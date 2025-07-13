@@ -23,10 +23,11 @@ namespace Network
         const int DEF_LOAD_WHEEL_MILLISECONDS = 1000;   //default wait some milliseconds then show load wheel
         const int NetReconnectPeriod = 10;              //default reconnect seconds
 
+        
         public const int NET_ERROR_UNKNOW_PROTOCOL = 2;           //协议错误
         public const int NET_ERROR_SEND_EXCEPTION = 1000;       //发送异常
         public const int NET_ERROR_ILLEGAL_PACKAGE = 1001;      //接受到错误数据包
-        public const int NET_ERROR_ZERO_BYTE = 1002;            //收发0字节
+        public const int NET_ERROR_ZERO_BYTE = 1002;            //收发0个字节
         public const int NET_ERROR_PACKAGE_TIMEOUT = 1003;      //收包超时
         public const int NET_ERROR_PROXY_TIMEOUT = 1004;        //proxy超时
         public const int NET_ERROR_FAIL_TO_CONNECT = 1005;      //3次连接不上

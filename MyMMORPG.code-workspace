@@ -1,0 +1,82 @@
+{
+	"folders": [
+		{
+			"name": "客户端代码",
+			"path": "./Src/Client"
+		},
+		{
+			"name": "服务器代码",
+			"path": "./Src/Server"
+		},
+		{
+			"name": "共享库",
+			"path": "./Src/Lib"
+		},
+		{
+			"name": "数据配置",
+			"path": "./Data"
+		},
+		{
+			"name": "开发工具",
+			"path": "./Tools"
+		}
+	],
+	"settings": {
+		// 全局文件排除规则
+		"files.exclude": {
+			// ---- 通用排除 ----
+			"**/Library/": true,
+			"**/Temp/": true,
+			"**/obj/": true,
+			"**/bin/": true,
+			"**/.vs/": true,
+			"**/packages/": true,
+			"Art/": true,
+			"Doc/": true,
+			// ---- Unity客户端 (Src/Client) 专属排除 ----
+			// 隐藏项目根目录下的非代码文件
+			"Assembly-CSharp.csproj": true,
+			"Client.csproj": true,
+			"Client.sln": true,
+			"log4net.xml": true,
+			// 隐藏Unity生成的项目文件夹
+			"ProjectSettings/": true,
+			"Packages/": true,
+			"Data/": true,
+			// 隐藏Assets下非代码相关的文件夹及其.meta文件
+			"Assets/Models/": true,
+			"Assets/Models.meta": true,
+			"Assets/Resources/": true,
+			"Assets/Resources.meta": true,
+			"Assets/UI/": true,
+			"Assets/UI.meta": true,
+			"Assets/Levels/": true,
+			"Assets/Levels.meta": true,
+			"Assets/JsonDotNet/": true,
+			"Assets/JsonDotNet.meta": true,
+			"Assets/References/": true,
+			"Assets/References.meta": true,
+			// 隐藏不必要的资源文件
+			"Assets/*.asset": true,
+			"Assets/*.asset.meta": true
+		},
+		// 全局搜索排除规则 (通常与files.exclude保持一致)
+		"search.exclude": {
+			"**/Library/": true,
+			"**/Temp/": true,
+			"**/obj/": true,
+			"**/bin/": true,
+			"**/.vs/": true,
+			"**/packages/": true
+		}
+	},
+	// 推荐的Unity开发扩展
+	// "extensions": {
+	// 	"recommendations": [
+	// 		"ms-dotnettools.csharp",
+	// 		"visualstudiotools.visual-studio-code-unity",
+	// 		"kleber-swf.unity-code-snippets",
+	// 		"Tobiah.unity-tools"
+	// 	]
+	// }
+}

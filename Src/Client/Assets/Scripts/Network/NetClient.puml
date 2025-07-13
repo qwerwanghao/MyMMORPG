@@ -1,0 +1,137 @@
+﻿@startuml NetClient Class Diagram
+
+!define PUML_COLOR_BACKGROUND #FFFBF0
+!define PUML_COLOR_CLASS #E6F3FF
+!define PUML_COLOR_INTERFACE #FFE6E6
+!define PUML_COLOR_ENUM #E6FFE6
+
+package "Network" {
+    package "System" {
+        class Socket <<external>>
+        class MemoryStream <<external>>
+        class Queue <<external>>
+        class IPEndPoint <<external>>
+    }
+
+    package "Unity" {
+        class MonoSingleton <<abstract>> {
+            + OnStart()
+        }
+    }
+
+    package "SkillBridge.Message" {
+        class NetMessage <<external>>
+        class MessageDistributer <<external>>
+    }
+
+    class NetClient {
+        -- Constants --
+        + {static} DEF_POLL_INTERVAL_MILLISECONDS : int = 100
+        + {static} DEF_TRY_CONNECT_TIMES : int = 3
+        + {static} DEF_RECV_BUFFER_SIZE : int = 64 * 1024
+        + {static} DEF_PACKAGE_HEADER_LENGTH : int = 4
+        + {static} DEF_SEND_PING_INTERVAL : int = 30
+        + {static} NetConnectTimeout : int = 10000
+        + {static} DEF_LOAD_WHEEL_MILLISECONDS : int = 1000
+        + {static} NetReconnectPeriod : int = 10
+        
+        -- Error Constants --
+        + {static} NET_ERROR_UNKNOW_PROTOCOL : int = 2
+        + {static} NET_ERROR_SEND_EXCEPTION : int = 1000
+        + {static} NET_ERROR_ILLEGAL_PACKAGE : int = 1001
+        + {static} NET_ERROR_ZERO_BYTE : int = 1002
+        + {static} NET_ERROR_PACKAGE_TIMEOUT : int = 1003
+        + {static} NET_ERROR_PROXY_TIMEOUT : int = 1004
+        + {static} NET_ERROR_FAIL_TO_CONNECT : int = 1005
+        + {static} NET_ERROR_PROXY_ERROR : int = 1006
+        + {static} NET_ERROR_ON_DESTROY : int = 1007
+        + {static} NET_ERROR_ON_KICKOUT : int = 25
+
+        -- Fields --
+        - address : IPEndPoint
+        - clientSocket : Socket
+        - sendBuffer : MemoryStream
+        - receiveBuffer : MemoryStream
+        - sendQueue : Queue<NetMessage>
+        - connecting : bool
+        - retryTimes : int
+        - retryTimesTotal : int
+        - lastSendTime : float
+        - sendOffset : int
+        + running : bool
+        + packageHandler : PackageHandler
+
+        -- Properties --
+        + Connected : bool <<get>>
+
+        -- Events --
+        + OnConnect : ConnectEventHandler
+        + OnDisconnect : ConnectEventHandler
+        + OnExpectPackageTimeout : ExpectPackageEventHandler
+        + OnExpectPackageResume : ExpectPackageEventHandler
+
+        -- Constructor --
+        + NetClient()
+
+        -- Unity Methods --
+        - Awake()
+        # OnStart()
+        + OnDestroy()
+        + Update()
+
+        -- Connection Methods --
+        + Init(serverIP : string, port : int)
+        + Connect(times : int = DEF_TRY_CONNECT_TIMES)
+        - DoConnect()
+        + CloseConnection(errCode : int)
+        - KeepConnect() : bool
+
+        -- Message Handling --
+        + SendMessage(message : NetMessage)
+        - ProcessSend() : bool
+        - ProcessRecv() : bool
+        - ProceeMessage()
+
+        -- Event Handlers --
+        # RaiseConnected(result : int, reason : string)
+        + RaiseDisonnected(result : int, reason : string = "")
+        # RaiseExpectPackageTimeout()
+        # RaiseExpectPackageResume()
+
+        -- Utility Methods --
+        + Reset()
+    }
+
+    class PackageHandler {
+        + PackageHandler(handler)
+        + ReceiveData(buffer : byte[], offset : int, count : int)
+        + {static} PackMessage(message : NetMessage) : byte[]
+    }
+
+    ' Delegates
+    class ConnectEventHandler <<delegate>> {
+        + ConnectEventHandler(result : int, reason : string)
+    }
+
+    class ExpectPackageEventHandler <<delegate>> {
+        + ExpectPackageEventHandler()
+    }
+}
+
+' Relationships
+NetClient --|> MonoSingleton : inherits
+NetClient --> Socket : uses
+NetClient --> MemoryStream : uses
+NetClient --> Queue : uses
+NetClient --> IPEndPoint : uses
+NetClient --> NetMessage : uses
+NetClient --> PackageHandler : aggregates
+NetClient --> ConnectEventHandler : uses
+NetClient --> ExpectPackageEventHandler : uses
+NetClient --> MessageDistributer : uses
+
+note right of NetClient : 网络客户端单例类\n负责与服务器的连接和通信\n处理消息的发送和接收
+
+note top of PackageHandler : 数据包处理器\n负责消息的打包和解包
+
+@enduml
