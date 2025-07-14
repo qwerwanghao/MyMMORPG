@@ -11,7 +11,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             if (instance == null)
             {
-                instance =(T)FindFirstObjectByType<T>();
+                instance = (T)FindFirstObjectByType<T>();
             }
             return instance;
         }
