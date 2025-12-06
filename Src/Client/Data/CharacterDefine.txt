@@ -5,6 +5,7 @@
     "Type": "Normal",
     "Class": "WARRIOR",
     "Resource": "Character/Warrior",
+    "Description": "以钢铁般的意志冲锋在最前线，用盾与刀锋守护队友。",
     "InitLevel": 1,
     "Speed": 300
   },
@@ -14,6 +15,7 @@
     "Type": "Normal",
     "Class": "WIZARD",
     "Resource": "Character/Wizard",
+    "Description": "掌控元素与奥术之力，以无形之力改变战局。",
     "InitLevel": 1,
     "Speed": 300
   },
@@ -23,6 +25,7 @@
     "Type": "Normal",
     "Class": "ARCHER",
     "Resource": "Character/Archer",
+    "Description": "潜行于暗处，以迅疾而精准的箭矢击杀远方的敌人。",
     "InitLevel": 1,
     "Speed": 300
   },

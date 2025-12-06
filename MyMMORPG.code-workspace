@@ -1,24 +1,28 @@
 {
 	"folders": [
 		{
-			"name": "客户端代码",
+			"name": "Client",
 			"path": "./Src/Client"
 		},
 		{
-			"name": "服务器代码",
+			"name": "Server",
 			"path": "./Src/Server"
 		},
 		{
-			"name": "共享库",
+			"name": "Lib",
 			"path": "./Src/Lib"
 		},
 		{
-			"name": "数据配置",
-			"path": "./Data"
+			"name": "Data",
+			"path": "./Src/Data"
 		},
 		{
-			"name": "开发工具",
+			"name": "Tools",
 			"path": "./Tools"
+		}
+		{
+			"name": "agentMD",
+			"path": "./agentMD"
 		}
 	],
 	"settings": {
@@ -34,15 +38,6 @@
 			"Art/": true,
 			"Doc/": true,
 			// ---- Unity客户端 (Src/Client) 专属排除 ----
-			// 隐藏项目根目录下的非代码文件
-			"Assembly-CSharp.csproj": true,
-			"Client.csproj": true,
-			"Client.sln": true,
-			"log4net.xml": true,
-			// 隐藏Unity生成的项目文件夹
-			"ProjectSettings/": true,
-			"Packages/": true,
-			"Data/": true,
 			// 隐藏Assets下非代码相关的文件夹及其.meta文件
 			"Assets/Models/": true,
 			"Assets/Models.meta": true,
@@ -68,15 +63,8 @@
 			"**/bin/": true,
 			"**/.vs/": true,
 			"**/packages/": true
-		}
+		},
+		"dotnet.preferCSharpExtension": true,
+		"dotnet.defaultSolution": "Client.sln"
 	},
-	// 推荐的Unity开发扩展
-	// "extensions": {
-	// 	"recommendations": [
-	// 		"ms-dotnettools.csharp",
-	// 		"visualstudiotools.visual-studio-code-unity",
-	// 		"kleber-swf.unity-code-snippets",
-	// 		"Tobiah.unity-tools"
-	// 	]
-	// }
 }

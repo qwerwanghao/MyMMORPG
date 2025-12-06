@@ -1,0 +1,2 @@
+2025-11-28 13:55:53,879 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - Joystick connected ("Wireless Gamepad").
+2025-11-28 14:35:14,765 [1] WARN  [UnityEngine.Application.CallLogCallback:0] - Joystick disconnected ("Wireless Gamepad").

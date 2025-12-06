@@ -54,4 +54,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Exec Command="set TARGET=..\..\Client\Assets\ThirdParty\Protocol&#x0D;&#x0A;if not exist &quot;%25TARGET%25&quot; mkdir &quot;%25TARGET%25&quot;&#x0D;&#x0A;copy /Y &quot;$(TargetPath)&quot; &quot;%25TARGET%25\&quot;&#x0D;&#x0A;if exist &quot;$(TargetDir)$(TargetName).pdb&quot; copy /Y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;%25TARGET%25\&quot;" />
+  </Target>
 </Project>

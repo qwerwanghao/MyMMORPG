@@ -98,35 +98,34 @@ message NetMessage {
   NetMessageResponse Response = 2;
 }
 
+// NetMessageRequest：客户端 -> 服务器的统一请求封包，字段号与响应保持一一对应，避免序列化冲突。
 message NetMessageRequest {
-  UserRegisterRequest userRegister = 1;
-  UserLoginRequest userLogin = 2;
-  UserCreateCharacterRequest createChar = 3;
-  UserGameEnterRequest gameEnter = 4;
-  UserGameLeaveRequest gameLeave = 5;
-
-  MapCharacterEnterRequest mapCharacterEnter = 6;
-
-  MapEntitySyncRequest mapEntitySync = 8;
-  MapTeleportRequest mapTeleport = 9;
-
-  FirstTestRequest firstRequest = 10;
+  UserRegisterRequest userRegister = 1;            // 1: 用户注册
+  UserLoginRequest userLogin = 2;                  // 2: 用户登录
+  UserCreateCharacterRequest createChar = 3;       // 3: 创角
+  UserDeleteCharacterRequest deleteChar = 4;       // 4: 删角
+  UserGameEnterRequest gameEnter = 5;              // 5: 进入游戏
+  UserGameLeaveRequest gameLeave = 6;              // 6: 离开游戏
+  MapCharacterEnterRequest mapCharacterEnter = 7;  // 7: 进入地图
+  MapCharacterLeaveRequest mapCharacterLeave = 8;  // 8: 离开地图
+  MapEntitySyncRequest mapEntitySync = 9;          // 9: 地图内实体同步
+  MapTeleportRequest mapTeleport = 10;             // 10: 传送
 }
 
+// NetMessageResponse：服务器 -> 客户端的统一响应封包，字段号与请求保持一致，便于一一对应。
 message NetMessageResponse {
-  UserRegisterResponse userRegister = 1;
-  UserLoginResponse userLogin = 2;
-  UserCreateCharacterResponse createChar = 3;
-  UserGameEnterResponse gameEnter = 4;
-  UserGameLeaveResponse gameLeave = 5;
-
-  MapCharacterEnterResponse mapCharacterEnter = 6;
-  MapCharacterLeaveResponse mapCharacterLeave = 7;
-
-  MapEntitySyncResponse mapEntitySync = 8;
+  UserRegisterResponse userRegister = 1;            // 1: 用户注册
+  UserLoginResponse userLogin = 2;                  // 2: 用户登录
+  UserCreateCharacterResponse createChar = 3;       // 3: 创角
+  UserDeleteCharacterResponse deleteChar = 4;       // 4: 删角
+  UserGameEnterResponse gameEnter = 5;              // 5: 进入游戏
+  UserGameLeaveResponse gameLeave = 6;              // 6: 离开游戏
+  MapCharacterEnterResponse mapCharacterEnter = 7;  // 7: 进入地图
+  MapCharacterLeaveResponse mapCharacterLeave = 8;  // 8: 离开地图
+  MapEntitySyncResponse mapEntitySync = 9;          // 9: 地图内实体同步
+  MapTeleportResponse mapTeleport = 10;             // 10: 传送
 }
 
-message FirstTestRequest { string helloworld = 1; }
 
 // User Protocol
 message UserLoginRequest {
@@ -162,6 +161,17 @@ message UserCreateCharacterResponse {
   repeated NCharacterInfo characters = 3;
 }
 
+// 删除角色
+message UserDeleteCharacterRequest {
+  int32 characterId = 1; // 要删除的角色 ID
+}
+
+message UserDeleteCharacterResponse {
+  RESULT result = 1;
+  string errormsg = 2;
+  repeated NCharacterInfo characters = 3; // 删除后的角色列表
+}
+
 message UserGameEnterRequest { int32 characterIdx = 1; }
 
 message UserGameEnterResponse {
@@ -184,6 +194,11 @@ message MapCharacterEnterResponse {
   repeated NCharacterInfo characters = 2;
 }
 
+message MapCharacterLeaveRequest {
+  int32 mapId = 1;       // 离开的地图
+  int32 characterId = 2; // 离开的角色
+}
+
 message MapCharacterLeaveResponse { int32 characterId = 1; }
 
 message MapEntitySyncRequest { NEntitySync entitySync = 1; }
@@ -191,3 +206,8 @@ message MapEntitySyncRequest { NEntitySync entitySync = 1; }
 message MapEntitySyncResponse { repeated NEntitySync entitySyncs = 2; }
 
 message MapTeleportRequest { int32 teleporterId = 1; }
+
+message MapTeleportResponse {
+  RESULT result = 1;
+  string errormsg = 2;
+}

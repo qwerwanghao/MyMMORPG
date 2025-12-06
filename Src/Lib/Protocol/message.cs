@@ -159,22 +159,25 @@ namespace SkillBridge.Message
         public UserCreateCharacterRequest createChar { get; set; }
 
         [global::ProtoBuf.ProtoMember(4)]
-        public UserGameEnterRequest gameEnter { get; set; }
+        public UserDeleteCharacterRequest deleteChar { get; set; }
 
         [global::ProtoBuf.ProtoMember(5)]
-        public UserGameLeaveRequest gameLeave { get; set; }
+        public UserGameEnterRequest gameEnter { get; set; }
 
         [global::ProtoBuf.ProtoMember(6)]
+        public UserGameLeaveRequest gameLeave { get; set; }
+
+        [global::ProtoBuf.ProtoMember(7)]
         public MapCharacterEnterRequest mapCharacterEnter { get; set; }
 
         [global::ProtoBuf.ProtoMember(8)]
-        public MapEntitySyncRequest mapEntitySync { get; set; }
+        public MapCharacterLeaveRequest mapCharacterLeave { get; set; }
 
         [global::ProtoBuf.ProtoMember(9)]
-        public MapTeleportRequest mapTeleport { get; set; }
+        public MapEntitySyncRequest mapEntitySync { get; set; }
 
         [global::ProtoBuf.ProtoMember(10)]
-        public FirstTestRequest firstRequest { get; set; }
+        public MapTeleportRequest mapTeleport { get; set; }
 
     }
 
@@ -195,32 +198,25 @@ namespace SkillBridge.Message
         public UserCreateCharacterResponse createChar { get; set; }
 
         [global::ProtoBuf.ProtoMember(4)]
-        public UserGameEnterResponse gameEnter { get; set; }
+        public UserDeleteCharacterResponse deleteChar { get; set; }
 
         [global::ProtoBuf.ProtoMember(5)]
-        public UserGameLeaveResponse gameLeave { get; set; }
+        public UserGameEnterResponse gameEnter { get; set; }
 
         [global::ProtoBuf.ProtoMember(6)]
-        public MapCharacterEnterResponse mapCharacterEnter { get; set; }
+        public UserGameLeaveResponse gameLeave { get; set; }
 
         [global::ProtoBuf.ProtoMember(7)]
-        public MapCharacterLeaveResponse mapCharacterLeave { get; set; }
+        public MapCharacterEnterResponse mapCharacterEnter { get; set; }
 
         [global::ProtoBuf.ProtoMember(8)]
+        public MapCharacterLeaveResponse mapCharacterLeave { get; set; }
+
+        [global::ProtoBuf.ProtoMember(9)]
         public MapEntitySyncResponse mapEntitySync { get; set; }
 
-    }
-
-    [global::ProtoBuf.ProtoContract()]
-    public partial class FirstTestRequest : global::ProtoBuf.IExtensible
-    {
-        private global::ProtoBuf.IExtension __pbn__extensionData;
-        global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-            => global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
-
-        [global::ProtoBuf.ProtoMember(1, Name = @"helloworld")]
-        [global::System.ComponentModel.DefaultValue("")]
-        public string Helloworld { get; set; } = "";
+        [global::ProtoBuf.ProtoMember(10)]
+        public MapTeleportResponse mapTeleport { get; set; }
 
     }
 
@@ -332,6 +328,37 @@ namespace SkillBridge.Message
     }
 
     [global::ProtoBuf.ProtoContract()]
+    public partial class UserDeleteCharacterRequest : global::ProtoBuf.IExtensible
+    {
+        private global::ProtoBuf.IExtension __pbn__extensionData;
+        global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+            => global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+
+        [global::ProtoBuf.ProtoMember(1)]
+        public int characterId { get; set; }
+
+    }
+
+    [global::ProtoBuf.ProtoContract()]
+    public partial class UserDeleteCharacterResponse : global::ProtoBuf.IExtensible
+    {
+        private global::ProtoBuf.IExtension __pbn__extensionData;
+        global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+            => global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+
+        [global::ProtoBuf.ProtoMember(1, Name = @"result")]
+        public Result Result { get; set; }
+
+        [global::ProtoBuf.ProtoMember(2, Name = @"errormsg")]
+        [global::System.ComponentModel.DefaultValue("")]
+        public string Errormsg { get; set; } = "";
+
+        [global::ProtoBuf.ProtoMember(3, Name = @"characters")]
+        public global::System.Collections.Generic.List<NCharacterInfo> Characters { get; } = new global::System.Collections.Generic.List<NCharacterInfo>();
+
+    }
+
+    [global::ProtoBuf.ProtoContract()]
     public partial class UserGameEnterRequest : global::ProtoBuf.IExtensible
     {
         private global::ProtoBuf.IExtension __pbn__extensionData;
@@ -412,6 +439,21 @@ namespace SkillBridge.Message
     }
 
     [global::ProtoBuf.ProtoContract()]
+    public partial class MapCharacterLeaveRequest : global::ProtoBuf.IExtensible
+    {
+        private global::ProtoBuf.IExtension __pbn__extensionData;
+        global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+            => global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+
+        [global::ProtoBuf.ProtoMember(1)]
+        public int mapId { get; set; }
+
+        [global::ProtoBuf.ProtoMember(2)]
+        public int characterId { get; set; }
+
+    }
+
+    [global::ProtoBuf.ProtoContract()]
     public partial class MapCharacterLeaveResponse : global::ProtoBuf.IExtensible
     {
         private global::ProtoBuf.IExtension __pbn__extensionData;
@@ -456,6 +498,22 @@ namespace SkillBridge.Message
 
         [global::ProtoBuf.ProtoMember(1)]
         public int teleporterId { get; set; }
+
+    }
+
+    [global::ProtoBuf.ProtoContract()]
+    public partial class MapTeleportResponse : global::ProtoBuf.IExtensible
+    {
+        private global::ProtoBuf.IExtension __pbn__extensionData;
+        global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+            => global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+
+        [global::ProtoBuf.ProtoMember(1, Name = @"result")]
+        public Result Result { get; set; }
+
+        [global::ProtoBuf.ProtoMember(2, Name = @"errormsg")]
+        [global::System.ComponentModel.DefaultValue("")]
+        public string Errormsg { get; set; } = "";
 
     }
 

@@ -1,0 +1,32 @@
+
+2025-12-05 14:16:13,156 [1] [INFO ] [GameServer.Program.Main:20] - Game Server Init
+2025-12-05 14:16:13,721 [1] [WARN ] [Network.NetService.Start:28] - Starting Listener...
+2025-12-05 14:16:13,813 [13] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-05 14:16:13,815 [10] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-05 14:16:13,813 [5] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-05 14:16:13,813 [14] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-05 14:16:13,815 [8] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-05 14:16:13,815 [6] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-05 14:16:13,815 [7] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-05 14:16:13,815 [12] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-05 14:16:13,828 [1] [WARN ] [Network.NetService.Start:32] - NetService Started
+2025-12-05 14:17:06,556 [3] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:8582]] Connected
+2025-12-05 14:17:06,604 [3] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-12-05 14:17:06,684 [5] [INFO ] [GameServer.Services.UserService.OnLogin:69] - UserLoginRequest: User:testreg  Pass:regpass
+2025-12-05 14:19:01,590 [21] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:21
+2025-12-05 14:19:01,593 [5] [INFO ] [GameServer.Services.UserService.OnCreateCharacter:114] - UserCreateCharacterRequest: Name:邓荣荣  Class:Archer
+2025-12-05 14:19:06,993 [19] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected
+2025-12-05 14:20:15,048 [19] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:11467]] Connected
+2025-12-05 14:20:15,089 [19] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-12-05 14:20:15,090 [5] [INFO ] [GameServer.Services.UserService.OnLogin:69] - UserLoginRequest: User:testreg  Pass:regpass
+2025-12-05 14:20:50,558 [22] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:24
+2025-12-05 14:20:50,559 [5] [INFO ] [GameServer.Services.UserService.OnCreateCharacter:114] - UserCreateCharacterRequest: Name:小小战士  Class:Warrior
+2025-12-05 14:22:58,463 [15] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:24
+2025-12-05 14:22:58,464 [5] [INFO ] [GameServer.Services.UserService.OnCreateCharacter:114] - UserCreateCharacterRequest: Name:小小法师  Class:Wizard
+2025-12-05 17:54:45,123 [15] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected
+2025-12-05 17:55:23,711 [15] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:10975]] Connected
+2025-12-05 17:55:23,751 [15] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-12-05 17:55:23,752 [5] [INFO ] [GameServer.Services.UserService.OnLogin:69] - UserLoginRequest: User:testreg  Pass:regpass
+2025-12-05 17:55:57,605 [15] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:21
+2025-12-05 17:55:57,605 [5] [INFO ] [GameServer.Services.UserService.OnCreateCharacter:114] - UserCreateCharacterRequest: Name:王浩浩  Class:Wizard
+2025-12-05 17:56:21,181 [15] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected

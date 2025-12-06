@@ -71,6 +71,11 @@
     <Compile Include="Utils\MathUtil.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="obj\Debug\build.force" />
+    <None Include="obj\Debug\Common.csproj.AssemblyReference.cache" />
+    <None Include="obj\Debug\Common.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\Common.csproj.Up2Date" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -79,5 +84,27 @@
       <Name>Protocol</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\Common.dll" />
+    <Content Include="bin\Debug\Common.pdb" />
+    <Content Include="bin\Debug\log4net.dll" />
+    <Content Include="bin\Debug\log4net.xml" />
+    <Content Include="bin\Debug\Newtonsoft.Json.dll" />
+    <Content Include="bin\Debug\Newtonsoft.Json.xml" />
+    <Content Include="bin\Debug\protobuf-net.dll" />
+    <Content Include="bin\Debug\protobuf-net.xml" />
+    <Content Include="bin\Debug\Protocol.dll" />
+    <Content Include="bin\Debug\Protocol.pdb" />
+    <Content Include="bin\Debug\UnityEngine.dll" />
+    <Content Include="obj\Debug\Common.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\Common.dll" />
+    <Content Include="obj\Debug\Common.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="obj\Debug\TempPE\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Exec Command="set TARGET=..\..\Client\Assets\ThirdParty\Common&#x0D;&#x0A;if not exist &quot;%25TARGET%25&quot; mkdir &quot;%25TARGET%25&quot;&#x0D;&#x0A;copy /Y &quot;$(TargetPath)&quot; &quot;%25TARGET%25\&quot;&#x0D;&#x0A;if exist &quot;$(TargetDir)$(TargetName).pdb&quot; copy /Y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;%25TARGET%25\&quot;" />
+  </Target>
 </Project>

@@ -1,0 +1,16 @@
+
+2025-08-03 11:31:45,838 [1] [INFO ] [GameServer.Program.Main:20] - Game Server Init
+2025-08-03 11:31:46,123 [1] [WARN ] [Network.NetService.Start:28] - Starting Listener...
+2025-08-03 11:31:46,196 [7] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-08-03 11:31:46,196 [5] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-08-03 11:31:46,197 [6] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-08-03 11:31:46,196 [10] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-08-03 11:31:46,196 [8] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-08-03 11:31:46,196 [11] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-08-03 11:31:46,196 [12] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-08-03 11:31:46,206 [13] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-08-03 11:31:46,238 [1] [WARN ] [Network.NetService.Start:32] - NetService Started
+2025-08-03 11:31:54,425 [3] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:10457]] Connected
+2025-08-03 11:31:54,471 [3] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-08-03 11:31:54,550 [5] [INFO ] [GameServer.Services.UserService.OnLogin:56] - UserLoginRequest: User:testreg  Pass:regpass
+2025-08-03 11:39:48,568 [24] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected
