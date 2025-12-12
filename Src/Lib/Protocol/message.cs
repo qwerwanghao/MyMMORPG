@@ -89,6 +89,21 @@ namespace SkillBridge.Message
     }
 
     [global::ProtoBuf.ProtoContract()]
+    public partial class NVector2 : global::ProtoBuf.IExtensible
+    {
+        private global::ProtoBuf.IExtension __pbn__extensionData;
+        global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+            => global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+
+        [global::ProtoBuf.ProtoMember(1, Name = @"x")]
+        public int X { get; set; }
+
+        [global::ProtoBuf.ProtoMember(2, Name = @"y")]
+        public int Y { get; set; }
+
+    }
+
+    [global::ProtoBuf.ProtoContract()]
     public partial class NEntity : global::ProtoBuf.IExtensible
     {
         private global::ProtoBuf.IExtension __pbn__extensionData;

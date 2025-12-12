@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Models;
 using Services;
 using SkillBridge.Message;
+using Common;
 public class UICharacterSelect : MonoBehaviour
 {
 
@@ -28,8 +29,6 @@ public class UICharacterSelect : MonoBehaviour
     public Text[] names;
 
     private int selectCharacterIdx = -1;
-    
-    private int selectCharacterFirstIdx = 0;
 
     public UICharacterView characterView;
 
@@ -65,11 +64,12 @@ public class UICharacterSelect : MonoBehaviour
                     {
                         RefreshSelection(idx);
                     });
-                RefreshSelection(selectCharacterFirstIdx);
                 charInfo.SetActive(true);
                 charInfo.GetComponent<UICharInfo>().SetCharacterInfo(cha, i, this);
                 uiChars.Add(charInfo);
             }
+
+            RefreshSelection(0);
         }
     }
 
@@ -149,9 +149,14 @@ public class UICharacterSelect : MonoBehaviour
 
     public void RefreshSelection(int idx)
     {
+        if (idx < 0 || idx >= User.Instance.Info.Player.Characters.Count)
+        {
+            Log.WarningFormat("RefreshSelection: Invalid index {0}", idx);
+            return;
+        }
         this.selectCharacterIdx = idx;
         var cha = User.Instance.Info.Player.Characters[idx];
-        Debug.LogFormat("Select Char:[{0}]{1}[{2}]", cha.Id, cha.Name, cha.Class);
+        Log.InfoFormat("Select Char:[{0}]{1}[{2}]", cha.Id, cha.Name, cha.Class);
         User.Instance.CurrentCharacter = cha;
         // Map selected list item to the actual character class model
         characterView.CurrectCharacter = ((int)cha.Class) - 1;
@@ -165,7 +170,7 @@ public class UICharacterSelect : MonoBehaviour
             return;
         }
 
-        Debug.LogFormat("UICharacterSelect OnClickDeleteById charId:{0}", charId);
+        Log.InfoFormat("UICharacterSelect OnClickDeleteById charId:{0}", charId);
         var confirm = MessageBox.Show("确定要删除该角色吗？", "删除角色", MessageBoxType.Confirm);
         confirm.OnYes = () =>
         {

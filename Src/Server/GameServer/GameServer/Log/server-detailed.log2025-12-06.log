@@ -1,0 +1,154 @@
+
+2025-12-06 14:23:33,415 [1] [INFO ] [GameServer.Program.Main:20] - Game Server Init
+2025-12-06 14:23:34,146 [1] [WARN ] [Network.NetService.Start:28] - Starting Listener...
+2025-12-06 14:23:34,218 [7] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:23:34,218 [19] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:23:34,218 [10] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:23:34,218 [11] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:23:34,218 [8] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:23:34,221 [6] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:23:34,221 [5] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:23:34,221 [9] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:23:34,293 [1] [WARN ] [Network.NetService.Start:32] - NetService Started
+2025-12-06 14:23:49,837 [3] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:7088]] Connected
+2025-12-06 14:23:49,877 [3] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-12-06 14:23:49,955 [5] [INFO ] [GameServer.Services.UserService.OnLogin:70] - UserLoginRequest: User:testreg  Pass:regpass
+2025-12-06 14:24:03,028 [21] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:10
+2025-12-06 14:25:36,764 [21] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected
+2025-12-06 14:26:35,468 [21] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:6241]] Connected
+2025-12-06 14:26:35,511 [21] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-12-06 14:26:35,512 [5] [INFO ] [GameServer.Services.UserService.OnLogin:70] - UserLoginRequest: User:testreg  Pass:regpass
+2025-12-06 14:34:37,958 [21] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected
+2025-12-06 14:50:26,722 [1] [INFO ] [GameServer.Program.Main:20] - Game Server Init
+2025-12-06 14:50:26,857 [1] [WARN ] [Network.NetService.Start:28] - Starting Listener...
+2025-12-06 14:50:26,890 [8] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:50:26,890 [9] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:50:26,890 [12] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:50:26,890 [10] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:50:26,890 [7] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:50:26,890 [5] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:50:26,894 [6] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:50:26,900 [13] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 14:50:26,962 [1] [WARN ] [Network.NetService.Start:32] - NetService Started
+2025-12-06 14:50:38,833 [3] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:4983]] Connected
+2025-12-06 14:50:38,873 [3] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-12-06 14:50:38,948 [5] [INFO ] [GameServer.Services.UserService.OnLogin:70] - UserLoginRequest: User:testreg  Pass:regpass
+2025-12-06 14:50:43,315 [21] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:10
+2025-12-06 15:18:58,915 [21] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected
+2025-12-06 15:22:31,789 [1] [INFO ] [GameServer.Program.Main:20] - Game Server Init
+2025-12-06 15:22:32,298 [1] [WARN ] [Network.NetService.Start:28] - Starting Listener...
+2025-12-06 15:22:32,327 [7] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:22:32,327 [5] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:22:32,327 [11] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:22:32,327 [6] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:22:32,327 [8] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:22:32,327 [10] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:22:32,327 [9] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:22:32,339 [13] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:22:32,418 [1] [WARN ] [Network.NetService.Start:32] - NetService Started
+2025-12-06 15:22:59,556 [3] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:1173]] Connected
+2025-12-06 15:22:59,597 [3] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-12-06 15:22:59,676 [5] [INFO ] [GameServer.Services.UserService.OnLogin:70] - UserLoginRequest: User:testreg  Pass:regpass
+2025-12-06 15:23:09,418 [17] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:10
+2025-12-06 15:29:12,549 [17] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected
+2025-12-06 15:30:55,514 [1] [INFO ] [GameServer.Program.Main:20] - Game Server Init
+2025-12-06 15:30:56,021 [1] [WARN ] [Network.NetService.Start:28] - Starting Listener...
+2025-12-06 15:30:56,059 [5] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:30:56,060 [7] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:30:56,060 [10] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:30:56,060 [8] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:30:56,060 [13] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:30:56,073 [6] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:30:56,073 [11] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:30:56,074 [12] [WARN ] [Network.MessageDistributer`1.MessageDistribute:196] - MessageDistribute thread start
+2025-12-06 15:30:56,134 [1] [WARN ] [Network.NetService.Start:32] - NetService Started
+2025-12-06 15:32:22,891 [21] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:12002]] Connected
+2025-12-06 15:32:22,932 [21] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-12-06 15:32:23,031 [5] [INFO ] [GameServer.Services.UserService.OnLogin:70] - UserLoginRequest: User:testreg  Pass:regpass
+2025-12-06 15:32:33,453 [17] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:10
+2025-12-06 15:32:33,457 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:172] - UserDeleteCharacterRequest: Id:2
+2025-12-06 15:32:33,458 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:187] - DeleteChar PlayerId:15 CurrentCount:6
+2025-12-06 15:32:33,458 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:197] - DeleteChar removing: Id:2 Name:123
+2025-12-06 15:32:33,629 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:216] - DeleteChar success, RemainingCount:5
+2025-12-06 15:32:39,952 [17] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:10
+2025-12-06 15:32:39,954 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:172] - UserDeleteCharacterRequest: Id:1
+2025-12-06 15:32:39,954 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:187] - DeleteChar PlayerId:15 CurrentCount:5
+2025-12-06 15:32:39,955 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:197] - DeleteChar removing: Id:1 Name:moonshooter
+2025-12-06 15:32:39,957 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:216] - DeleteChar success, RemainingCount:4
+2025-12-06 15:32:42,680 [3] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:10
+2025-12-06 15:32:42,681 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:172] - UserDeleteCharacterRequest: Id:4
+2025-12-06 15:32:42,682 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:187] - DeleteChar PlayerId:15 CurrentCount:4
+2025-12-06 15:32:42,682 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:197] - DeleteChar removing: Id:4 Name:小小战士
+2025-12-06 15:32:42,686 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:216] - DeleteChar success, RemainingCount:3
+2025-12-06 15:32:44,361 [3] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:10
+2025-12-06 15:32:44,361 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:172] - UserDeleteCharacterRequest: Id:5
+2025-12-06 15:32:44,362 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:187] - DeleteChar PlayerId:15 CurrentCount:3
+2025-12-06 15:32:44,362 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:197] - DeleteChar removing: Id:5 Name:小小法师
+2025-12-06 15:32:48,412 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:216] - DeleteChar success, RemainingCount:2
+2025-12-06 15:38:06,429 [3] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected
+2025-12-06 15:38:36,542 [3] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:2263]] Connected
+2025-12-06 15:38:36,606 [3] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-12-06 15:38:36,607 [5] [INFO ] [GameServer.Services.UserService.OnLogin:70] - UserLoginRequest: User:testreg  Pass:regpass
+2025-12-06 15:40:09,611 [23] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected
+2025-12-06 15:45:33,097 [26] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:9377]] Connected
+2025-12-06 15:45:33,153 [26] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-12-06 15:45:33,154 [5] [INFO ] [GameServer.Services.UserService.OnLogin:70] - UserLoginRequest: User:testreg  Pass:regpass
+2025-12-06 15:51:14,138 [26] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected
+2025-12-06 15:51:33,815 [26] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:4041]] Connected
+2025-12-06 15:51:33,875 [26] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-12-06 15:51:33,876 [5] [INFO ] [GameServer.Services.UserService.OnLogin:70] - UserLoginRequest: User:testreg  Pass:regpass
+2025-12-06 15:54:46,301 [50] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected
+2025-12-06 15:55:19,999 [50] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:3826]] Connected
+2025-12-06 15:55:20,064 [50] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-12-06 15:55:20,064 [5] [INFO ] [GameServer.Services.UserService.OnLogin:70] - UserLoginRequest: User:testreg  Pass:regpass
+2025-12-06 15:55:45,348 [56] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected
+2025-12-06 15:56:55,833 [58] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:11705]] Connected
+2025-12-06 15:56:55,886 [58] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-12-06 15:56:55,887 [5] [INFO ] [GameServer.Services.UserService.OnLogin:70] - UserLoginRequest: User:testreg  Pass:regpass
+2025-12-06 15:57:07,917 [58] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:10
+2025-12-06 15:57:07,918 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:172] - UserDeleteCharacterRequest: Id:6
+2025-12-06 15:57:07,919 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:187] - DeleteChar PlayerId:15 CurrentCount:2
+2025-12-06 15:57:07,920 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:197] - DeleteChar removing: Id:6 Name:王浩浩
+2025-12-06 15:57:07,924 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:216] - DeleteChar success, RemainingCount:1
+2025-12-06 15:57:12,078 [63] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:10
+2025-12-06 15:57:12,079 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:172] - UserDeleteCharacterRequest: Id:3
+2025-12-06 15:57:12,080 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:187] - DeleteChar PlayerId:15 CurrentCount:1
+2025-12-06 15:57:12,081 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:197] - DeleteChar removing: Id:3 Name:邓荣荣
+2025-12-06 15:57:12,082 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:216] - DeleteChar success, RemainingCount:0
+2025-12-06 15:58:09,148 [63] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:21
+2025-12-06 15:58:09,150 [5] [INFO ] [GameServer.Services.UserService.OnCreateCharacter:115] - UserCreateCharacterRequest: Name:王浩浩  Class:Wizard
+2025-12-06 15:58:19,950 [66] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:21
+2025-12-06 15:58:19,951 [5] [INFO ] [GameServer.Services.UserService.OnCreateCharacter:115] - UserCreateCharacterRequest: Name:邓荣荣  Class:Archer
+2025-12-06 15:58:45,982 [66] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:13
+2025-12-06 15:58:45,983 [5] [INFO ] [GameServer.Services.UserService.OnCreateCharacter:115] - UserCreateCharacterRequest: Name:1  Class:Warrior
+2025-12-06 15:58:48,838 [68] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:10
+2025-12-06 15:58:48,838 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:172] - UserDeleteCharacterRequest: Id:9
+2025-12-06 15:58:48,844 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:187] - DeleteChar PlayerId:15 CurrentCount:3
+2025-12-06 15:58:48,845 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:197] - DeleteChar removing: Id:9 Name:1
+2025-12-06 15:58:48,847 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:216] - DeleteChar success, RemainingCount:2
+2025-12-06 15:59:42,783 [66] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:13
+2025-12-06 15:59:42,784 [5] [INFO ] [GameServer.Services.UserService.OnCreateCharacter:115] - UserCreateCharacterRequest: Name:1  Class:Warrior
+2025-12-06 16:01:51,228 [71] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:10
+2025-12-06 16:01:51,229 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:172] - UserDeleteCharacterRequest: Id:10
+2025-12-06 16:01:51,229 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:187] - DeleteChar PlayerId:15 CurrentCount:3
+2025-12-06 16:01:51,230 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:197] - DeleteChar removing: Id:10 Name:1
+2025-12-06 16:01:51,238 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:216] - DeleteChar success, RemainingCount:2
+2025-12-06 16:02:00,169 [75] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:13
+2025-12-06 16:02:00,169 [5] [INFO ] [GameServer.Services.UserService.OnCreateCharacter:115] - UserCreateCharacterRequest: Name:1  Class:Warrior
+2025-12-06 16:02:04,960 [71] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:10
+2025-12-06 16:02:04,962 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:172] - UserDeleteCharacterRequest: Id:11
+2025-12-06 16:02:04,962 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:187] - DeleteChar PlayerId:15 CurrentCount:3
+2025-12-06 16:02:04,963 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:197] - DeleteChar removing: Id:11 Name:1
+2025-12-06 16:02:04,968 [6] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:216] - DeleteChar success, RemainingCount:2
+2025-12-06 16:02:44,164 [71] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:13
+2025-12-06 16:02:44,165 [5] [INFO ] [GameServer.Services.UserService.OnCreateCharacter:115] - UserCreateCharacterRequest: Name:1  Class:Warrior
+2025-12-06 16:05:21,553 [78] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected
+2025-12-06 16:06:52,353 [84] [WARN ] [Network.NetService.OnSocketConnected:59] - Client[127.0.0.1:1855]] Connected
+2025-12-06 16:06:52,396 [84] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:26
+2025-12-06 16:06:52,398 [5] [INFO ] [GameServer.Services.UserService.OnLogin:70] - UserLoginRequest: User:testreg  Pass:regpass
+2025-12-06 16:06:55,089 [88] [WARN ] [Network.NetService.DataReceived:82] - Client[] DataReceived Len:10
+2025-12-06 16:06:55,090 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:172] - UserDeleteCharacterRequest: Id:12
+2025-12-06 16:06:55,090 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:187] - DeleteChar PlayerId:15 CurrentCount:3
+2025-12-06 16:06:55,090 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:197] - DeleteChar removing: Id:12 Name:1
+2025-12-06 16:06:55,094 [5] [INFO ] [GameServer.Services.UserService.OnDeleteCharacter:216] - DeleteChar success, RemainingCount:2
+2025-12-06 16:07:04,540 [88] [WARN ] [Network.NetService.Disconnected:71] - Client[] Disconnected

@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using Common;
 
 public class GameViewHierarchyPicker
 {
@@ -11,7 +12,7 @@ public class GameViewHierarchyPicker
         var focused = EditorWindow.focusedWindow ?? EditorWindow.mouseOverWindow;
         if (focused == null || focused.GetType().FullName != "UnityEditor.GameView")
         {
-            Debug.LogWarning("GameViewHierarchyPicker: 请将焦点切到 Game 视图再使用 Ctrl+Q。");
+            Log.Warning("GameViewHierarchyPicker: 请将焦点切到 Game 视图再使用 Ctrl+Q。");
             return;
         }
 
@@ -24,7 +25,7 @@ public class GameViewHierarchyPicker
 
         if (eventSystem == null)
         {
-            Debug.LogWarning("GameViewHierarchyPicker: No EventSystem found in the scene.");
+            Log.Warning("GameViewHierarchyPicker: No EventSystem found in the scene.");
             return;
         }
 
@@ -47,11 +48,11 @@ public class GameViewHierarchyPicker
             // Ping in Hierarchy to highlight
             EditorGUIUtility.PingObject(pickedObject);
 
-            Debug.Log($"[GameViewHierarchyPicker] Picked: {pickedObject.name}", pickedObject);
+            Log.InfoFormat("[GameViewHierarchyPicker] Picked: {0}", pickedObject.name);
         }
         else
         {
-            Debug.Log("[GameViewHierarchyPicker] No UI element found under mouse.");
+            Log.Info("[GameViewHierarchyPicker] No UI element found under mouse.");
         }
     }
 }

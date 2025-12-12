@@ -1,0 +1,27 @@
+2025-12-09 20:01:27,736 [1] INFO  [LoadingManager+<Start>d__6.MoveNext:37] - LoadingManager start
+2025-12-09 20:01:46,303 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - <b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Discovered 12 MCP tools via reflection
+2025-12-09 20:01:50,230 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - DataManager > DataManager()
+2025-12-09 20:01:57,598 [1] INFO  [Services.UserService.SendLogin:215] - UserLoginRequest::user :testreg psw:regpass
+2025-12-09 20:01:57,599 [1] INFO  [Services.UserService.ConnectToServer:51] - ConnectToServer() Start 
+2025-12-09 20:01:57,600 [1] INFO  [Network.NetClient.Connect:228] - DoConnect
+2025-12-09 20:01:57,601 [1] INFO  [Network.NetClient.DoConnect:333] - NetClient.DoConnect on 127.0.0.1:8000
+2025-12-09 20:01:57,603 [1] INFO  [Network.NetClient.DoConnect:345] - Connect[0] to server 127.0.0.1:8000
+
+2025-12-09 20:01:57,605 [1] INFO  [Services.UserService.OnGameServerConnect:60] - LoadingMesager::OnGameServerConnect :0 reason:Success
+2025-12-09 20:01:59,385 [1] INFO  [Services.UserService.OnUserLogin:247] - OnUserLogin:Success [登录成功]
+2025-12-09 20:01:59,482 [1] INFO  [SceneManager+<LoadLevel>d__4.MoveNext:30] - LoadLevel: CharSelect
+2025-12-09 20:02:00,277 [1] INFO  [SceneManager.LevelLoadCompleted:46] - LevelLoadCompleted:1
+2025-12-09 20:02:00,280 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - Select Char:[7]王浩浩[Wizard]
+2025-12-09 20:02:00,282 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - Select Char:[7]王浩浩[Wizard]
+2025-12-09 20:02:11,858 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - Select Char:[7]王浩浩[Wizard]
+2025-12-09 20:02:12,236 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - Select Char:[8]邓荣荣[Archer]
+2025-12-09 20:02:12,716 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - Select Char:[7]王浩浩[Wizard]
+2025-12-09 20:02:13,281 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - Select Char:[8]邓荣荣[Archer]
+2025-12-09 20:02:14,209 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - Select Char:[7]王浩浩[Wizard]
+2025-12-09 20:02:15,032 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - Select Char:[8]邓荣荣[Archer]
+2025-12-09 20:03:00,465 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - Select Char:[7]王浩浩[Wizard]
+2025-12-09 20:03:00,467 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - Select Char:[7]王浩浩[Wizard]
+2025-12-09 20:03:06,190 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - Select Char:[7]王浩浩[Wizard]
+2025-12-09 20:03:06,736 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - Select Char:[8]邓荣荣[Archer]
+2025-12-09 20:03:07,298 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - Select Char:[7]王浩浩[Wizard]
+2025-12-09 20:03:18,764 [1] INFO  [UnityEngine.Application.CallLogCallback:0] - [GameViewHierarchyPicker] Picked: Text

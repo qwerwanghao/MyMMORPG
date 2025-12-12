@@ -1,141 +1,171 @@
-# 极世界 MMORPG（教学项目）
+# Src 目录结构与关键时序
 
-本项目包含 Unity 客户端与 .NET 服务器，以及一套共享的网络/协议库。本文提供快速上手、目录结构、网络协议与关键代码入口，所有代码引用均为相对链接，点击可直接跳转。
+本文件只关注 `Src/` 下各子模块的代码结构与关键链路时序（Mermaid）。  
+更完整的上手/规范/排查请看 `.codex/ONBOARDING.md` 与 `.codex/PROJECT_GUIDELINES.md`。
 
-## 目录结构
+---
 
-- Client（Unity 客户端工程）
-  - Assets/Game/Scripts：核心游戏与网络脚本
-  - ProjectSettings：Unity 项目配置
-- Server/GameServer（.NET 服务器工程）
-  - GameServer：服务器源代码（控制台程序）
-- Lib（共享库）
-  - Common：日志、网络封包、消息分发等通用代码
-  - Protocol：由 protobuf 生成的 C# 协议代码
-  - proto：`message.proto` 协议定义
-- Data：策划数据与工具
+## 目录
+- [1) Src 子模块结构](#1-src-子模块结构)
+- [2) 关键模块说明](#2-关键模块说明)
+- [3) 时序（Mermaid）](#3-时序mermaid)
+- [4) 协议与数据链路](#4-协议与数据链路)
 
-## 快速开始
+---
 
-### 启动服务器
+## 1) Src 子模块结构
 
-1) 打开并配置数据库连接（默认 SQL Server，本地实例名可按需修改）：
-- [Server/GameServer/GameServer/App.config](Server/GameServer/GameServer/App.config)
+```
+Src/
+├── Client/                         # Unity 客户端
+│   ├── Assets/Game/Scripts/        # 核心脚本（Core/Network/Services/UI/Log 等）
+│   ├── Assets/Levels/              # 场景
+│   ├── Assets/Resources/           # 资源与 log4net.xml
+│   └── Data/                       # 客户端运行时数据（*.txt）
+│
+├── Server/
+│   └── GameServer/                 # 服务器解决方案根
+│       └── GameServer/             # 服务器项目
+│           ├── Network/            # TCP/连接/封包/消息分发
+│           ├── Services/           # 业务网关（登录/注册/创角/删角）
+│           ├── Entities/           # EF 实体与模型
+│           ├── Utils/              # 时间/工具
+│           └── bin/Debug/Data/     # 服务器运行时数据（转表同步）
+│
+├── Lib/                            # 双端共享库
+│   ├── Common/                     # 日志/网络/单例等基础
+│   ├── Protocol/                   # 由 proto 生成的 C# 协议
+│   └── proto/message.proto         # 协议源文件
+│
+└── Data/                           # 策划数据与转表
+    ├── Tables/*.xlsx               # Excel 源表
+    ├── Data/*.txt                  # 转表产物（JSON 文本）
+    └── excel2json.py               # 默认转表脚本
+```
 
-2) 用 Visual Studio 打开并运行服务器工程：
-- [Server/GameServer/GameServer/GameServer.csproj](Server/GameServer/GameServer/GameServer.csproj)
-- 入口： [Server/GameServer/GameServer/Program.cs](Server/GameServer/GameServer/Program.cs)
-- 默认监听：127.0.0.1:8000（见 [Server/GameServer/GameServer/Network/NetService.cs](Server/GameServer/GameServer/Network/NetService.cs)）
+---
 
-3) 数据库初始化：如首次运行，请确保本机 SQL Server 中已有数据库 `ExtremeWorld`，或参考仓库中的 `Entities.edmx.sql` 初始化。
+## 2) 关键模块说明
 
-### 启动客户端
+**客户端**
+- `Core/LoadingManager.cs`：启动入口，初始化 log4net、加载策划数据、初始化 Services、切换 UI。
+- `Core/DataManager.cs`：从 `Data/*.txt` 读取配置并缓存（Map/Character/Teleporter/SpawnPoint）。
+- `Network/NetClient.cs`：TCP 客户端、收发循环、封包/拆包、消息分发。
+- `Services/UserService.cs`：账号/角色相关请求发送与回包回调（对 UI 暴露统一接口）。
+- `UI/*`：登录/注册/选角/弹窗等，订阅 `UserService` 回调，不直接处理网络包。
 
-1) 用 Unity 打开工程：`Src/Client`
+**服务器**
+- `Program.cs`：服务器入口，初始化日志并启动 `GameServer`。
+- `GameServer.cs`：组装 Network/DB/Services，启动主循环 Tick。
+- `Network/NetService.cs`：监听 TCP、创建 `NetConnection`、把字节交给 `PackageHandler`。
+- `Network/PackageHandler.cs`（共享库）：4 字节长度前缀 + Protobuf `NetMessage` 的打包/解包。
+- `Services/UserSerevice.cs`：注册/登录/创角/删角网关；依赖 EF 写库。
+- `Services/DBService.cs`：EF 上下文持有者（`Entities`）。
 
-2) 加载场景并运行（示例场景）：
-- [Client/Assets/Levels/Test.unity](Client/Assets/Levels/Test.unity)
+---
 
-3) 登录示例 UI：
-- [Client/Assets/Game/Scripts/UI/UILogin.cs](Client/Assets/Game/Scripts/UI/UILogin.cs)
-- 点击登录后，将通过 `UserService` 发送登录请求到服务器。
+## 3) 时序（Mermaid）
 
-## 通信协议与封包
-
-- 协议定义（protobuf）：
-  - [Lib/proto/message.proto](Lib/proto/message.proto)
-- 生成的 C# 协议代码：
-  - [Lib/Protocol/message.cs](Lib/Protocol/message.cs)
-- 封包格式：
-  - 4 字节包长前缀 + Protobuf 序列化的 `NetMessage`
-  - 打包与解包： [Lib/Common/Network/PackageHandler.cs](Lib/Common/Network/PackageHandler.cs)
-
-## 关键代码入口
-
-- 客户端网络：
-  - 网络客户端： [Client/Assets/Game/Scripts/Network/NetClient.cs](Client/Assets/Game/Scripts/Network/NetClient.cs)
-  - 用户服务： [Client/Assets/Game/Scripts/Services/UserService.cs](Client/Assets/Game/Scripts/Services/UserService.cs)
-  - 启动流程（加载/日志初始化）： [Client/Assets/Game/Scripts/Core/LoadingManager.cs](Client/Assets/Game/Scripts/Core/LoadingManager.cs)
-  - 消息分发（共享库）： [Lib/Common/Network/MessageDistributer.cs](Lib/Common/Network/MessageDistributer.cs)
-  - 消息调度映射（自动生成）： [Lib/Common/Network/MessageDispatch.cs](Lib/Common/Network/MessageDispatch.cs)
-
-- 服务器：
-  - 入口： [Server/GameServer/GameServer/Program.cs](Server/GameServer/GameServer/Program.cs)
-  - 服务器主控： [Server/GameServer/GameServer/GameServer.cs](Server/GameServer/GameServer/GameServer.cs)
-  - 网络监听/连接：
-    - [Server/GameServer/GameServer/Network/TcpSocketListener.cs](Server/GameServer/GameServer/Network/TcpSocketListener.cs)
-    - [Server/GameServer/GameServer/Network/NetConnection.cs](Server/GameServer/GameServer/Network/NetConnection.cs)
-    - [Server/GameServer/GameServer/Network/NetService.cs](Server/GameServer/GameServer/Network/NetService.cs)
-  - 用户业务： [Server/GameServer/GameServer/Services/UserSerevice.cs](Server/GameServer/GameServer/Services/UserSerevice.cs)
-  - 数据访问（EF）： [Server/GameServer/GameServer/Services/DBService.cs](Server/GameServer/GameServer/Services/DBService.cs)
-
-## 登录/注册时序（Mermaid）
+### 3.1 客户端启动与数据加载
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant UI as UILogin
-    participant CUser as UserService (Client)
-    participant Net as NetClient
-    participant SListen as NetService/TcpSocketListener
-    participant Conn as NetConnection
-    participant SPH as PackageHandler (Server)
-    participant SBus as MessageDistributer (Server)
-    participant SUser as UserService (Server)
-    participant DB as DBService / EF
-    participant CPH as PackageHandler (Client)
-    participant CBus as MessageDistributer (Client)
+    participant LM as LoadingManager
+    participant L4N as log4net/UnityLogger
+    participant DM as DataManager
+    participant US as UserService(Client)
+    participant UI as UI(Loading/Login)
 
-    UI->>CUser: OnClickLogin/OnClickRegister
-    alt Login
-        CUser->>CUser: Build NetMessage.Request.userLogin
-    else Register
-        CUser->>CUser: Build NetMessage.Request.userRegister
-    end
-
-    alt Not connected
-        CUser->>Net: ConnectToServer()
-        Net-->>CUser: OnConnect(0, "Success")
-    end
-
-    CUser->>Net: SendMessage(NetMessage)
-    note right of Net: Pack: 4-byte length + Protobuf(NetMessage)
-
-    Net->>SListen: TCP Connect + Send(bytes)
-    SListen->>Conn: Accept new connection
-    Conn->>SPH: DataReceived(bytes)
-    SPH->>SBus: ParsePackage() → NetMessage
-    alt userLogin
-        SBus->>SUser: Dispatch(UserLoginRequest)
-        SUser->>DB: Validate user/password
-        DB-->>SUser: Result
-        SUser->>Conn: Pack+Send(UserLoginResponse)
-    else userRegister
-        SBus->>SUser: Dispatch(UserRegisterRequest)
-        SUser->>DB: Check exists / Insert user+player
-        DB-->>SUser: Result
-        SUser->>Conn: Pack+Send(UserRegisterResponse)
-    end
-
-    Conn-->>Net: bytes
-    Net->>CPH: ReceiveData(bytes)
-    CPH->>CBus: ParsePackage() → NetMessage
-    alt Response.userLogin
-        CBus->>CUser: Dispatch(UserLoginResponse)
-        CUser->>UI: OnLogin(Result, Errormsg)
-    else Response.userRegister
-        CBus->>CUser: Dispatch(UserRegisterResponse)
-        CUser->>UI: OnRegister(Result, Errormsg)
-    end
-
-    note over Net,Conn: 粘包/拆包：PackageHandler；分发：MessageDistributer
+    LM->>L4N: Configure log4net.xml\nLog.Init("Unity")\nUnityLogger.Init()
+    LM->>UI: 显示 Tips/Loading
+    LM->>DM: LoadData()
+    DM-->>LM: Maps/Characters/Teleporters/SpawnPoints Ready
+    LM->>US: Init()
+    LM->>UI: 切换到 Login UI
 ```
 
-## 常见问题
+### 3.2 登录/注册/创角/删角（客户端 ↔ 服务器）
 
-- 服务器无法启动或端口占用：确认 8000 端口空闲，或在 [Server/GameServer/GameServer/Network/NetService.cs](Server/GameServer/GameServer/Network/NetService.cs) 调整端口，并同步修改客户端连接地址（见下条）。
-- 客户端连接地址：当前客户端在 `UserService.ConnectToServer()` 写死为 `127.0.0.1:8000`
-  - [Client/Assets/Game/Scripts/Services/UserService.cs](Client/Assets/Game/Scripts/Services/UserService.cs)
-- 数据库连接失败：检查本机 SQL Server 实例与数据库名，修改 [Server/GameServer/GameServer/App.config](Server/GameServer/GameServer/App.config) 的 `ExtremeWorldEntities` 连接串。
+```mermaid
+sequenceDiagram
+    autonumber
+    participant UI as UI层
+    participant CUser as UserService(Client)
+    participant Net as NetClient
+    participant SListen as NetService/TcpSocketListener
+    participant Conn as NetConnection(Server)
+    participant SBus as MessageDistributer(Server)
+    participant SUser as UserSerevice(Server)
+    participant DB as DBService/EF
+    participant CBus as MessageDistributer(Client)
 
-—— 祝开发顺利！
+    UI->>CUser: 点击注册/登录/创角/删角
+    CUser->>Net: Pack+Send(NetMessage)
+    Net->>SListen: TCP Send(bytes)
+    SListen->>Conn: Accept/Recv(bytes)
+    Conn->>SBus: PackageHandler.ParsePackage()\n得到 NetMessage
+
+    alt userRegister
+        SBus->>SUser: Dispatch(UserRegisterRequest)
+        SUser->>DB: 查重/写入 User+Player
+        DB-->>SUser: Result
+        SUser-->>Conn: Pack+Send(UserRegisterResponse)
+    else userLogin
+        SBus->>SUser: Dispatch(UserLoginRequest)
+        SUser->>DB: 校验账号密码\n加载角色列表
+        DB-->>SUser: Result+Characters
+        SUser-->>Conn: Pack+Send(UserLoginResponse)
+    else createChar
+        SBus->>SUser: Dispatch(UserCreateCharacterRequest)
+        SUser->>DB: 校验/插入 Character
+        DB-->>SUser: Result+Characters
+        SUser-->>Conn: Pack+Send(UserCreateCharacterResponse)
+    else deleteChar
+        SBus->>SUser: Dispatch(UserDeleteCharacterRequest)
+        SUser->>DB: 删除 Character
+        DB-->>SUser: Result+Characters
+        SUser-->>Conn: Pack+Send(UserDeleteCharacterResponse)
+    end
+
+    Conn-->>Net: TCP Recv(bytes)
+    Net->>CBus: ParsePackage()\n得到 Response
+    CBus->>CUser: Dispatch(Response)
+    CUser-->>UI: 回调 UI 刷新
+```
+
+### 3.3 策划数据转表与同步
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Excel as Src/Data/Tables/*.xlsx
+    participant Py as excel2json.py
+    participant Out as Src/Data/Data
+    participant CData as Src/Client/Data
+    participant SData as Server/bin/Debug/Data
+
+    Excel->>Py: 修改 Excel 后执行脚本
+    Py->>Out: json-excel.exe 转出 *.txt
+    Py->>CData: 复制指定 txt
+    Py->>SData: 清空旧 Data\n全量同步新 txt
+```
+
+---
+
+## 4) 协议与数据链路
+
+**协议链路**
+
+```
+Src/Lib/proto/message.proto
+  → Tools/genproto.cmd
+  → Src/Lib/Protocol/message.cs
+```
+修改 proto 后必须同步提交生成的 `message.cs` 并重编双端。
+
+**数据读取位置**
+
+- 客户端：`DataManager.DataPath="Data/"` → 读取 `Src/Client/Data/*.txt`
+- 服务器：运行目录 `bin/Debug` 下读取 `bin/Debug/Data/*.txt`
+

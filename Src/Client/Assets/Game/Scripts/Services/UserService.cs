@@ -124,7 +124,7 @@ namespace Services
         {
             if (this.IsBusy)
             {
-                Debug.LogWarning("UserService busy; ignore duplicate submit.");
+                Log.Warning("UserService busy; ignore duplicate submit.");
                 return;
             }
             this.IsBusy = true;
@@ -152,7 +152,7 @@ namespace Services
         {
             if (this.IsBusy)
             {
-                Debug.LogWarning("UserService busy; ignore duplicate submit.");
+                Log.Warning("UserService busy; ignore duplicate submit.");
                 return;
             }
             this.IsBusy = true;
@@ -180,7 +180,7 @@ namespace Services
         {
             if (this.IsBusy)
             {
-                Debug.LogWarning("UserService busy; ignore duplicate submit.");
+                Log.Warning("UserService busy; ignore duplicate submit.");
                 return;
             }
             this.IsBusy = true;
@@ -207,7 +207,7 @@ namespace Services
         {
             if (this.IsBusy)
             {
-                Debug.LogWarning("UserService busy; ignore duplicate submit.");
+                Log.Warning("UserService busy; ignore duplicate submit.");
                 return;
             }
             this.IsBusy = true;

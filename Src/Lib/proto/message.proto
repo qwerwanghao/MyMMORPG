@@ -7,7 +7,7 @@ option cc_enable_arenas = true;
 
 ////////////////////////////////////////////////////////////////
 //
-//  Basic Defines
+//  Basic Defines基本定义
 //
 ////////////////////////////////////////////////////////////////
 enum RESULT {
@@ -68,6 +68,11 @@ message NVector3 {
   int32 z = 3;
 }
 
+message NVector2 {
+  int32 x = 1;
+  int32 y = 2;
+}
+
 ////////////////////////////////////////////////////////////////
 //
 //  Entities
@@ -98,34 +103,35 @@ message NetMessage {
   NetMessageResponse Response = 2;
 }
 
-// NetMessageRequest：客户端 -> 服务器的统一请求封包，字段号与响应保持一一对应，避免序列化冲突。
+// NetMessageRequest：客户端 ->
+// 服务器的统一请求封包，字段号与响应保持一一对应，避免序列化冲突。
 message NetMessageRequest {
-  UserRegisterRequest userRegister = 1;            // 1: 用户注册
-  UserLoginRequest userLogin = 2;                  // 2: 用户登录
-  UserCreateCharacterRequest createChar = 3;       // 3: 创角
-  UserDeleteCharacterRequest deleteChar = 4;       // 4: 删角
-  UserGameEnterRequest gameEnter = 5;              // 5: 进入游戏
-  UserGameLeaveRequest gameLeave = 6;              // 6: 离开游戏
-  MapCharacterEnterRequest mapCharacterEnter = 7;  // 7: 进入地图
-  MapCharacterLeaveRequest mapCharacterLeave = 8;  // 8: 离开地图
-  MapEntitySyncRequest mapEntitySync = 9;          // 9: 地图内实体同步
-  MapTeleportRequest mapTeleport = 10;             // 10: 传送
+  UserRegisterRequest userRegister = 1;           // 1: 用户注册
+  UserLoginRequest userLogin = 2;                 // 2: 用户登录
+  UserCreateCharacterRequest createChar = 3;      // 3: 创角
+  UserDeleteCharacterRequest deleteChar = 4;      // 4: 删角
+  UserGameEnterRequest gameEnter = 5;             // 5: 进入游戏
+  UserGameLeaveRequest gameLeave = 6;             // 6: 离开游戏
+  MapCharacterEnterRequest mapCharacterEnter = 7; // 7: 进入地图
+  MapCharacterLeaveRequest mapCharacterLeave = 8; // 8: 离开地图
+  MapEntitySyncRequest mapEntitySync = 9;         // 9: 地图内实体同步
+  MapTeleportRequest mapTeleport = 10;            // 10: 传送
 }
 
-// NetMessageResponse：服务器 -> 客户端的统一响应封包，字段号与请求保持一致，便于一一对应。
+// NetMessageResponse：服务器 ->
+// 客户端的统一响应封包，字段号与请求保持一致，便于一一对应。
 message NetMessageResponse {
-  UserRegisterResponse userRegister = 1;            // 1: 用户注册
-  UserLoginResponse userLogin = 2;                  // 2: 用户登录
-  UserCreateCharacterResponse createChar = 3;       // 3: 创角
-  UserDeleteCharacterResponse deleteChar = 4;       // 4: 删角
-  UserGameEnterResponse gameEnter = 5;              // 5: 进入游戏
-  UserGameLeaveResponse gameLeave = 6;              // 6: 离开游戏
-  MapCharacterEnterResponse mapCharacterEnter = 7;  // 7: 进入地图
-  MapCharacterLeaveResponse mapCharacterLeave = 8;  // 8: 离开地图
-  MapEntitySyncResponse mapEntitySync = 9;          // 9: 地图内实体同步
-  MapTeleportResponse mapTeleport = 10;             // 10: 传送
+  UserRegisterResponse userRegister = 1;           // 1: 用户注册
+  UserLoginResponse userLogin = 2;                 // 2: 用户登录
+  UserCreateCharacterResponse createChar = 3;      // 3: 创角
+  UserDeleteCharacterResponse deleteChar = 4;      // 4: 删角
+  UserGameEnterResponse gameEnter = 5;             // 5: 进入游戏
+  UserGameLeaveResponse gameLeave = 6;             // 6: 离开游戏
+  MapCharacterEnterResponse mapCharacterEnter = 7; // 7: 进入地图
+  MapCharacterLeaveResponse mapCharacterLeave = 8; // 8: 离开地图
+  MapEntitySyncResponse mapEntitySync = 9;         // 9: 地图内实体同步
+  MapTeleportResponse mapTeleport = 10;            // 10: 传送
 }
-
 
 // User Protocol
 message UserLoginRequest {

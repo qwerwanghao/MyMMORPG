@@ -9,6 +9,7 @@ using System.IO;
 using Common.Data;
 
 using Newtonsoft.Json;
+using Common;
 
 public class DataManager : Singleton<DataManager>
 {
@@ -22,7 +23,7 @@ public class DataManager : Singleton<DataManager>
     public DataManager()
     {
         this.DataPath = "Data/";
-        Debug.LogFormat("DataManager > DataManager()");
+        Log.InfoFormat("DataManager > DataManager()");
     }
 
     public void Load()
@@ -37,7 +38,7 @@ public class DataManager : Singleton<DataManager>
         this.Teleporters = JsonConvert.DeserializeObject<Dictionary<int, TeleporterDefine>>(json);
 
         json = File.ReadAllText(this.DataPath + "SpawnPointDefine.txt");
-        this.SpawnPoints = JsonConvert.DeserializeObject<Dictionary<int, Dictionary<int, SpawnPointDefine>>> (json);
+        this.SpawnPoints = JsonConvert.DeserializeObject<Dictionary<int, Dictionary<int, SpawnPointDefine>>>(json);
     }
 
 
