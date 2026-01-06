@@ -1,31 +1,21 @@
-using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Events;
-using System.Text;
-using System;
 using System.IO;
-
-using Common.Data;
-
-using Newtonsoft.Json;
 using Common;
+using Common.Data;
+using Newtonsoft.Json;
 
 public class DataManager : Singleton<DataManager>
 {
     /// <summary>
-    /// DataManager：客户端配置/策划数据加载器。
-    /// - 从 `Data/` 目录读取 JSON 文本（MapDefine/CharacterDefine/...）。
-    /// - 提供字典索引给 UI、场景切换、角色定义等使用。
-    /// - 同时读取 GameServerConfig（服务器地址/端口）用于网络连接配置。
-    /// </summary>
+    /// DataManagerï¼šå®¢æˆ·ç«¯é…ç½®/ç­–åˆ’æ•°æ®åŠ è½½å™¨ã€?    /// - ä»?`Data/` ç›®å½•è¯»å– JSON æ–‡æœ¬ï¼ˆMapDefine/CharacterDefine/...ï¼‰ã€?    /// - æä¾›å­—å…¸ç´¢å¼•ç»?UIã€åœºæ™¯åˆ‡æ¢ã€è§’è‰²å®šä¹‰ç­‰ä½¿ç”¨ã€?    /// - åŒæ—¶è¯»å– GameServerConfigï¼ˆæœåŠ¡å™¨åœ°å€/ç«¯å£ï¼‰ç”¨äºŽç½‘ç»œè¿žæŽ¥é…ç½®ã€?    /// </summary>
     public string DataPath;
     public Dictionary<int, MapDefine> Maps = null;
     public Dictionary<int, CharacterDefine> Characters = null;
     public Dictionary<int, TeleporterDefine> Teleporters = null;
     public Dictionary<int, Dictionary<int, SpawnPointDefine>> SpawnPoints = null;
     public GameServerConfig Config = null;
-
 
     public DataManager()
     {
@@ -62,7 +52,6 @@ public class DataManager : Singleton<DataManager>
         json = File.ReadAllText(this.DataPath + "SpawnPointDefine.txt");
         this.SpawnPoints = JsonConvert.DeserializeObject<Dictionary<int, Dictionary<int, SpawnPointDefine>>>(json);
     }
-
 
     public IEnumerator LoadData()
     {

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System;
 using Common;
 using Network;
-using UnityEngine;
-
 using SkillBridge.Message;
+using UnityEngine;
 
 namespace Services
 {
@@ -18,10 +14,10 @@ namespace Services
         public UnityEngine.Events.UnityAction<Result, string> OnDeleteCharacter;
         public UnityEngine.Events.UnityAction<Result, string> OnGameEnter;
         public UnityEngine.Events.UnityAction<Result, string> OnGameLeave;
-        NetMessage pendingMessage = null;
-        bool connected = false;
         public bool IsBusy { get; private set; } = false;
 
+        private NetMessage pendingMessage = null;
+        private bool connected = false;
         private bool initialized = false;
 
         public UserService()
@@ -106,7 +102,6 @@ namespace Services
             NetClient.Instance.Init(host, port);
             NetClient.Instance.Connect();
         }
-
 
         void OnGameServerConnect(int result, string reason)
         {

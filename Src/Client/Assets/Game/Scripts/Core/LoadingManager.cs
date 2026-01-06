@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using System.IO;
-using Common;
 
 public class LoadingManager : MonoBehaviour
 {
@@ -14,10 +11,10 @@ public class LoadingManager : MonoBehaviour
     /// - 调用 ClientInitPipeline.Run 初始化基础设施（日志、单例、服务/管理器订阅等）。
     /// </summary>
 
+    [Header("UI References")]
     public GameObject UITips;
     public GameObject UILoading;
     public GameObject UILogin;
-
     public Slider progressBar;
     public Text progressText;
     public Text progressNumber;
@@ -28,12 +25,12 @@ public class LoadingManager : MonoBehaviour
         ClientInitPipeline.Run();
     }
 
-    // Use this for initialization
-    IEnumerator Start()
+    private IEnumerator Start()
     {
         UITips.SetActive(true);
         UILoading.SetActive(false);
         UILogin.SetActive(false);
+
         yield return new WaitForSeconds(2f);
         UILoading.SetActive(true);
         yield return new WaitForSeconds(1f);
@@ -54,10 +51,7 @@ public class LoadingManager : MonoBehaviour
         yield return null;
     }
 
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
     }
 }

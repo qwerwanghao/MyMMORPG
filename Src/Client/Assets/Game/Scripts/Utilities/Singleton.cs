@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-
 public class Singleton<T> where T : new()
 {
-    static T instance;
+    private static T instance;
 
     public static T Instance
     {
@@ -18,6 +12,5 @@ public class Singleton<T> where T : new()
             }
             return instance;
         }
-        
     }
 }

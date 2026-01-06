@@ -1,6 +1,6 @@
+using Services;
 using UnityEngine;
 using UnityEngine.UI;
-using Services;
 
 public class UILogin : MonoBehaviour
 {
@@ -8,29 +8,13 @@ public class UILogin : MonoBehaviour
     public InputField password;
     public Button buttonLogin;
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
         UserService.Instance.OnLogin = this.OnLogin;
     }
 
-    void OnLogin(SkillBridge.Message.Result result, string msg)
+    private void Update()
     {
-        buttonLogin.interactable = true;
-        MessageBox.Show(string.Format("登录结果：{0} 消息:{1}", result, msg));
-
-        if (result == SkillBridge.Message.Result.Success)
-        {
-            // 登录成功后的操作，跳转角色选择界面
-            SceneManager.Instance.LoadScene("CharSelect");
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public void OnClickLogin()
@@ -40,18 +24,18 @@ public class UILogin : MonoBehaviour
 
         if (string.IsNullOrWhiteSpace(user))
         {
-            MessageBox.Show("请输入账号");
+            MessageBox.Show("è¯·è¾“å…¥è´¦å?");
             return;
         }
         if (string.IsNullOrWhiteSpace(pass))
         {
-            MessageBox.Show("请输入密码");
+            MessageBox.Show("è¯·è¾“å…¥å¯†ç ?");
             return;
         }
 
-        if (Services.UserService.Instance.IsBusy)  // 第4步会加入 IsBusy
+        if (Services.UserService.Instance.IsBusy)  // ç¬?æ­¥ä¼šåŠ å…¥ IsBusy
         {
-            MessageBox.Show("正在处理上一次请求，请稍候…");
+            MessageBox.Show("æ­£åœ¨å¤„ç†ä¸Šä¸€æ¬¡è¯·æ±‚ï¼Œè¯·ç¨å€™â€?");
             return;
         }
 
@@ -61,7 +45,7 @@ public class UILogin : MonoBehaviour
 
     public void OnClickOpenRegister()
     {
-        // 清空输入框
+        // æ¸…ç©ºè¾“å…¥æ¡?
         this.username.text = "";
         this.password.text = "";
     }
@@ -70,5 +54,17 @@ public class UILogin : MonoBehaviour
     {
         this.username.text = user;
         this.password.text = pwd;
+    }
+
+    private void OnLogin(SkillBridge.Message.Result result, string msg)
+    {
+        buttonLogin.interactable = true;
+        MessageBox.Show(string.Format("ç™»å½•ç»“æžœï¼š{0} æ¶ˆæ¯:{1}", result, msg));
+
+        if (result == SkillBridge.Message.Result.Success)
+        {
+            // ç™»å½•æˆåŠŸåŽçš„æ“ä½œï¼Œè·³è½¬è§’è‰²é€‰æ‹©ç•Œé¢
+            SceneManager.Instance.LoadScene("CharSelect");
+        }
     }
 }

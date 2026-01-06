@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 using Entities;
 using SkillBridge.Message;
+using UnityEngine;
 
 /// <summary>
 /// PlayerInputController：本地玩家输入驱动器。
@@ -13,27 +10,20 @@ using SkillBridge.Message;
 /// </summary>
 public class PlayerInputController : MonoBehaviour
 {
-
     public Rigidbody rb;
-    SkillBridge.Message.CharacterState state;
-
-    /// <summary>绑定的逻辑角色（Entities.Character）。</summary>
     public Character character;
-
-    public float rotateSpeed = 2.0f;
-
-    public float turnAngle = 10;
-
-    public int speed;
-
     public EntityController entityController;
-
+    public float rotateSpeed = 2.0f;
+    public float turnAngle = 10;
+    public int speed;
     public bool onAir = false;
 
-    // Use this for initialization
-    void Start()
+    private CharacterState state;
+    private Vector3 lastPos;
+
+    private void Start()
     {
-        state = SkillBridge.Message.CharacterState.Idle;
+        state = CharacterState.Idle;
         if (this.character == null)
         {
             // 兜底/测试逻辑：当未绑定角色时，创建一个临时角色用于本地调试。
@@ -50,12 +40,12 @@ public class PlayerInputController : MonoBehaviour
             cinfo.Entity.Direction.Z = 0;
             this.character = new Character(cinfo);
 
-            if (entityController != null) entityController.entity = this.character;
+            if (entityController != null)
+                entityController.entity = this.character;
         }
     }
 
-
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (character == null)
             return;
@@ -64,9 +54,9 @@ public class PlayerInputController : MonoBehaviour
         float v = Input.GetAxis("Vertical");
         if (v > 0.01)
         {
-            if (state != SkillBridge.Message.CharacterState.Move)
+            if (state != CharacterState.Move)
             {
-                state = SkillBridge.Message.CharacterState.Move;
+                state = CharacterState.Move;
                 this.character.MoveForward();
                 this.SendEntityEvent(EntityEvent.MoveFwd);
             }
@@ -74,9 +64,9 @@ public class PlayerInputController : MonoBehaviour
         }
         else if (v < -0.01)
         {
-            if (state != SkillBridge.Message.CharacterState.Move)
+            if (state != CharacterState.Move)
             {
-                state = SkillBridge.Message.CharacterState.Move;
+                state = CharacterState.Move;
                 this.character.MoveBack();
                 this.SendEntityEvent(EntityEvent.MoveBack);
             }
@@ -84,9 +74,9 @@ public class PlayerInputController : MonoBehaviour
         }
         else
         {
-            if (state != SkillBridge.Message.CharacterState.Idle)
+            if (state != CharacterState.Idle)
             {
-                state = SkillBridge.Message.CharacterState.Idle;
+                state = CharacterState.Idle;
                 this.rb.linearVelocity = Vector3.zero;
                 this.character.Stop();
                 this.SendEntityEvent(EntityEvent.Idle);
@@ -114,11 +104,9 @@ public class PlayerInputController : MonoBehaviour
                 rb.transform.forward = this.transform.forward;
                 this.SendEntityEvent(EntityEvent.None);
             }
-
         }
     }
-    Vector3 lastPos;
-    //float lastSync = 0;
+
     private void LateUpdate()
     {
         // 计算当前帧速度（用于同步或动画参数）
@@ -137,7 +125,7 @@ public class PlayerInputController : MonoBehaviour
         this.transform.position = this.rb.transform.position;
     }
 
-    void SendEntityEvent(EntityEvent entityEvent)
+    private void SendEntityEvent(EntityEvent entityEvent)
     {
         if (entityController != null)
             entityController.OnEntityEvent(entityEvent);

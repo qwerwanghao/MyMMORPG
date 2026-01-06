@@ -1,11 +1,10 @@
 using Common;
 using log4net.Appender;
 using log4net.Core;
-using UnityEngine;
 
 public class UnityConsoleAppender : AppenderSkeleton
 {
-    // 防止无限循环的标志位
+    // é˜²æ­¢æ— é™å¾ªçŽ¯çš„æ ‡å¿—ä½?
     private static bool isLoggingFromAppender = false;
 
     public static bool IsLoggingFromAppender
@@ -15,15 +14,15 @@ public class UnityConsoleAppender : AppenderSkeleton
 
     protected override void Append(LoggingEvent loggingEvent)
     {
-        // 设置标志位，防止无限循环
+        // è®¾ç½®æ ‡å¿—ä½?ï¼Œé˜²æ­¢æ— é™å¾ªçŽ¯
         isLoggingFromAppender = true;
 
         try
         {
-            // 格式化日志消息
+            // æ ¼å¼åŒ–æ—¥å¿—æ¶ˆæ?
             string formattedMessage = RenderLoggingEvent(loggingEvent);
 
-            // 根据日志级别选择合适的Unity控制台输出方法
+            // æ ¹æ®æ—¥å¿—çº§åˆ«é€‰æ‹©åˆé€‚çš„UnityæŽ§åˆ¶å°è¾“å‡ºæ–¹æ³?
             if (loggingEvent.Level >= Level.Error)
             {
                 Log.Error(formattedMessage);
@@ -39,7 +38,7 @@ public class UnityConsoleAppender : AppenderSkeleton
         }
         finally
         {
-            // 清除标志位
+            // æ¸…é™¤æ ‡å¿—ä½?
             isLoggingFromAppender = false;
         }
     }

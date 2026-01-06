@@ -6,7 +6,6 @@ using UnityEngine;
 
 /// <summary>
 /// ClientInitPipeline：客户端初始化入口（同步）。
-/// 目标：把 LoadingManager 中的初始化逻辑收拢到一个地方，LoadingManager 只负责 UI 与流程编排。
 /// </summary>
 public static class ClientInitPipeline
 {

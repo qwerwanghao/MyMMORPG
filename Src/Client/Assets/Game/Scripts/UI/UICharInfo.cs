@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using SkillBridge.Message;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UICharInfo : MonoBehaviour
 {
-
-
-    public SkillBridge.Message.NCharacterInfo info;
+    public NCharacterInfo info;
 
     public Text charClass;
     public Text charName;
     public Button deleteButton;
+
     private UICharacterSelect characterSelect;
 
     internal void SetCharacterInfo(NCharacterInfo cha, int i, UICharacterSelect uICharacterSelect)
@@ -41,8 +37,7 @@ public class UICharInfo : MonoBehaviour
         }
     }
 
-    // Use this for initialization
-    void Start()
+    private void Start()
     {
         if (info != null)
         {
@@ -51,9 +46,7 @@ public class UICharInfo : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
     }
 }

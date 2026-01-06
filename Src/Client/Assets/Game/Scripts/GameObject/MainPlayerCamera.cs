@@ -1,5 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MainPlayerCamera : MonoSingleton<MainPlayerCamera>
@@ -9,15 +7,14 @@ public class MainPlayerCamera : MonoSingleton<MainPlayerCamera>
 
     /// <summary>本地玩家 GameObject（相机将跟随其 Transform）。</summary>
     public GameObject player;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    private void Start()
+    {
+    }
+
+    private void Update()
+    {
+    }
 
     private void LateUpdate()
     {

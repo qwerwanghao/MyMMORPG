@@ -1,12 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 class MessageBox
 {
-    static Object cacheObject = null;
+    private static Object cacheObject = null;
 
-    public static UIMessageBox Show(string message, string title="", MessageBoxType type = MessageBoxType.Information, string btnOK = "", string btnCancel = "")
+    public static UIMessageBox Show(string message, string title = "", MessageBoxType type = MessageBoxType.Information, string btnOK = "", string btnCancel = "")
     {
-        if(cacheObject==null)
+        if (cacheObject == null)
         {
             cacheObject = Resloader.Load<Object>("UI/UIMessageBox");
         }

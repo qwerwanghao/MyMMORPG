@@ -1,32 +1,28 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class UIMessageBox : MonoBehaviour {
-
+public class UIMessageBox : MonoBehaviour
+{
     public Text title;
     public Text message;
     public Image[] icons;
     public Button buttonYes;
     public Button buttonNo;
     public Button buttonClose;
-
     public Text buttonYesTitle;
     public Text buttonNoTitle;
 
     public UnityAction OnYes;
     public UnityAction OnNo;
-    
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private void Start()
+    {
+    }
+
+    private void Update()
+    {
+    }
 
     public void Init(string title, string message, MessageBoxType type = MessageBoxType.Information, string btnOK = "", string btnCancel = "")
     {
@@ -45,14 +41,14 @@ public class UIMessageBox : MonoBehaviour {
         this.buttonNo.gameObject.SetActive(type == MessageBoxType.Confirm);
     }
 
-    void OnClickYes()
+    private void OnClickYes()
     {
         Destroy(this.gameObject);
         if (this.OnYes != null)
             this.OnYes();
     }
 
-    void OnClickNo()
+    private void OnClickNo()
     {
         Destroy(this.gameObject);
         if (this.OnNo != null)

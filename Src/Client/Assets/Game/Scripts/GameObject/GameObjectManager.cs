@@ -1,11 +1,9 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-
+using Common;
 using Entities;
 using Services;
-using SkillBridge.Message;
-using Common;
+using UnityEngine;
 
 /// <summary>
 /// GameObjectManager：根据 CharacterManager 中的逻辑角色列表，创建/管理 Unity 场景中的角色 GameObject。
@@ -15,11 +13,10 @@ using Common;
 /// </summary>
 public class GameObjectManager : MonoBehaviour
 {
-
     /// <summary>已创建的角色 GameObject：key=角色ID（NCharacterInfo.Id）。</summary>
-    Dictionary<int, GameObject> Characters = new Dictionary<int, GameObject>();
-    // Use this for initialization
-    void Start()
+    private readonly Dictionary<int, GameObject> characters = new Dictionary<int, GameObject>();
+
+    private void Start()
     {
         // 先创建当前已有角色的对象，再监听后续进入事件
         StartCoroutine(InitGameObjects());
@@ -31,19 +28,17 @@ public class GameObjectManager : MonoBehaviour
         CharacterManager.Instance.OnCharacterEnter = null;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
     }
 
-    void OnCharacterEnter(Character cha)
+    private void OnCharacterEnter(Character cha)
     {
         // 收到“角色进入地图”事件：创建对应的 GameObject 表现
         CreateCharacterObject(cha);
     }
 
-    IEnumerator InitGameObjects()
+    private IEnumerator InitGameObjects()
     {
         foreach (var cha in CharacterManager.Instance.Characters.Values)
         {
@@ -54,7 +49,7 @@ public class GameObjectManager : MonoBehaviour
 
     private void CreateCharacterObject(Character character)
     {
-        if (!Characters.ContainsKey(character.Info.Id) || Characters[character.Info.Id] == null)
+        if (!this.characters.ContainsKey(character.Info.Id) || this.characters[character.Info.Id] == null)
         {
             // 从 Resources 加载角色预制体（资源路径由 CharacterDefine.Resource 配置）
             Object obj = Resloader.Load<Object>(character.Define.Resource);
@@ -69,7 +64,7 @@ public class GameObjectManager : MonoBehaviour
             // 初始位置/朝向：逻辑坐标转世界坐标
             go.transform.position = GameObjectTool.LogicToWorld(character.position);
             go.transform.forward = GameObjectTool.LogicToWorld(character.direction);
-            Characters[character.Info.Id] = go;
+            this.characters[character.Info.Id] = go;
 
             EntityController ec = go.GetComponent<EntityController>();
             if (ec != null)
@@ -98,4 +93,3 @@ public class GameObjectManager : MonoBehaviour
         }
     }
 }
-

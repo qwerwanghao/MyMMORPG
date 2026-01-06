@@ -1,10 +1,7 @@
-﻿using SkillBridge.Message;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Entities;
 using Common;
-
+using Entities;
+using SkillBridge.Message;
+using UnityEngine;
 
 /// <summary>
 /// EntityController：把“逻辑实体（Entities.Entity）”绑定到 Unity GameObject 的表现层组件。
@@ -14,21 +11,15 @@ using Common;
 /// </summary>
 public class EntityController : MonoBehaviour
 {
-
     public Animator anim;
     public Rigidbody rb;
-    private AnimatorStateInfo currentBaseState;
 
     /// <summary>绑定的逻辑实体（位置/朝向/速度都在 entity 上）。</summary>
     public Entity entity;
 
-    public UnityEngine.Vector3 position;
-    public UnityEngine.Vector3 direction;
-    Quaternion rotation;
-
-    public UnityEngine.Vector3 lastPosition;
-    Quaternion lastRotation;
-
+    public Vector3 position;
+    public Vector3 direction;
+    public Vector3 lastPosition;
     public float speed;
     public float animSpeed = 1.5f;
     public float jumpPower = 3.0f;
@@ -36,8 +27,11 @@ public class EntityController : MonoBehaviour
     /// <summary>是否为本地玩家角色（本地玩家通常由输入控制，不由同步驱动 Transform）。</summary>
     public bool isPlayer = false;
 
-    // Use this for initialization
-    void Start()
+    private AnimatorStateInfo currentBaseState;
+    private Quaternion rotation;
+    private Quaternion lastRotation;
+
+    private void Start()
     {
         if (entity != null)
         {
@@ -48,27 +42,7 @@ public class EntityController : MonoBehaviour
             rb.useGravity = false;
     }
 
-    void UpdateTransform()
-    {
-        // 将逻辑坐标（以 1/100 为单位的格点坐标）转换为 Unity 世界坐标
-        this.position = GameObjectTool.LogicToWorld(entity.position);
-        this.direction = GameObjectTool.LogicToWorld(entity.direction);
-
-        // 非玩家对象：用 MovePosition 做物理移动同步，避免穿透/抖动
-        this.rb.MovePosition(this.position);
-        this.transform.forward = this.direction;
-        this.lastPosition = this.position;
-        this.lastRotation = this.rotation;
-    }
-
-    void OnDestroy()
-    {
-        if (entity != null)
-            Log.InfoFormat("{0} OnDestroy :ID:{1} POS:{2} DIR:{3} SPD:{4} ", this.name, entity.entityId, entity.position, entity.direction, entity.speed);
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (this.entity == null)
             return;
@@ -80,6 +54,12 @@ public class EntityController : MonoBehaviour
         {
             this.UpdateTransform();
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (entity != null)
+            Log.InfoFormat("{0} OnDestroy :ID:{1} POS:{2} DIR:{3} SPD:{4} ", this.name, entity.entityId, entity.position, entity.direction, entity.speed);
     }
 
     public void OnEntityEvent(EntityEvent entityEvent)
@@ -100,5 +80,18 @@ public class EntityController : MonoBehaviour
                 anim.SetTrigger("Jump");
                 break;
         }
+    }
+
+    private void UpdateTransform()
+    {
+        // 将逻辑坐标（以 1/100 为单位的格点坐标）转换为 Unity 世界坐标
+        this.position = GameObjectTool.LogicToWorld(entity.position);
+        this.direction = GameObjectTool.LogicToWorld(entity.direction);
+
+        // 非玩家对象：用 MovePosition 做物理移动同步，避免穿透/抖动
+        this.rb.MovePosition(this.position);
+        this.transform.forward = this.direction;
+        this.lastPosition = this.position;
+        this.lastRotation = this.rotation;
     }
 }

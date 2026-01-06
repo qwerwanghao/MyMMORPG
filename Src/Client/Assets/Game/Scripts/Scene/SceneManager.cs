@@ -1,23 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+using System.Collections;
+using Common;
 using UnityEngine;
 using UnityEngine.Events;
-using Common;
 
 public class SceneManager : MonoSingleton<SceneManager>
 {
-    UnityAction<float> onProgress = null;
+    private UnityAction<float> onProgress = null;
 
-    // Use this for initialization
     protected override void OnStart()
     {
-
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
     }
 
     public void LoadScene(string name)
@@ -25,7 +20,7 @@ public class SceneManager : MonoSingleton<SceneManager>
         StartCoroutine(LoadLevel(name));
     }
 
-    IEnumerator LoadLevel(string name)
+    private IEnumerator LoadLevel(string name)
     {
         Log.InfoFormat("LoadLevel: {0}", name);
         AsyncOperation async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name);

@@ -1,39 +1,30 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+using System.Collections.Generic;
+using Common;
 using Models;
 using Services;
 using SkillBridge.Message;
-using Common;
+using UnityEngine;
+using UnityEngine.UI;
+
 public class UICharacterSelect : MonoBehaviour
 {
-
     public GameObject panelCreate;
     public GameObject panelSelect;
-
     public GameObject btnCreateCancel;
-
     public InputField charName;
-    CharacterClass charClass;
-
     public Transform uiCharList;
     public GameObject uiCharInfo;
+    public Image[] titles;
+    public Text descs;
+    public Text[] names;
+    public UICharacterView characterView;
 
     public List<GameObject> uiChars = new List<GameObject>();
 
-    public Image[] titles;
-
-    public Text descs;
-
-
-    public Text[] names;
-
+    private CharacterClass charClass;
     private int selectCharacterIdx = -1;
 
-    public UICharacterView characterView;
-
-    // Use this for initialization
-    void Start()
+    private void Start()
     {
         InitCharacterSelect(true);
         UserService.Instance.OnCreateCharacter = this.OnCharacterCreate;
@@ -41,6 +32,9 @@ public class UICharacterSelect : MonoBehaviour
         UserService.Instance.OnGameEnter = this.OnGameEnter;
     }
 
+    private void Update()
+    {
+    }
 
     public void InitCharacterSelect(bool init)
     {
@@ -62,9 +56,9 @@ public class UICharacterSelect : MonoBehaviour
                 Button btn = charInfo.GetComponent<Button>();
                 int idx = i;
                 btn.onClick.AddListener(() =>
-                    {
-                        RefreshSelection(idx);
-                    });
+                {
+                    RefreshSelection(idx);
+                });
                 charInfo.SetActive(true);
                 charInfo.GetComponent<UICharInfo>().SetCharacterInfo(cha, i, this);
                 uiChars.Add(charInfo);
@@ -80,12 +74,6 @@ public class UICharacterSelect : MonoBehaviour
         panelSelect.SetActive(false);
 
         OnSelectClass(1);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public void OnClickCreate()
@@ -109,7 +97,6 @@ public class UICharacterSelect : MonoBehaviour
     public void OnSelectClass(int charClass)
     {
         this.charClass = (CharacterClass)charClass;
-
         characterView.CurrectCharacter = charClass - 1;
 
         for (int i = 0; i < 3; i++)
@@ -119,54 +106,6 @@ public class UICharacterSelect : MonoBehaviour
         }
 
         descs.text = DataManager.Instance.Characters[charClass].Description;
-    }
-
-
-    void OnCharacterCreate(Result result, string message)
-    {
-        if (result == Result.Success)
-        {
-            InitCharacterSelect(true);
-
-            this.charName.text = "";
-            MessageBox.Show("角色创建成功！");
-        }
-        else
-            MessageBox.Show(message, "错误", MessageBoxType.Error);
-    }
-
-    void OnCharacterDelete(Result result, string message)
-    {
-        if (result == Result.Success)
-        {
-            InitCharacterSelect(true);
-            this.selectCharacterIdx = -1;
-            User.Instance.CurrentCharacter = null;
-            MessageBox.Show("角色删除成功！");
-        }
-        else
-            MessageBox.Show(message, "错误", MessageBoxType.Error);
-    }
-
-    void OnGameEnter(Result result, string message)
-    {
-        if (result != Result.Success)
-            MessageBox.Show(message, "错误", MessageBoxType.Error);
-    }
-
-    void RefreshSelection(int idx)
-    {
-        if (idx < 0 || idx >= User.Instance.Info.Player.Characters.Count)
-        {
-            Log.WarningFormat("RefreshSelection: Invalid index {0}", idx);
-            return;
-        }
-        this.selectCharacterIdx = idx;
-        var cha = User.Instance.Info.Player.Characters[idx];
-        Log.InfoFormat("Select Char:[{0}]{1}[{2}]", cha.Id, cha.Name, cha.Class);
-        User.Instance.CurrentCharacter = cha;
-        // Map selected list item to the actual character class model
-        characterView.CurrectCharacter = ((int)cha.Class) - 1;
     }
 
     public void OnClickDeleteById(int charId)
@@ -184,6 +123,7 @@ public class UICharacterSelect : MonoBehaviour
             UserService.Instance.SendDeleteCharacter(charId);
         };
     }
+
     public void OnClickPlay()
     {
         // 检查是否有角色
@@ -209,5 +149,52 @@ public class UICharacterSelect : MonoBehaviour
 
         // 发送进入游戏请求到服务器
         UserService.Instance.SendGameEnter(selectCharacterIdx);
+    }
+
+    private void OnCharacterCreate(Result result, string message)
+    {
+        if (result == Result.Success)
+        {
+            InitCharacterSelect(true);
+
+            this.charName.text = "";
+            MessageBox.Show("角色创建成功！");
+        }
+        else
+            MessageBox.Show(message, "错误", MessageBoxType.Error);
+    }
+
+    private void OnCharacterDelete(Result result, string message)
+    {
+        if (result == Result.Success)
+        {
+            InitCharacterSelect(true);
+            this.selectCharacterIdx = -1;
+            User.Instance.CurrentCharacter = null;
+            MessageBox.Show("角色删除成功！");
+        }
+        else
+            MessageBox.Show(message, "错误", MessageBoxType.Error);
+    }
+
+    private void OnGameEnter(Result result, string message)
+    {
+        if (result != Result.Success)
+            MessageBox.Show(message, "错误", MessageBoxType.Error);
+    }
+
+    private void RefreshSelection(int idx)
+    {
+        if (idx < 0 || idx >= User.Instance.Info.Player.Characters.Count)
+        {
+            Log.WarningFormat("RefreshSelection: Invalid index {0}", idx);
+            return;
+        }
+        this.selectCharacterIdx = idx;
+        var cha = User.Instance.Info.Player.Characters[idx];
+        Log.InfoFormat("Select Char:[{0}]{1}[{2}]", cha.Id, cha.Name, cha.Class);
+        User.Instance.CurrentCharacter = cha;
+        // Map selected list item to the actual character class model
+        characterView.CurrectCharacter = ((int)cha.Class) - 1;
     }
 }

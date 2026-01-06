@@ -1,8 +1,4 @@
-﻿using SkillBridge.Message;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using SkillBridge.Message;
 using UnityEngine;
 
 public class GameObjectTool
@@ -52,15 +48,14 @@ public class GameObjectTool
         };
     }
 
-
-    public static bool EntityUpdate(NEntity entity,UnityEngine.Vector3 position, Quaternion rotation,float speed)
+    public static bool EntityUpdate(NEntity entity, Vector3 position, Quaternion rotation, float speed)
     {
         // 将 Unity Transform 数据转换成协议坐标，检查是否有变化，有变化才写回（减少同步频率/带宽）。
         NVector3 pos = WorldToLogicN(position);
         NVector3 dir = WorldToLogicN(rotation.eulerAngles);
         int spd = WorldToLogic(speed);
         bool updated = false;
-        if(!entity.Position.Equal(pos))
+        if (!entity.Position.Equal(pos))
         {
             entity.Position = pos;
             updated = true;
@@ -70,7 +65,7 @@ public class GameObjectTool
             entity.Direction = dir;
             updated = true;
         }
-        if(entity.Speed!= spd)
+        if (entity.Speed != spd)
         {
             entity.Speed = spd;
             updated = true;

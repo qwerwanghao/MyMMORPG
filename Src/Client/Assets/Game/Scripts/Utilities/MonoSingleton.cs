@@ -1,10 +1,11 @@
-﻿using UnityEngine;
-
+using UnityEngine;
 
 public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     public bool global = true;
-    static T instance;
+
+    private static T instance;
+
     public static T Instance
     {
         get
@@ -15,10 +16,9 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
             }
             return instance;
         }
-
     }
 
-    void Start()
+    private void Start()
     {
         if (global) DontDestroyOnLoad(this.gameObject);
         this.OnStart();
@@ -26,6 +26,5 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 
     protected virtual void OnStart()
     {
-
     }
 }

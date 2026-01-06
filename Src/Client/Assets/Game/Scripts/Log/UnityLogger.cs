@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
-using log4net;
-using log4net.Core;
+using System;
 using System.Reflection;
 using Common;
+using log4net;
+using log4net.Core;
+using UnityEngine;
 
 public static class UnityLogger
 {

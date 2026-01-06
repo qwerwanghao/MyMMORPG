@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.IO;
-using UnityEngine;
-using SkillBridge.Message;
 using Common;
+using SkillBridge.Message;
+using UnityEngine;
 
 namespace Network
 {

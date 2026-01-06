@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using Common;
-using Network;
-using UnityEngine;
-
 using Common.Data;
-using SkillBridge.Message;
 using Models;
+using Network;
+using SkillBridge.Message;
+using UnityEngine;
 
 namespace Services
 {
@@ -15,29 +14,16 @@ namespace Services
     /// - MapCharacterEnterResponse：进入地图（全量/增量角色列表）
     /// - MapCharacterLeaveResponse：离开地图（暂未实现）
     /// </summary>
+    
     class MapService : Singleton<MapService>, IDisposable
     {
+        /// <summary>客户端当前所在地图ID（用于判断是否需要切场景）。</summary>
+        public int CurrentMapId = 0;
+
         private bool initialized = false;
 
-        /// <summary>
-        /// 客户端当前所在地图ID（用于判断是否需要切场景）。
-        /// </summary>
-        public int CurrentMapId = 0;
         public MapService()
         {
-
-        }
-
-        public void Dispose()
-        {
-            if (!this.initialized)
-            {
-                return;
-            }
-
-            MessageDistributer.Instance.Unsubscribe<MapCharacterEnterResponse>(this.OnMapCharacterEnter);
-            MessageDistributer.Instance.Unsubscribe<MapCharacterLeaveResponse>(this.OnMapCharacterLeave);
-            this.initialized = false;
         }
 
         public void Run()
@@ -50,6 +36,18 @@ namespace Services
             MessageDistributer.Instance.Subscribe<MapCharacterEnterResponse>(this.OnMapCharacterEnter);
             MessageDistributer.Instance.Subscribe<MapCharacterLeaveResponse>(this.OnMapCharacterLeave);
             this.initialized = true;
+        }
+
+        public void Dispose()
+        {
+            if (!this.initialized)
+            {
+                return;
+            }
+
+            MessageDistributer.Instance.Unsubscribe<MapCharacterEnterResponse>(this.OnMapCharacterEnter);
+            MessageDistributer.Instance.Unsubscribe<MapCharacterLeaveResponse>(this.OnMapCharacterLeave);
+            this.initialized = false;
         }
 
         /// <summary>

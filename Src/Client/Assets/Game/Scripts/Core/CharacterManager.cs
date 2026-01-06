@@ -68,7 +68,6 @@ namespace Services
         {
             Log.InfoFormat("RemoveCharacter:{0}", characterId);
             this.Characters.Remove(characterId);
-
         }
     }
 }

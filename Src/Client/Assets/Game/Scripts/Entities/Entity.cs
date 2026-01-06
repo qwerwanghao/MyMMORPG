@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
 using SkillBridge.Message;
+using UnityEngine;
 
 namespace Entities
 {
@@ -14,11 +10,8 @@ namespace Entities
     /// </summary>
     public class Entity
     {
-        /// <summary>
-        /// 实体唯一 ID（来自协议 NEntity.Id；通常由服务端分配）。
-        /// </summary>
+        /// <summary>实体唯一 ID（来自协议 NEntity.Id；通常由服务端分配）。</summary>
         public int entityId;
-
 
         /// <summary>当前位置（客户端本地坐标）。</summary>
         public Vector3Int position;
@@ -27,7 +20,6 @@ namespace Entities
         /// <summary>移动速度（协议里的单位；由子类/输入驱动改变）。</summary>
         public int speed;
 
-
         /// <summary>
         /// 协议层实体数据（网络同步用）。
         /// 设置时会同步刷新本地 position/direction/speed。
@@ -35,10 +27,9 @@ namespace Entities
         private NEntity entityData;
         public NEntity EntityData
         {
-            get {
-                return entityData;
-            }
-            set {
+            get { return entityData; }
+            set
+            {
                 entityData = value;
                 this.SetEntityData(value);
             }
