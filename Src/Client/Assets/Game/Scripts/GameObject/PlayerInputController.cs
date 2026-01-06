@@ -118,7 +118,7 @@ public class PlayerInputController : MonoBehaviour
         }
     }
     Vector3 lastPos;
-    float lastSync = 0;
+    //float lastSync = 0;
     private void LateUpdate()
     {
         // 计算当前帧速度（用于同步或动画参数）

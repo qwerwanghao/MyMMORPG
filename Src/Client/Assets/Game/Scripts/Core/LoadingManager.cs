@@ -5,17 +5,13 @@ using UnityEngine.UI;
 using System.IO;
 using Common;
 
-using SkillBridge.Message;
-using ProtoBuf;
-using Services;
-
 public class LoadingManager : MonoBehaviour
 {
     /// <summary>
     /// LoadingManager：客户端启动流程入口（启动画面 → 加载数据 → 初始化服务 → 显示登录 UI）。
     /// - 初始化 log4net/Log 系统（便于联调定位）。
     /// - 调用 DataManager.LoadData 读取 `Data/` 下策划配置。
-    /// - 初始化基础服务（MapService/UserService 等）。
+    /// - 调用 ClientInitPipeline.Run 初始化基础设施（日志、单例、服务/管理器订阅等）。
     /// </summary>
 
     public GameObject UITips;
@@ -26,22 +22,15 @@ public class LoadingManager : MonoBehaviour
     public Text progressText;
     public Text progressNumber;
 
+    private void Awake()
+    {
+        // 尽早初始化基础设施，避免其它脚本在 Start 里访问到未就绪的单例（如 NetClient/SceneManager）。
+        ClientInitPipeline.Run();
+    }
+
     // Use this for initialization
     IEnumerator Start()
     {
-        // 使用绝对路径配置log4net
-        var configPath = Path.Combine(Application.dataPath, "Resources/log4net.xml");
-
-        // 初始化log4net配置
-        log4net.Config.XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo(configPath));
-
-        // 初始化旧的Log系统以保持兼容性
-        Log.Init("Unity");
-        UnityLogger.Init();
-
-        // 使用改进的日志系统记录日志
-        Log.Info("LoadingManager start");
-
         UITips.SetActive(true);
         UILoading.SetActive(false);
         UILogin.SetActive(false);
@@ -51,11 +40,6 @@ public class LoadingManager : MonoBehaviour
         UITips.SetActive(false);
 
         yield return DataManager.Instance.LoadData();
-
-        //Init basic services
-        MapService.Instance.Init();
-        UserService.Instance.Init();
-
 
         // Fake Loading Simulate
         for (float i = 50; i < 100;)

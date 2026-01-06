@@ -28051,7 +28051,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   global: 1
-  camera: {fileID: 506804689}
+  followCamera: {fileID: 506804689}
   viewPoint: {fileID: 0}
   player: {fileID: 0}
 --- !u!4 &714050297

@@ -22,8 +22,50 @@ namespace Services
         bool connected = false;
         public bool IsBusy { get; private set; } = false;
 
+        private bool initialized = false;
+
         public UserService()
         {
+        }
+
+        public void Dispose()
+        {
+            if (!this.initialized)
+            {
+                return;
+            }
+
+            MessageDistributer.Instance.Unsubscribe<UserRegisterResponse>(this.OnUserRegister);
+            MessageDistributer.Instance.Unsubscribe<UserLoginResponse>(this.OnUserLogin);
+            MessageDistributer.Instance.Unsubscribe<UserCreateCharacterResponse>(this.OnUserCreateCharacter);
+            MessageDistributer.Instance.Unsubscribe<UserDeleteCharacterResponse>(this.OnUserDeleteCharacter);
+            MessageDistributer.Instance.Unsubscribe<UserGameEnterResponse>(this.OnUserGameEnter);
+            MessageDistributer.Instance.Unsubscribe<UserGameLeaveResponse>(this.OnUserGameLeave);
+            MessageDistributer.Instance.Unsubscribe<MapCharacterEnterRequest>(this.OnMapCharacterEnter);
+
+            if (NetClient.Instance != null)
+            {
+                NetClient.Instance.OnConnect -= OnGameServerConnect;
+                NetClient.Instance.OnDisconnect -= OnGameServerDisconnect;
+            }
+
+            this.initialized = false;
+        }
+
+        public void Run()
+        {
+            if (this.initialized)
+            {
+                return;
+            }
+
+            // Ensure NetClient exists (MonoSingleton requires a scene object)
+            if (NetClient.Instance == null)
+            {
+                var go = new GameObject("NetClient");
+                go.AddComponent<NetClient>();
+            }
+
             NetClient.Instance.OnConnect += OnGameServerConnect;
             NetClient.Instance.OnDisconnect += OnGameServerDisconnect;
             MessageDistributer.Instance.Subscribe<UserRegisterResponse>(this.OnUserRegister);
@@ -33,23 +75,8 @@ namespace Services
             MessageDistributer.Instance.Subscribe<UserGameEnterResponse>(this.OnUserGameEnter);
             MessageDistributer.Instance.Subscribe<UserGameLeaveResponse>(this.OnUserGameLeave);
             MessageDistributer.Instance.Subscribe<MapCharacterEnterRequest>(this.OnMapCharacterEnter);
-        }
 
-        public void Dispose()
-        {
-            MessageDistributer.Instance.Unsubscribe<UserRegisterResponse>(this.OnUserRegister);
-            MessageDistributer.Instance.Unsubscribe<UserLoginResponse>(this.OnUserLogin);
-            MessageDistributer.Instance.Unsubscribe<UserCreateCharacterResponse>(this.OnUserCreateCharacter);
-            MessageDistributer.Instance.Unsubscribe<UserDeleteCharacterResponse>(this.OnUserDeleteCharacter);
-            MessageDistributer.Instance.Unsubscribe<UserGameEnterResponse>(this.OnUserGameEnter);
-            MessageDistributer.Instance.Unsubscribe<UserGameLeaveResponse>(this.OnUserGameLeave);
-            NetClient.Instance.OnConnect -= OnGameServerConnect;
-            NetClient.Instance.OnDisconnect -= OnGameServerDisconnect;
-        }
-
-        public void Init()
-        {
-
+            this.initialized = true;
         }
 
         public void ConnectToServer()

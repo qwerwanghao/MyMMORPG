@@ -17,6 +17,7 @@ namespace Services
     /// </summary>
     class MapService : Singleton<MapService>, IDisposable
     {
+        private bool initialized = false;
 
         /// <summary>
         /// 客户端当前所在地图ID（用于判断是否需要切场景）。
@@ -24,20 +25,31 @@ namespace Services
         public int CurrentMapId = 0;
         public MapService()
         {
-            MessageDistributer.Instance.Subscribe<MapCharacterEnterResponse>(this.OnMapCharacterEnter);
-            MessageDistributer.Instance.Subscribe<MapCharacterLeaveResponse>(this.OnMapCharacterLeave);
 
         }
 
         public void Dispose()
         {
+            if (!this.initialized)
+            {
+                return;
+            }
+
             MessageDistributer.Instance.Unsubscribe<MapCharacterEnterResponse>(this.OnMapCharacterEnter);
             MessageDistributer.Instance.Unsubscribe<MapCharacterLeaveResponse>(this.OnMapCharacterLeave);
+            this.initialized = false;
         }
 
-        public void Init()
+        public void Run()
         {
+            if (this.initialized)
+            {
+                return;
+            }
 
+            MessageDistributer.Instance.Subscribe<MapCharacterEnterResponse>(this.OnMapCharacterEnter);
+            MessageDistributer.Instance.Subscribe<MapCharacterLeaveResponse>(this.OnMapCharacterLeave);
+            this.initialized = true;
         }
 
         /// <summary>
@@ -90,7 +102,7 @@ namespace Services
 
         private void OnMapCharacterLeave(object sender, MapCharacterLeaveResponse response)
         {
-            
+
         }
 
         private void EnterMap(int mapId)
@@ -98,6 +110,11 @@ namespace Services
             if (DataManager.Instance.Maps.ContainsKey(mapId))
             {
                 MapDefine map = DataManager.Instance.Maps[mapId];
+                if (SceneManager.Instance == null)
+                {
+                    var go = new GameObject("SceneManager");
+                    go.AddComponent<SceneManager>();
+                }
                 SceneManager.Instance.LoadScene(map.Resource);
             }
             else

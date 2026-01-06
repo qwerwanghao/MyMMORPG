@@ -19,6 +19,7 @@ namespace Services
     /// </summary>
     class CharacterManager : Singleton<CharacterManager>, IDisposable
     {
+        private bool initialized = false;
         /// <summary>当前已知角色：key=角色ID（NCharacterInfo.Id）。</summary>
         public Dictionary<int, Character> Characters = new Dictionary<int, Character>();
 
@@ -35,9 +36,13 @@ namespace Services
         {
         }
 
-        public void Init()
+        public void Run()
         {
-
+            if (this.initialized)
+            {
+                return;
+            }
+            this.initialized = true;
         }
 
         public void Clear()
