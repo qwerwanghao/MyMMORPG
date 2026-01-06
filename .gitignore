@@ -66,3 +66,6 @@ Src/Client/nul
 
 Src/Client/.idea/
 Src/Client/.claude/
+/Src/Client/.kilocode
+/Src/Client/.vscode
+/Src/Server/GameServer/.idea/.idea.GameServer/.idea
