@@ -2,9 +2,7 @@
 using GameServer.Entities;
 using Network;
 using SkillBridge.Message;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 
 namespace GameServer.Managers
 {
@@ -14,29 +12,57 @@ namespace GameServer.Managers
     /// </summary>
     class CharacterManager : Singleton<CharacterManager>
     {
-        // 使用ConcurrentDictionary确保线程安全
+        #region 私有字段
+
+        /// <summary>
+        /// 角色字典：使用 ConcurrentDictionary 确保线程安全
+        /// </summary>
         private readonly ConcurrentDictionary<int, Character> characters;
 
+        #endregion
+
+        #region 构造函数
+
+        /// <summary>
+        /// 构造函数：初始化角色字典
+        /// </summary>
         public CharacterManager()
         {
             this.characters = new ConcurrentDictionary<int, Character>();
         }
 
-        public void Dispose()
-        {
-            this.Clear();
-        }
+        #endregion
 
+        #region 生命周期方法
+
+        /// <summary>
+        /// 初始化管理器
+        /// </summary>
         public void Init()
         {
             Log.Info("CharacterManager initialized");
         }
 
+        /// <summary>
+        /// 释放资源：清空所有角色
+        /// </summary>
+        public void Dispose()
+        {
+            this.Clear();
+        }
+
+        /// <summary>
+        /// 清空所有角色
+        /// </summary>
         public void Clear()
         {
             this.characters.Clear();
             Log.Info("CharacterManager: All characters cleared");
         }
+
+        #endregion
+
+        #region 角色管理方法
 
         /// <summary>
         /// 添加角色到管理器
@@ -73,5 +99,7 @@ namespace GameServer.Managers
             Character character;
             return this.characters.TryGetValue(charId, out character) ? character : null;
         }
+
+        #endregion
     }
 }

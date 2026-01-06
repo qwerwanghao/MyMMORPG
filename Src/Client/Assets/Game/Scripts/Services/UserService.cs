@@ -189,7 +189,7 @@ namespace Services
             message.Request = new NetMessageRequest();
             message.Request.userRegister = new UserRegisterRequest();
             message.Request.userRegister.User = user;
-            message.Request.userRegister.Passward = psw;
+            message.Request.userRegister.Password = psw;
 
             if (this.connected && Network.NetClient.Instance.Connected)
             {
@@ -341,7 +341,7 @@ namespace Services
             message.Request = new NetMessageRequest();
             message.Request.userLogin = new UserLoginRequest();
             message.Request.userLogin.User = user;
-            message.Request.userLogin.Passward = psw;
+            message.Request.userLogin.Password = psw;
 
             if (this.connected && NetClient.Instance.Connected)
             {

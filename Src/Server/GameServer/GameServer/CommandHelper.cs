@@ -1,13 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameServer
 {
+    /// <summary>
+    /// 命令行助手：处理服务器控制台命令（exit/help）
+    /// </summary>
     class CommandHelper
     {
+        #region 公共方法
+
+        /// <summary>
+        /// 启动命令行循环处理
+        /// </summary>
         public static void Run()
         {
             bool run = true;
@@ -27,6 +31,9 @@ namespace GameServer
             }
         }
 
+        /// <summary>
+        /// 显示帮助信息
+        /// </summary>
         public static void Help()
         {
             Console.Write(@"
@@ -35,5 +42,7 @@ Help:
     help    Show Help
 ");
         }
+
+        #endregion
     }
 }

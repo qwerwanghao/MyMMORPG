@@ -246,9 +246,9 @@ namespace SkillBridge.Message
         [global::System.ComponentModel.DefaultValue("")]
         public string User { get; set; } = "";
 
-        [global::ProtoBuf.ProtoMember(2, Name = @"passward")]
+        [global::ProtoBuf.ProtoMember(2, Name = @"password")]
         [global::System.ComponentModel.DefaultValue("")]
-        public string Passward { get; set; } = "";
+        public string Password { get; set; } = "";
 
     }
 
@@ -282,9 +282,9 @@ namespace SkillBridge.Message
         [global::System.ComponentModel.DefaultValue("")]
         public string User { get; set; } = "";
 
-        [global::ProtoBuf.ProtoMember(2, Name = @"passward")]
+        [global::ProtoBuf.ProtoMember(2, Name = @"password")]
         [global::System.ComponentModel.DefaultValue("")]
-        public string Passward { get; set; } = "";
+        public string Password { get; set; } = "";
 
         [global::ProtoBuf.ProtoMember(3, Name = @"age")]
         public int Age { get; set; }

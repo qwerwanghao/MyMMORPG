@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SkillBridge.Message;
-
 using Common;
 using Common.Data;
-
 using Network;
 using GameServer.Managers;
 using GameServer.Entities;
@@ -16,18 +11,28 @@ using GameServer.Entities;
 namespace GameServer.Models
 {
     /// <summary>
-    /// Map：服务端地图实例（对应一张逻辑地图/场景）。
-    /// - 维护地图内在线角色列表（线程安全：ConcurrentDictionary）。
-    /// - 负责进入/离开地图时的广播（MapCharacterEnter/Leave）。
-    /// - 具体刷怪/同步/逻辑 Tick 可放在 Update()。
+    /// Map：服务端地图实例（对应一张逻辑地图/场景）
+    /// - 维护地图内在线角色列表（线程安全：ConcurrentDictionary）
+    /// - 负责进入/离开地图时的广播（MapCharacterEnter/Leave）
+    /// - 具体刷怪/同步/逻辑 Tick 可放在 Update()
     /// </summary>
     class Map
     {
+        #region 嵌套类型
+
+        /// <summary>
+        /// 地图角色信息：包含网络连接和角色对象
+        /// </summary>
         internal class MapCharacter
         {
-            // 该角色所在的网络连接（用于下发广播）
+            /// <summary>
+            /// 该角色所在的网络连接（用于下发广播）
+            /// </summary>
             public NetConnection<NetSession> connection;
-            // 服务端运行时角色对象（GameServer.Entities.Character）
+
+            /// <summary>
+            /// 服务端运行时角色对象（GameServer.Entities.Character）
+            /// </summary>
             public Character character;
 
             public MapCharacter(NetConnection<NetSession> conn, Character cha)
@@ -37,23 +42,52 @@ namespace GameServer.Models
             }
         }
 
-        public int ID
-        {
-            // 地图ID（来自配置表 MapDefine.ID）
-            get { return this.Define.ID; }
-        }
+        #endregion
+
+        #region 私有字段
+
+        /// <summary>
+        /// 地图定义数据（来自配置表）
+        /// </summary>
         internal MapDefine Define;
 
-        // 地图内的角色列表：key=CharacterId，value=连接+角色对象。
-        // 注意：网络消息处理是多线程（MessageDistributer.Start(8)），进入/离开可能并发发生，因此用并发集合。
+        /// <summary>
+        /// 地图内的角色列表：key=CharacterId，value=连接+角色对象
+        /// 注意：网络消息处理是多线程（MessageDistributer.Start(8)），进入/离开可能并发发生，因此用并发集合
+        /// </summary>
         private readonly ConcurrentDictionary<int, MapCharacter> mapCharacters = new ConcurrentDictionary<int, MapCharacter>();
 
+        #endregion
 
+        #region 公共属性
+
+        /// <summary>
+        /// 地图ID（来自配置表 MapDefine.ID）
+        /// </summary>
+        public int ID
+        {
+            get { return this.Define.ID; }
+        }
+
+        #endregion
+
+        #region 构造函数
+
+        /// <summary>
+        /// 构造函数：使用地图定义数据创建地图实例
+        /// </summary>
         internal Map(MapDefine define)
         {
             this.Define = define;
         }
 
+        #endregion
+
+        #region 公共方法
+
+        /// <summary>
+        /// 更新地图逻辑（每帧调用）
+        /// </summary>
         internal void Update()
         {
         }
@@ -67,10 +101,10 @@ namespace GameServer.Models
         {
             Log.InfoFormat("CharacterEnter: Map:{0} characterId:{1}", this.Define.ID, character.Id);
 
-            // 更新进入者的协议数据：告诉客户端“当前在哪张地图”
+            // 更新进入者的协议数据：告诉客户端"当前在哪张地图"
             character.Info.mapId = this.ID;
 
-            // 发送给“进入者”的全量进入消息：包含自己 + 当前地图已有的所有角色信息
+            // 发送给"进入者"的全量进入消息：包含自己 + 当前地图已有的所有角色信息
             NetMessage message = new NetMessage();
             message.Response = new NetMessageResponse();
             message.Response.mapCharacterEnter = new MapCharacterEnterResponse();
@@ -81,28 +115,12 @@ namespace GameServer.Models
             {
                 // 给进入者：把已有角色列表一并带回，用于一次性生成当前地图内的其他角色
                 message.Response.mapCharacterEnter.Characters.Add(kv.Value.character.Info);
-                // 给已在地图里的每个人：广播“进入者来了”（增量进入）
+                // 给已在地图里的每个人：广播"进入者来了"（增量进入）
                 this.SendCharacterEnterMap(kv.Value.connection, character.Info);
             }
 
             // 把进入者加入地图（后续广播/离开会用到）
             this.mapCharacters[character.Id] = new MapCharacter(conn, character);
-
-            byte[] data = PackageHandler.PackMessage(message);
-            conn.SendData(data, 0, data.Length);
-        }
-
-        /// <summary>
-        /// 向“已在地图里的玩家”发送“某角色进入地图”的增量消息。
-        /// </summary>
-        void SendCharacterEnterMap(NetConnection<NetSession> conn, NCharacterInfo character)
-        {
-            NetMessage message = new NetMessage();
-            message.Response = new NetMessageResponse();
-
-            message.Response.mapCharacterEnter = new MapCharacterEnterResponse();
-            message.Response.mapCharacterEnter.mapId = this.Define.ID;
-            message.Response.mapCharacterEnter.Characters.Add(character);
 
             byte[] data = PackageHandler.PackMessage(message);
             conn.SendData(data, 0, data.Length);
@@ -141,6 +159,26 @@ namespace GameServer.Models
                 character.Id, this.Define.ID, this.mapCharacters.Count);
         }
 
+        #endregion
+
+        #region 私有方法
+
+        /// <summary>
+        /// 向"已在地图里的玩家"发送"某角色进入地图"的增量消息
+        /// </summary>
+        void SendCharacterEnterMap(NetConnection<NetSession> conn, NCharacterInfo character)
+        {
+            NetMessage message = new NetMessage();
+            message.Response = new NetMessageResponse();
+
+            message.Response.mapCharacterEnter = new MapCharacterEnterResponse();
+            message.Response.mapCharacterEnter.mapId = this.Define.ID;
+            message.Response.mapCharacterEnter.Characters.Add(character);
+
+            byte[] data = PackageHandler.PackMessage(message);
+            conn.SendData(data, 0, data.Length);
+        }
+
         /// <summary>
         /// 向指定连接发送角色离开地图消息
         /// </summary>
@@ -163,5 +201,7 @@ namespace GameServer.Models
             byte[] data = PackageHandler.PackMessage(message);
             conn.SendData(data, 0, data.Length);
         }
+
+        #endregion
     }
 }

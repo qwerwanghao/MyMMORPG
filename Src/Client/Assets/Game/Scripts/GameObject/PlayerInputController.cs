@@ -1,3 +1,4 @@
+using System;
 using Entities;
 using SkillBridge.Message;
 using UnityEngine;
@@ -6,20 +7,33 @@ using UnityEngine;
 /// PlayerInputController：本地玩家输入驱动器。
 /// - 读取 Unity Input（Horizontal/Vertical/Jump）。
 /// - 驱动 Character 的逻辑状态（speed/direction/position），并通知 EntityController 播放动画。
-/// - 同时直接控制 Rigidbody 产生移动（本地玩家的“权威移动”）。
+/// - 同时直接控制 Rigidbody 产生移动（本地玩家的"权威移动"）。
 /// </summary>
 public class PlayerInputController : MonoBehaviour
 {
+    #region Unity 可配置字段
+    // 供 Inspector 配置的公共属性（组件引用/参数）
+
     public Rigidbody rb;
     public Character character;
     public EntityController entityController;
     public float rotateSpeed = 2.0f;
-    public float turnAngle = 10;
+    public float turnAngle = 1;
     public int speed;
     public bool onAir = false;
 
+    #endregion
+
+    #region 内部状态
+    // 运行时私有状态（角色状态/位置记录）
+
     private CharacterState state;
     private Vector3 lastPos;
+
+    #endregion
+
+    #region Unity 生命周期方法
+    // Start：初始化 / FixedUpdate：物理更新 / LateUpdate：动画同步
 
     private void Start()
     {
@@ -52,6 +66,8 @@ public class PlayerInputController : MonoBehaviour
 
         // 前后移动：更新角色逻辑速度 + 发送动画事件；并用 Rigidbody 推动实际移动
         float v = Input.GetAxis("Vertical");
+        float h = Input.GetAxis("Horizontal");
+
         if (v > 0.01)
         {
             if (state != CharacterState.Move)
@@ -60,7 +76,10 @@ public class PlayerInputController : MonoBehaviour
                 this.character.MoveForward();
                 this.SendEntityEvent(EntityEvent.MoveFwd);
             }
-            this.rb.linearVelocity = this.rb.linearVelocity.y * Vector3.up + GameObjectTool.LogicToWorld(character.direction) * (this.character.speed + 9.81f) / 100f;
+            // 前进：使用当前实际朝向，使用速度的绝对值
+            float absSpeed = Math.Abs(this.character.speed);
+            Vector3 moveDir = this.transform.forward * (absSpeed + 9.81f) / 100f;
+            this.rb.linearVelocity = this.rb.linearVelocity.y * Vector3.up + moveDir;
         }
         else if (v < -0.01)
         {
@@ -70,7 +89,10 @@ public class PlayerInputController : MonoBehaviour
                 this.character.MoveBack();
                 this.SendEntityEvent(EntityEvent.MoveBack);
             }
-            this.rb.linearVelocity = this.rb.linearVelocity.y * Vector3.up + GameObjectTool.LogicToWorld(character.direction) * (this.character.speed + 9.81f) / 100f;
+            // 后退：使用当前实际朝向的负方向，使用速度的绝对值
+            float absSpeed = Math.Abs(this.character.speed);
+            Vector3 moveDir = -this.transform.forward * (absSpeed + 9.81f) / 100f;
+            this.rb.linearVelocity = this.rb.linearVelocity.y * Vector3.up + moveDir;
         }
         else
         {
@@ -89,16 +111,22 @@ public class PlayerInputController : MonoBehaviour
             this.SendEntityEvent(EntityEvent.Jump);
         }
 
-        float h = Input.GetAxis("Horizontal");
+        // 旋转处理
         if (h < -0.1 || h > 0.1)
         {
+            Vector3 oldForward = this.transform.forward;
             this.transform.Rotate(0, h * rotateSpeed, 0);
+            Vector3 newForward = this.transform.forward;
+
             Vector3 dir = GameObjectTool.LogicToWorld(character.direction);
-            Quaternion rot = new Quaternion();
-            rot.SetFromToRotation(dir, this.transform.forward);
+
+            // 计算水平旋转角度（忽略 X/Z 轴，只看 Y 轴旋转）
+            Vector3 dirFlat = new Vector3(dir.x, 0, dir.z).normalized;
+            Vector3 forwardFlat = new Vector3(this.transform.forward.x, 0, this.transform.forward.z).normalized;
+            float angle = Vector3.Angle(dirFlat, forwardFlat);
 
             // 只有偏转角超过阈值时才更新逻辑朝向（避免频繁同步/抖动）
-            if (rot.eulerAngles.y > this.turnAngle && rot.eulerAngles.y < (360 - this.turnAngle))
+            if (angle > this.turnAngle)
             {
                 character.SetDirection(GameObjectTool.WorldToLogic(this.transform.forward));
                 rb.transform.forward = this.transform.forward;
@@ -125,9 +153,16 @@ public class PlayerInputController : MonoBehaviour
         this.transform.position = this.rb.transform.position;
     }
 
+    #endregion
+
+    #region 私有辅助方法
+    // 通知 EntityController 播放动画/更新状态
+
     private void SendEntityEvent(EntityEvent entityEvent)
     {
         if (entityController != null)
             entityController.OnEntityEvent(entityEvent);
     }
+
+    #endregion
 }

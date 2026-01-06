@@ -1,33 +1,48 @@
 ﻿using GameServer.Core;
 using SkillBridge.Message;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameServer.Entities
 {
+    /// <summary>
+    /// 实体基类：所有游戏对象的基类，提供位置、方向、速度等基础属性
+    /// </summary>
     class Entity
     {
+        #region 私有字段
+
+        private Vector3Int position;
+        private Vector3Int direction;
+        private int speed;
+        private NEntity entityData;
+
+        #endregion
+
+        #region 公共属性
+
+        /// <summary>
+        /// 实体ID（来自 entityData）
+        /// </summary>
         public int entityId
         {
             get { return this.entityData.Id; }
         }
 
-
-        private Vector3Int position;
-
+        /// <summary>
+        /// 实体位置（同步到 entityData）
+        /// </summary>
         public Vector3Int Position
         {
             get { return position; }
-            set {
+            set
+            {
                 position = value;
                 this.entityData.Position = position;
             }
         }
 
-        private Vector3Int direction;
+        /// <summary>
+        /// 实体朝向（同步到 entityData）
+        /// </summary>
         public Vector3Int Direction
         {
             get { return direction; }
@@ -38,7 +53,9 @@ namespace GameServer.Entities
             }
         }
 
-        private int speed;
+        /// <summary>
+        /// 移动速度（同步到 entityData）
+        /// </summary>
         public int Speed
         {
             get { return speed; }
@@ -49,7 +66,9 @@ namespace GameServer.Entities
             }
         }
 
-        private NEntity entityData;
+        /// <summary>
+        /// 实体网络数据（用于同步到客户端）
+        /// </summary>
         public NEntity EntityData
         {
             get
@@ -63,7 +82,14 @@ namespace GameServer.Entities
             }
         }
 
-        public Entity(Vector3Int pos,Vector3Int dir)
+        #endregion
+
+        #region 构造函数
+
+        /// <summary>
+        /// 从位置和方向创建实体
+        /// </summary>
+        public Entity(Vector3Int pos, Vector3Int dir)
         {
             this.entityData = new NEntity();
             this.entityData.Position = pos;
@@ -71,16 +97,28 @@ namespace GameServer.Entities
             this.SetEntityData(this.entityData);
         }
 
+        /// <summary>
+        /// 从网络数据创建实体
+        /// </summary>
         public Entity(NEntity entity)
         {
             this.entityData = entity;
         }
 
+        #endregion
+
+        #region 公共方法
+
+        /// <summary>
+        /// 设置实体数据并同步到内部状态
+        /// </summary>
         public void SetEntityData(NEntity entity)
         {
             this.Position = entity.Position;
             this.Direction = entity.Direction;
             this.speed = entity.Speed;
         }
+
+        #endregion
     }
 }

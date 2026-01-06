@@ -3,26 +3,26 @@ using GameServer.Entities;
 using GameServer.Managers;
 using Network;
 using SkillBridge.Message;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameServer.Services
 {
     /// <summary>
-    /// UserService 负责处理账号注册 / 登录 / 创角三个网关消息。
-    /// - 所有入口均由 MessageDistributer 分发（网络层解出 NetMessage 后调用）。
-    /// - 依赖 EF 上下文 DBService.Instance.Entities 进行数据库读写。
-    /// - 登录成功后会把 EF 的 TUser 存到 NetSession，后续请求用 session 判断登录态。
+    /// UserService 负责处理账号注册 / 登录 / 创角三个网关消息
+    /// - 所有入口均由 MessageDistributer 分发（网络层解出 NetMessage 后调用）
+    /// - 依赖 EF 上下文 DBService.Instance.Entities 进行数据库读写
+    /// - 登录成功后会把 EF 的 TUser 存到 NetSession，后续请求用 session 判断登录态
     /// </summary>
     class UserService : Singleton<UserService>, IService
     {
+        #region 构造函数
 
+        /// <summary>
+        /// 构造函数：注册所有网络消息处理器
+        /// </summary>
         public UserService()
         {
-            // 注册网络消息回调：NetConnection.PackageHandler 解出包后交给 MessageDistributer 触发对应处理。
+            // 注册网络消息回调：NetConnection.PackageHandler 解出包后交给 MessageDistributer 触发对应处理
             MessageDistributer<NetConnection<NetSession>>.Instance.Subscribe<UserRegisterRequest>(this.OnRegister);
             MessageDistributer<NetConnection<NetSession>>.Instance.Subscribe<UserLoginRequest>(this.OnLogin);
             MessageDistributer<NetConnection<NetSession>>.Instance.Subscribe<UserCreateCharacterRequest>(this.OnCreateCharacter);
@@ -31,27 +31,46 @@ namespace GameServer.Services
             MessageDistributer<NetConnection<NetSession>>.Instance.Subscribe<UserGameLeaveRequest>(this.OnGameLeave);
         }
 
+        #endregion
+
+        #region 生命周期方法
+
+        /// <summary>
+        /// 初始化（IService 接口实现）
+        /// </summary>
         public void Init()
         {
-
         }
 
+        /// <summary>
+        /// 启动（IService 接口实现）
+        /// </summary>
         public void Start()
         {
         }
 
+        /// <summary>
+        /// 停止（IService 接口实现）
+        /// </summary>
         public void Stop()
         {
         }
 
+        /// <summary>
+        /// 更新（IService 接口实现）
+        /// </summary>
         public void Update()
         {
         }
 
+        #endregion
+
+        #region 消息处理器
+
         void OnRegister(NetConnection<NetSession> sender, UserRegisterRequest request)
         {
             // 0.记录请求日志
-            Log.InfoFormat("UserRegisterRequest: User:{0}  Pass:{1}", request.User, request.Passward);
+            Log.InfoFormat("UserRegisterRequest: User:{0}  Pass:{1}", request.User, request.Password);
 
             // 1.创建响应消息对象
             NetMessage message = new NetMessage();
@@ -76,7 +95,7 @@ namespace GameServer.Services
                 DBService.Instance.Entities.Users.Add(new TUser()
                 {
                     Username = request.User,
-                    Password = request.Passward,
+                    Password = request.Password,
                     Player = player
                 });
 
@@ -96,7 +115,7 @@ namespace GameServer.Services
         void OnLogin(NetConnection<NetSession> sender, UserLoginRequest request)
         {
             // 0.记录请求日志
-            Log.InfoFormat("UserLoginRequest: User:{0}  Pass:{1}", request.User, request.Passward);
+            Log.InfoFormat("UserLoginRequest: User:{0}  Pass:{1}", request.User, request.Password);
 
             // 1.创建响应消息对象
             NetMessage message = new NetMessage();
@@ -114,7 +133,7 @@ namespace GameServer.Services
                 message.Response.userLogin.Errormsg = "用户不存在";
             }
             // 4.验证密码是否正确
-            else if (user.Password != request.Passward)
+            else if (user.Password != request.Password)
             {
                 // 4.1 密码错误，返回失败响应
                 message.Response.userLogin.Result = Result.Failed;
@@ -349,7 +368,8 @@ namespace GameServer.Services
 
         void OnGameLeave(NetConnection<NetSession> sender, UserGameLeaveRequest request)
         {
-
         }
+
+        #endregion
     }
 }

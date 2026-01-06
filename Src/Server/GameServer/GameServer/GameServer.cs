@@ -1,26 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
-using System.Net.Sockets;
-using System.Configuration;
-
 using System.Threading;
-
 using Network;
 using GameServer.Services;
 using GameServer.Managers;
 
 namespace GameServer
 {
+    /// <summary>
+    /// 游戏服务器主类：管理服务生命周期和主循环
+    /// </summary>
     class GameServer
     {
+        #region 私有字段
+
         Thread thread;
         bool running = false;
         private List<IService> services = new List<IService>();
 
+        #endregion
+
+        #region 公共方法（服务生命周期）
+
+        /// <summary>
+        /// 初始化服务器：Managers 和 Services 两阶段初始化
+        /// </summary>
         public bool Init()
         {
             // 第一阶段：初始化基础数据管理模块 (Managers)
@@ -45,6 +49,9 @@ namespace GameServer
             return true;
         }
 
+        /// <summary>
+        /// 启动服务器：启动所有服务并进入主循环
+        /// </summary>
         public void Start()
         {
             foreach (var service in services)
@@ -56,18 +63,28 @@ namespace GameServer
             thread.Start();
         }
 
-
+        /// <summary>
+        /// 停止服务器：停止主循环和所有服务
+        /// </summary>
         public void Stop()
         {
             running = false;
             thread.Join();
 
+            // 逆序停止服务
             for (int i = services.Count - 1; i >= 0; i--)
             {
                 services[i].Stop();
             }
         }
 
+        #endregion
+
+        #region 主循环
+
+        /// <summary>
+        /// 主循环：30 FPS 固定帧率更新所有服务（供 ThreadStart 调用）
+        /// </summary>
         public void Update()
         {
             const int FPS = 30;
@@ -94,5 +111,7 @@ namespace GameServer
                 }
             }
         }
+
+        #endregion
     }
 }
