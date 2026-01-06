@@ -11,6 +11,12 @@ using Services;
 
 public class LoadingManager : MonoBehaviour
 {
+    /// <summary>
+    /// LoadingManager：客户端启动流程入口（启动画面 → 加载数据 → 初始化服务 → 显示登录 UI）。
+    /// - 初始化 log4net/Log 系统（便于联调定位）。
+    /// - 调用 DataManager.LoadData 读取 `Data/` 下策划配置。
+    /// - 初始化基础服务（MapService/UserService 等）。
+    /// </summary>
 
     public GameObject UITips;
     public GameObject UILoading;
@@ -47,7 +53,7 @@ public class LoadingManager : MonoBehaviour
         yield return DataManager.Instance.LoadData();
 
         //Init basic services
-        //MapService.Instance.Init();
+        MapService.Instance.Init();
         UserService.Instance.Init();
 
 

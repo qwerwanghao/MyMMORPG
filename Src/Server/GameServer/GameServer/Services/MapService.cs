@@ -1,37 +1,38 @@
-﻿using System;
+﻿using Common;
+using GameServer.Managers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Common;
-
 namespace GameServer.Services
 {
-    class DBService : Singleton<DBService>, IService
+    class MapService : Singleton<MapService>, IService
     {
-        ExtremeWorldEntities entities;
-
-        public ExtremeWorldEntities Entities
+        public MapService()
         {
-            get { return this.entities; }
+
         }
 
         public void Init()
         {
-            entities = new ExtremeWorldEntities();
+
         }
 
         public void Start()
         {
+
         }
 
         public void Stop()
         {
+
         }
 
         public void Update()
         {
+
         }
     }
 }

@@ -38,6 +38,7 @@ public class UICharacterSelect : MonoBehaviour
         InitCharacterSelect(true);
         UserService.Instance.OnCreateCharacter = this.OnCharacterCreate;
         UserService.Instance.OnDeleteCharacter = this.OnCharacterDelete;
+        UserService.Instance.OnGameEnter = this.OnGameEnter;
     }
 
 
@@ -147,7 +148,13 @@ public class UICharacterSelect : MonoBehaviour
             MessageBox.Show(message, "错误", MessageBoxType.Error);
     }
 
-    public void RefreshSelection(int idx)
+    void OnGameEnter(Result result, string message)
+    {
+        if (result != Result.Success)
+            MessageBox.Show(message, "错误", MessageBoxType.Error);
+    }
+
+    void RefreshSelection(int idx)
     {
         if (idx < 0 || idx >= User.Instance.Info.Player.Characters.Count)
         {
@@ -179,9 +186,28 @@ public class UICharacterSelect : MonoBehaviour
     }
     public void OnClickPlay()
     {
-        if (selectCharacterIdx >= 0)
+        // 检查是否有角色
+        if (User.Instance.Info.Player.Characters == null || User.Instance.Info.Player.Characters.Count == 0)
         {
-            MessageBox.Show("进入游戏", "进入游戏", MessageBoxType.Confirm);
+            MessageBox.Show("没有可用角色，请先创建角色", "提示", MessageBoxType.Error);
+            return;
         }
+
+        // 检查是否选择了角色
+        if (selectCharacterIdx < 0 || selectCharacterIdx >= User.Instance.Info.Player.Characters.Count)
+        {
+            MessageBox.Show("请先选择一个角色", "提示", MessageBoxType.Error);
+            return;
+        }
+
+        // 检查当前角色数据是否有效
+        if (User.Instance.CurrentCharacter == null)
+        {
+            MessageBox.Show("当前角色数据无效，请重新选择角色", "提示", MessageBoxType.Error);
+            return;
+        }
+
+        // 发送进入游戏请求到服务器
+        UserService.Instance.SendGameEnter(selectCharacterIdx);
     }
 }

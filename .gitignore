@@ -56,3 +56,9 @@ ipch/
 *.vsp
 *.vspx
 
+# Unity local logs
+Src/Client/Logs/*.log
+Src/Client/Log/*.log
+
+# Server local logs
+Src/Server/GameServer/GameServer/Log/*.log

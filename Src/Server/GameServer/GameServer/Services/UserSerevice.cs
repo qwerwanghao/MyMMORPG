@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Common;
+using GameServer.Entities;
+using GameServer.Managers;
+using Network;
+using SkillBridge.Message;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Common;
-using Network;
-using SkillBridge.Message;
-using GameServer.Entities;
 
 namespace GameServer.Services
 {
@@ -16,7 +17,7 @@ namespace GameServer.Services
     /// - 依赖 EF 上下文 DBService.Instance.Entities 进行数据库读写。
     /// - 登录成功后会把 EF 的 TUser 存到 NetSession，后续请求用 session 判断登录态。
     /// </summary>
-    class UserService : Singleton<UserService>
+    class UserService : Singleton<UserService>, IService
     {
 
         public UserService()
@@ -26,6 +27,8 @@ namespace GameServer.Services
             MessageDistributer<NetConnection<NetSession>>.Instance.Subscribe<UserLoginRequest>(this.OnLogin);
             MessageDistributer<NetConnection<NetSession>>.Instance.Subscribe<UserCreateCharacterRequest>(this.OnCreateCharacter);
             MessageDistributer<NetConnection<NetSession>>.Instance.Subscribe<UserDeleteCharacterRequest>(this.OnDeleteCharacter);
+            MessageDistributer<NetConnection<NetSession>>.Instance.Subscribe<UserGameEnterRequest>(this.OnGameEnter);
+            MessageDistributer<NetConnection<NetSession>>.Instance.Subscribe<UserGameLeaveRequest>(this.OnGameLeave);
         }
 
         public void Init()
@@ -33,122 +36,181 @@ namespace GameServer.Services
 
         }
 
+        public void Start()
+        {
+        }
+
+        public void Stop()
+        {
+        }
+
+        public void Update()
+        {
+        }
+
         void OnRegister(NetConnection<NetSession> sender, UserRegisterRequest request)
         {
-            // 流程：校验重名 → 写库（User + Player）→ 回包
+            // 0.记录请求日志
             Log.InfoFormat("UserRegisterRequest: User:{0}  Pass:{1}", request.User, request.Passward);
 
+            // 1.创建响应消息对象
             NetMessage message = new NetMessage();
             message.Response = new NetMessageResponse();
             message.Response.userRegister = new UserRegisterResponse();
 
-            // 从数据库查重：用户名唯一
+            // 2.从数据库查询用户名是否已存在（用户名必须唯一）
             TUser user = DBService.Instance.Entities.Users.Where(u => u.Username == request.User).FirstOrDefault();
             if (user != null)
             {
+                // 2.1 用户名已存在，返回失败响应
                 message.Response.userRegister.Result = Result.Failed;
                 message.Response.userRegister.Errormsg = "用户已存在.";
             }
             else
             {
-                // 创建 Player（1:1 对应 User），让 EF 生成自增主键
+                // 3.创建新的用户账号
+                // 3.1 先创建Player对象（1:1对应User），让EF生成自增主键
                 TPlayer player = DBService.Instance.Entities.Players.Add(new TPlayer());
-                DBService.Instance.Entities.Users.Add(new TUser() { Username = request.User, Password = request.Passward, Player = player });
+
+                // 3.2 创建User对象并关联到Player
+                DBService.Instance.Entities.Users.Add(new TUser()
+                {
+                    Username = request.User,
+                    Password = request.Passward,
+                    Player = player
+                });
+
+                // 3.3 保存到数据库
                 DBService.Instance.Entities.SaveChanges();
+
+                // 4.构建成功响应
                 message.Response.userRegister.Result = Result.Success;
                 message.Response.userRegister.Errormsg = "None";
             }
 
-            // 回写 NetMessage：网络层直接发送字节，不再做额外包装
+            // 5.打包响应消息并发送给客户端（网络层直接发送字节，不再做额外包装）
             byte[] data = PackageHandler.PackMessage(message);
             sender.SendData(data, 0, data.Length);
         }
 
         void OnLogin(NetConnection<NetSession> sender, UserLoginRequest request)
         {
-            // 流程：校验账号/密码 → 构造 NUserInfo（含角色列表）→ 把 EF User 绑定进 Session 标记登录态
+            // 0.记录请求日志
             Log.InfoFormat("UserLoginRequest: User:{0}  Pass:{1}", request.User, request.Passward);
 
+            // 1.创建响应消息对象
             NetMessage message = new NetMessage();
             message.Response = new NetMessageResponse();
             message.Response.userLogin = new UserLoginResponse();
 
+            // 2.根据用户名查询用户信息
             TUser user = DBService.Instance.Entities.Users.Where(u => u.Username == request.User).FirstOrDefault();
+
+            // 3.验证用户是否存在
             if (user == null)
             {
+                // 3.1 用户不存在，返回失败响应
                 message.Response.userLogin.Result = Result.Failed;
                 message.Response.userLogin.Errormsg = "用户不存在";
             }
+            // 4.验证密码是否正确
             else if (user.Password != request.Passward)
             {
+                // 4.1 密码错误，返回失败响应
                 message.Response.userLogin.Result = Result.Failed;
                 message.Response.userLogin.Errormsg = "密码错误";
             }
             else
             {
+                // 5.验证通过，构建成功响应
                 message.Response.userLogin.Result = Result.Success;
                 message.Response.userLogin.Errormsg = "登录成功";
+
+                // 5.1 创建用户信息对象
                 message.Response.userLogin.Userinfo = new NUserInfo();
-                message.Response.userLogin.Userinfo.Id = 1; // 协议里保留的用户 Id，这里 demo 直接写死
+                // 5.2 设置用户ID（demo中直接写死为1）
+                message.Response.userLogin.Userinfo.Id = 1;
+
+                // 5.3 创建玩家信息对象
                 message.Response.userLogin.Userinfo.Player = new NPlayerInfo();
+                // 5.4 设置玩家ID
                 message.Response.userLogin.Userinfo.Player.Id = (int)user.Player.ID;
-                sender.Session.User = user;     // 将 EF User 放入 session，后续请求可直接访问
+
+                // 6.将EF User对象放入Session，标记登录状态
+                sender.Session.User = user;     // 后续请求可直接访问
                 sender.Verified = true;         // 标记连接已通过登录校验
+
+                // 7.构建角色列表返回给客户端
                 foreach (var character in user.Player.Characters)
                 {
                     NCharacterInfo charinfo = new NCharacterInfo();
                     charinfo.Id = (int)character.ID;
                     charinfo.Name = character.Name;
                     charinfo.Class = (CharacterClass)character.Class;
-                    // 目前只返回少量字段（没有地图坐标等），客户端仅用于展示列表
+                    charinfo.mapId = character.MapID;
                     message.Response.userLogin.Userinfo.Player.Characters.Add(charinfo);
                 }
             }
 
+            // 8.打包响应消息并发送给客户端
             byte[] data = PackageHandler.PackMessage(message);
             sender.SendData(data, 0, data.Length);
         }
 
         private void OnCreateCharacter(NetConnection<NetSession> sender, UserCreateCharacterRequest message)
         {
-            // 流程：校验登录态 → 校验重名（同一 Player 下不重复）→ 创建 TCharacter → 回传最新角色列表
+            // 0.记录请求日志
             Log.InfoFormat("UserCreateCharacterRequest: Name:{0}  Class:{1}", message.Name, message.Class);
 
+            // 1.创建响应消息对象
             NetMessage response = new NetMessage();
             response.Response = new NetMessageResponse();
             response.Response.createChar = new UserCreateCharacterResponse();
 
+            // 2.验证用户是否已登录
             if (sender.Session.User == null || sender.Session.User.Player == null)
             {
+                // 2.1 用户未登录，返回失败响应
                 response.Response.createChar.Result = Result.Failed;
                 response.Response.createChar.Errormsg = "未登录";
             }
+            // 3.检查角色名是否重复（同一Player下不能重名）
             else if (sender.Session.User.Player.Characters.Any(c => c.Name == message.Name))
             {
+                // 3.1 角色名已存在，返回失败响应
                 response.Response.createChar.Result = Result.Failed;
                 response.Response.createChar.Errormsg = "角色名已存在";
             }
             else
             {
+                // 4.创建新角色对象
                 TCharacter character = new TCharacter()
                 {
-                    // 这里未接入职业配置表，暂用 Class 作为 TID；若有模板表可替换为真实 tid。
+                    // 4.1 设置角色模板ID（未接入职业配置表，暂用Class作为TID）
                     TID = (int)message.Class,
+                    // 4.2 设置角色名称
                     Name = message.Name,
+                    // 4.3 设置角色职业
                     Class = (int)message.Class,
+                    // 4.4 设置初始地图ID（默认为1）
                     MapID = 1,
-                    MapPosX = 0,
-                    MapPosY = 0,
-                    MapPosZ = 0,
+                    // 4.5 设置初始地图坐标（默认为原点）
+                    MapPosX = 5000,
+                    MapPosY = 4000,
+                    MapPosZ = 820,
+                    // 4.6 关联到所属玩家
                     Player = sender.Session.User.Player
                 };
 
+                // 5.将新角色添加到数据库并保存
                 DBService.Instance.Entities.Characters.Add(character);
                 DBService.Instance.Entities.SaveChanges();
 
+                // 6.构建成功响应
                 response.Response.createChar.Result = Result.Success;
                 response.Response.createChar.Errormsg = "None";
-                // 返回当前玩家的所有角色，以便客户端刷新列表
+
+                // 7.返回当前玩家的所有角色，以便客户端刷新角色列表
                 foreach (var cha in sender.Session.User.Player.Characters)
                 {
                     NCharacterInfo info = new NCharacterInfo();
@@ -156,52 +218,70 @@ namespace GameServer.Services
                     info.Name = cha.Name;
                     info.Class = (CharacterClass)cha.Class;
                     info.Tid = cha.TID;
-                    info.Level = 1;
+                    info.Level = 1;  // 角色创建时等级为1
                     info.mapId = cha.MapID;
                     response.Response.createChar.Characters.Add(info);
                 }
             }
 
+            // 8.打包响应消息并发送给客户端
             byte[] data = PackageHandler.PackMessage(response);
             sender.SendData(data, 0, data.Length);
         }
 
         private void OnDeleteCharacter(NetConnection<NetSession> sender, UserDeleteCharacterRequest message)
         {
-            // 校验登录态后删除指定角色，并返回最新角色列表
+            // 0.记录请求日志
             Log.InfoFormat("UserDeleteCharacterRequest: Id:{0}", message.characterId);
 
+            // 1.创建响应消息对象
             NetMessage response = new NetMessage();
             response.Response = new NetMessageResponse();
             response.Response.deleteChar = new UserDeleteCharacterResponse();
 
+            // 2.验证用户是否已登录
             if (sender.Session.User == null || sender.Session.User.Player == null)
             {
+                // 2.1 用户未登录，返回失败响应
                 Log.Warning("UserDeleteCharacterRequest failed: not logged in");
                 response.Response.deleteChar.Result = Result.Failed;
                 response.Response.deleteChar.Errormsg = "未登录";
             }
             else
             {
+                // 3.获取玩家对象，记录当前角色数量
                 var player = sender.Session.User.Player;
                 Log.InfoFormat("DeleteChar PlayerId:{0} CurrentCount:{1}", player.ID, player.Characters.Count);
+
+                // 4.查找要删除的角色
                 var target = player.Characters.FirstOrDefault(c => c.ID == message.characterId);
                 if (target == null)
                 {
+                    // 4.1 角色不存在，返回失败响应
                     Log.WarningFormat("DeleteChar target not found: Id:{0}", message.characterId);
                     response.Response.deleteChar.Result = Result.Failed;
                     response.Response.deleteChar.Errormsg = "角色不存在";
                 }
                 else
                 {
+                    // 5.执行删除操作
+                    // 5.1 记录删除的角色信息
                     Log.InfoFormat("DeleteChar removing: Id:{0} Name:{1}", target.ID, target.Name);
+
+                    // 5.2 从玩家的角色列表中移除
                     player.Characters.Remove(target);
+
+                    // 5.3 从数据库中删除角色记录
                     DBService.Instance.Entities.Characters.Remove(target);
+
+                    // 5.4 保存数据库更改
                     DBService.Instance.Entities.SaveChanges();
 
+                    // 6.构建成功响应
                     response.Response.deleteChar.Result = Result.Success;
                     response.Response.deleteChar.Errormsg = "None";
 
+                    // 7.重新构建角色列表返回给客户端
                     foreach (var cha in player.Characters.ToList())
                     {
                         NCharacterInfo info = new NCharacterInfo();
@@ -213,12 +293,63 @@ namespace GameServer.Services
                         info.mapId = cha.MapID;
                         response.Response.deleteChar.Characters.Add(info);
                     }
+                    // 8.记录删除成功后的角色数量
                     Log.InfoFormat("DeleteChar success, RemainingCount:{0}", player.Characters.Count);
                 }
             }
 
+            // 9.打包响应消息并发送给客户端
             byte[] data = PackageHandler.PackMessage(response);
             sender.SendData(data, 0, data.Length);
+        }
+
+        private void OnGameEnter(NetConnection<NetSession> sender, UserGameEnterRequest message)
+        {
+            Log.InfoFormat("UserGameEnterRequest: characterIdx:{0}", message.characterIdx);
+
+            NetMessage response = new NetMessage();
+            response.Response = new NetMessageResponse();
+            response.Response.gameEnter = new UserGameEnterResponse();
+
+            if (sender.Session.User == null || sender.Session.User.Player == null)
+            {
+                response.Response.gameEnter.Result = Result.Failed;
+                response.Response.gameEnter.Errormsg = "未登录";
+            }
+            else
+            {
+                // 1.验证角色是否存在
+                TUser user = sender.Session.User;
+                if (message.characterIdx < 0 || message.characterIdx >= user.Player.Characters.Count)
+                {
+                    response.Response.gameEnter.Result = Result.Failed;
+                    response.Response.gameEnter.Errormsg = "角色不存在";
+                }
+                else
+                {
+                    // 2.获取选中的角色数据
+                    TCharacter dbchar = user.Player.Characters.ElementAt(message.characterIdx);
+                    Log.InfoFormat("UserGameEnterRequest: characterID:{0}:{1} Map:{2}", dbchar.ID, dbchar.Name, dbchar.MapID);
+                    Character character = CharacterManager.Instance.AddCharacter(dbchar);
+
+                    // 3.在session中记录当前激活的角色逻辑对象
+                    sender.Session.Character = character;
+
+                    // 4.填充响应数据并返回
+                    response.Response.gameEnter.Result = Result.Success;
+                    response.Response.gameEnter.Errormsg = "None";
+
+                    // 5.进入地图逻辑
+                    MapManager.Instance[dbchar.MapID].CharacterEnter(sender, character);
+                }
+            }
+            byte[] data = PackageHandler.PackMessage(response);
+            sender.SendData(data, 0, data.Length);
+        }
+
+        void OnGameLeave(NetConnection<NetSession> sender, UserGameLeaveRequest request)
+        {
+
         }
     }
 }

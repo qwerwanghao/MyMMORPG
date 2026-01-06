@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="BufferUtility.cs" />
     <Compile Include="Data\CharacterDefine.cs" />
+    <Compile Include="Data\GameServerConfig.cs" />
     <Compile Include="Data\SpawnRuleDefine.cs" />
     <Compile Include="Data\SpawnPointDefine.cs" />
     <Compile Include="Data\SpawnType.cs" />
@@ -105,6 +106,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
-    <Exec Command="set TARGET=..\..\Client\Assets\ThirdParty\Common&#x0D;&#x0A;if not exist &quot;%25TARGET%25&quot; mkdir &quot;%25TARGET%25&quot;&#x0D;&#x0A;copy /Y &quot;$(TargetPath)&quot; &quot;%25TARGET%25\&quot;&#x0D;&#x0A;if exist &quot;$(TargetDir)$(TargetName).pdb&quot; copy /Y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;%25TARGET%25\&quot;" />
+    <Exec Command="set TARGET=..\..\Client\Assets\ThirdParty\Common&#xD;&#xA;if not exist &quot;%25TARGET%25&quot; mkdir &quot;%25TARGET%25&quot;&#xD;&#xA;copy /Y &quot;$(TargetPath)&quot; &quot;%25TARGET%25\&quot;&#xD;&#xA;if exist &quot;$(TargetDir)$(TargetName).pdb&quot; copy /Y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;%25TARGET%25\&quot;" />
   </Target>
 </Project>

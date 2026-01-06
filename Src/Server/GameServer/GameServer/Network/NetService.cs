@@ -11,14 +11,20 @@ using Common;
 
 namespace Network
 {
-    class NetService
+    class NetService : IService
     {
         static TcpSocketListener ServerListener;
-        public bool Init(int port)
+        int Port = GameServer.Properties.Settings.Default.ServerPort;
+        string IP = GameServer.Properties.Settings.Default.ServerIP;
+
+        internal NetService()
         {
-            ServerListener = new TcpSocketListener("127.0.0.1", GameServer.Properties.Settings.Default.ServerPort, 10);
+        }
+
+        public void Init()
+        {
+            ServerListener = new TcpSocketListener(IP, Port, 10);
             ServerListener.SocketConnected += OnSocketConnected;
-            return true;
         }
 
 
@@ -41,6 +47,10 @@ namespace Network
 
             Log.Warning("Stoping Message Handler...");
             MessageDistributer<NetConnection<NetSession>>.Instance.Stop();
+        }
+
+        public void Update()
+        {
         }
 
         private void OnSocketConnected(object sender, Socket e)

@@ -1,3 +1,4 @@
+using Common;
 using log4net.Appender;
 using log4net.Core;
 using UnityEngine;
@@ -25,15 +26,15 @@ public class UnityConsoleAppender : AppenderSkeleton
             // 根据日志级别选择合适的Unity控制台输出方法
             if (loggingEvent.Level >= Level.Error)
             {
-                Debug.LogError(formattedMessage);
+                Log.Error(formattedMessage);
             }
             else if (loggingEvent.Level >= Level.Warn)
             {
-                Debug.LogWarning(formattedMessage);
+                Log.Warning(formattedMessage);
             }
             else
             {
-                Debug.Log(formattedMessage);
+                Log.Info(formattedMessage);
             }
         }
         finally

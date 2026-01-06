@@ -52,14 +52,14 @@ message NPlayerInfo {
 }
 
 message NCharacterInfo {
-  int32 id = 1;
-  int32 tid = 2;
-  string name = 3;
-  CHARACTER_TYPE type = 4;
-  CHARACTER_CLASS class = 5;
-  int32 level = 6;
-  int32 mapId = 7;
-  NEntity entity = 8;
+  int32 id = 1;              // 角色唯一ID（通常对应数据库角色ID）
+  int32 tid = 2;             // 角色模板ID（对应配置表的角色/怪物/NPC模板）
+  string name = 3;           // 角色名字（玩家角色名或怪物/NPC显示名）
+  CHARACTER_TYPE type = 4;   // 角色类型（Player/NPC/Monster）
+  CHARACTER_CLASS class = 5; // 职业（仅 Player 有意义；NPC/Monster 可忽略或当作默认值）
+  int32 level = 6;           // 等级
+  int32 mapId = 7;           // 当前所在地图ID（对应 MapDefine.ID）
+  NEntity entity = 8;        // 实体基础数据（位置/朝向/速度等），用于同步与展示
 }
 
 message NVector3 {

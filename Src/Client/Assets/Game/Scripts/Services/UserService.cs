@@ -16,6 +16,8 @@ namespace Services
         public UnityEngine.Events.UnityAction<Result, string> OnLogin;
         public UnityEngine.Events.UnityAction<Result, string> OnCreateCharacter;
         public UnityEngine.Events.UnityAction<Result, string> OnDeleteCharacter;
+        public UnityEngine.Events.UnityAction<Result, string> OnGameEnter;
+        public UnityEngine.Events.UnityAction<Result, string> OnGameLeave;
         NetMessage pendingMessage = null;
         bool connected = false;
         public bool IsBusy { get; private set; } = false;
@@ -28,7 +30,9 @@ namespace Services
             MessageDistributer.Instance.Subscribe<UserLoginResponse>(this.OnUserLogin);
             MessageDistributer.Instance.Subscribe<UserCreateCharacterResponse>(this.OnUserCreateCharacter);
             MessageDistributer.Instance.Subscribe<UserDeleteCharacterResponse>(this.OnUserDeleteCharacter);
-
+            MessageDistributer.Instance.Subscribe<UserGameEnterResponse>(this.OnUserGameEnter);
+            MessageDistributer.Instance.Subscribe<UserGameLeaveResponse>(this.OnUserGameLeave);
+            MessageDistributer.Instance.Subscribe<MapCharacterEnterRequest>(this.OnMapCharacterEnter);
         }
 
         public void Dispose()
@@ -37,6 +41,8 @@ namespace Services
             MessageDistributer.Instance.Unsubscribe<UserLoginResponse>(this.OnUserLogin);
             MessageDistributer.Instance.Unsubscribe<UserCreateCharacterResponse>(this.OnUserCreateCharacter);
             MessageDistributer.Instance.Unsubscribe<UserDeleteCharacterResponse>(this.OnUserDeleteCharacter);
+            MessageDistributer.Instance.Unsubscribe<UserGameEnterResponse>(this.OnUserGameEnter);
+            MessageDistributer.Instance.Unsubscribe<UserGameLeaveResponse>(this.OnUserGameLeave);
             NetClient.Instance.OnConnect -= OnGameServerConnect;
             NetClient.Instance.OnDisconnect -= OnGameServerDisconnect;
         }
@@ -50,7 +56,27 @@ namespace Services
         {
             Log.Info("ConnectToServer() Start ");
             //NetClient.Instance.CryptKey = this.SessionId;
-            NetClient.Instance.Init("127.0.0.1", 8000);
+
+            string host = "127.0.0.1";
+            int port = 8000;
+
+            if (DataManager.Instance != null && DataManager.Instance.Config != null)
+            {
+                if (!string.IsNullOrEmpty(DataManager.Instance.Config.ServerHost))
+                {
+                    host = DataManager.Instance.Config.ServerHost;
+                }
+                if (DataManager.Instance.Config.ServerPort > 0)
+                {
+                    port = DataManager.Instance.Config.ServerPort;
+                }
+            }
+            else
+            {
+                Log.Warning("GameServerConfig not loaded; use default server endpoint 127.0.0.1:8000");
+            }
+
+            NetClient.Instance.Init(host, port);
             NetClient.Instance.Connect();
         }
 
@@ -113,6 +139,13 @@ namespace Services
                     if (this.OnDeleteCharacter != null)
                     {
                         this.OnDeleteCharacter(Result.Failed, string.Format("服务器断开！\n RESULT:{0} ERROR:{1}", result, reason));
+                    }
+                }
+                else if (this.pendingMessage.Request.gameEnter != null)
+                {
+                    if (this.OnGameEnter != null)
+                    {
+                        this.OnGameEnter(Result.Failed, string.Format("服务器断开！\n RESULT:{0} ERROR:{1}", result, reason));
                     }
                 }
                 return true;
@@ -200,6 +233,75 @@ namespace Services
             {
                 this.pendingMessage = message;
                 this.ConnectToServer();
+            }
+        }
+
+        public void SendGameEnter(int characterIdx)
+        {
+            if (this.IsBusy)
+            {
+                Log.Warning("UserService busy; ignore duplicate submit.");
+                return;
+            }
+            this.IsBusy = true;
+
+            Log.InfoFormat("UserGameEnterRequest::characterIdx :{0}", characterIdx);
+            NetMessage message = new NetMessage();
+            message.Request = new NetMessageRequest();
+            message.Request.gameEnter = new UserGameEnterRequest();
+            message.Request.gameEnter.characterIdx = characterIdx;
+
+            if (this.connected && NetClient.Instance.Connected)
+            {
+                this.pendingMessage = null;
+                NetClient.Instance.SendMessage(message);
+            }
+            else
+            {
+                this.pendingMessage = message;
+                this.ConnectToServer();
+            }
+        }
+
+        public void SendGameLeave()
+        {
+            Log.Info("UserGameLeaveRequest");
+            if (this.IsBusy)
+            {
+                Log.Warning("UserService busy; ignore duplicate submit.");
+                return;
+            }
+            this.IsBusy = true;
+
+            try
+            {
+                // 空检查：检查 NetClient.Instance 是否为 null
+                if (NetClient.Instance == null)
+                {
+                    Log.Error("SendGameLeave failed: NetClient.Instance is null");
+                    this.OnGameLeave?.Invoke(Result.Failed, "网络客户端未初始化");
+                    return;
+                }
+
+                // 连接状态检查：检查网络是否已连接
+                if (!this.connected || !NetClient.Instance.Connected)
+                {
+                    Log.Warning("SendGameLeave failed: Not connected to server");
+                    this.OnGameLeave?.Invoke(Result.Failed, "未连接到服务器");
+                    return;
+                }
+
+                // 构建并发送消息
+                NetMessage message = new NetMessage();
+                message.Request = new NetMessageRequest();
+                message.Request.gameLeave = new UserGameLeaveRequest();
+                NetClient.Instance.SendMessage(message);
+            }
+            catch (Exception ex)
+            {
+                // 异常处理：捕获网络异常，防止程序崩溃
+                Log.ErrorFormat("SendGameLeave exception: {0}", ex.Message);
+                this.OnGameLeave?.Invoke(Result.Failed, "发送离开请求时发生异常");
             }
         }
 
@@ -298,6 +400,42 @@ namespace Services
                 this.OnDeleteCharacter(response.Result, response.Errormsg);
             }
             this.IsBusy = false;
+        }
+
+        void OnUserGameEnter(object sender, UserGameEnterResponse response)
+        {
+            Log.InfoFormat("OnUserGameEnter:{0} [{1}]", response.Result, response.Errormsg);
+
+            if (response.Result == Result.Success)
+            {
+                Log.InfoFormat("进入游戏成功！");
+            }
+            else
+            {
+                Log.InfoFormat("进入游戏失败：{0}", response.Errormsg);
+            }
+
+            this.OnGameEnter?.Invoke(response.Result, response.Errormsg);
+
+            this.IsBusy = false;
+        }
+
+        void OnUserGameLeave(object sender, UserGameLeaveResponse response)
+        {
+            //MapService.Instance.CurrentMapId = 0;
+            Log.InfoFormat("OnUserGameLeave:{0} [{1}]", response.Result, response.Errormsg);
+
+            if (this.OnGameLeave != null)
+            {
+                this.OnGameLeave(response.Result, response.Errormsg);
+            }
+            this.IsBusy = false;
+        }
+
+        void OnMapCharacterEnter(object sender, MapCharacterEnterRequest request)
+        {
+            Log.InfoFormat("OnMapCharacterEnter: characterId:{0}", request.mapId);
+
         }
     }
 }

@@ -11,6 +11,7 @@ using System.Threading;
 
 using Network;
 using GameServer.Services;
+using GameServer.Managers;
 
 namespace GameServer
 {
@@ -18,14 +19,27 @@ namespace GameServer
     {
         Thread thread;
         bool running = false;
-        NetService network;
+        private List<IService> services = new List<IService>();
 
         public bool Init()
         {
-            network = new NetService();
-            network.Init(8000);
-            DBService.Instance.Init();
-            UserService.Instance.Init();
+            // 第一阶段：初始化基础数据管理模块 (Managers)
+            // Manager 是被动的数据容器，通常不需要 Update
+            DataManager.Instance.Init();
+            MapManager.Instance.Init();
+
+            // 第二阶段：初始化业务逻辑服务模块 (Services)
+            // Service 是主动的业务驱动者，注册到 services 列表以便统一调用 Init/Start/Stop/Update
+            services.Add(DBService.Instance);
+            services.Add(UserService.Instance);
+            services.Add(MapService.Instance);
+            services.Add(new NetService());
+
+            foreach (var service in services)
+            {
+                service.Init();
+            }
+
             thread = new Thread(new ThreadStart(this.Update));
 
             return true;
@@ -33,7 +47,11 @@ namespace GameServer
 
         public void Start()
         {
-            network.Start();
+            foreach (var service in services)
+            {
+                service.Start();
+            }
+
             running = true;
             thread.Start();
         }
@@ -43,16 +61,37 @@ namespace GameServer
         {
             running = false;
             thread.Join();
-            network.Stop();
+
+            for (int i = services.Count - 1; i >= 0; i--)
+            {
+                services[i].Stop();
+            }
         }
 
         public void Update()
         {
+            const int FPS = 30;
+            const int frameTime = 1000 / FPS;
+
             while (running)
             {
+                long start = Time.ticks;
+
                 Time.Tick();
-                Thread.Sleep(100);
-                //Console.WriteLine("{0} {1} {2} {3} {4}", Time.deltaTime, Time.frameCount, Time.ticks, Time.time, Time.realtimeSinceStartup);
+
+                foreach (var service in services)
+                {
+                    service.Update();
+                }
+
+                MapManager.Instance.Update();
+
+                long end = Time.ticks;
+                int sleepTime = frameTime - (int)((end - start) / 10000);
+                if (sleepTime > 0)
+                {
+                    Thread.Sleep(sleepTime);
+                }
             }
         }
     }
