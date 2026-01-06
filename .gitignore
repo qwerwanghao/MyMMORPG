@@ -62,3 +62,4 @@ Src/Client/Log/*.log
 
 # Server local logs
 Src/Server/GameServer/GameServer/Log/*.log
+Src/Client/nul
