@@ -1,4 +1,4 @@
-# 新人 Onboarding（MyMMORPG）
+﻿# 新人 Onboarding（MyMMORPG）
 
 > 目标：让新人能**独立跑通客户端 + 服务器联调**、理解核心系统结构，并掌握日常开发工作流。  
 > 本文偏“从零到可开发”的细节手册；团队规范与更完整背景仍以 `.codex/PROJECT_GUIDELINES.md` 为准。

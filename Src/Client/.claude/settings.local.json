@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(uvx:*)",
+      "Bash(where:*)",
+      "Bash(claude:*)",
+      "Bash(echo:*)",
+      "Bash(powershell:*)",
+      "Bash(findstr:*)",
+      "Bash(curl:*)",
+      "Bash(netstat:*)",
+      "Bash(tasklist:*)",
+      "Bash(Get-Process)",
+      "Bash(Where-Object {$_Id -eq 20516})",
+      "Bash(Select-Object:*)",
+      "Bash(python:*)"
+    ]
+  }
+}
