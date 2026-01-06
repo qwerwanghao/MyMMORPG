@@ -66,6 +66,25 @@ Src/Client/nul
 
 Src/Client/.idea/
 Src/Client/.claude/
-/Src/Client/.kilocode
-/Src/Client/.vscode
-/Src/Server/GameServer/.idea/.idea.GameServer/.idea
+Src/Client/.kilocode
+Src/Client/.vscode
+Src/Server/GameServer/.idea/.idea.GameServer/.idea
+
+# --- MyMMORPG repo suggestions ---
+
+# Prefer ignoring whole log folders (tracked logs require `git rm -r --cached <path>` once)
+Src/Client/Log/
+Src/Client/Logs/
+Src/Server/GameServer/GameServer/Log/
+
+# Unity per-user editor settings (do not share across machines)
+Src/Client/UserSettings/
+
+# Unity auto-generated solution/project files (keep real project files under Src/Server, Src/Lib, etc.)
+Src/Client/*.csproj
+Src/Client/*.sln
+Src/Client/*.csproj.user
+
+# Optional local tooling artifacts (uncomment if you don't want to version these tools)
+# .claude/
+# .specify/
