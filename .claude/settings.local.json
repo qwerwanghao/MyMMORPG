@@ -3,7 +3,9 @@
     "allow": [
       "Bash(mkdir:*)",
       "Bash(ls:*)",
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "mcp__UnityMCP__read_console",
+      "mcp__UnityMCP__manage_editor"
     ]
   }
 }

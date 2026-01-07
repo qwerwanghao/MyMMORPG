@@ -1,44 +1,58 @@
-using Common;
 using log4net.Appender;
 using log4net.Core;
+using UnityEngine;
 
+/// <summary>
+/// Unity 控制台 Appender：将 log4net 日志输出到 Unity 控制台
+/// </summary>
 public class UnityConsoleAppender : AppenderSkeleton
 {
-    // é˜²æ­¢æ— é™å¾ªçŽ¯çš„æ ‡å¿—ä½?
+    /// <summary>
+    /// 防止无限循环的标志位
+    /// 注意：此标志由 UnityLogger 检查以防止递归日志
+    /// </summary>
     private static bool isLoggingFromAppender = false;
 
+    /// <summary>
+    /// 获取当前是否正在从 Appender 输出日志
+    /// </summary>
     public static bool IsLoggingFromAppender
     {
         get { return isLoggingFromAppender; }
     }
 
+    /// <summary>
+    /// 输出日志到 Unity 控制台
+    /// 注意：必须使用 Debug.Log* 而不是 Log.*，否则不会输出到 Unity 控制台
+    /// UnityLogger 会通过检查 IsLoggingFromAppender 标志来防止无限循环
+    /// </summary>
     protected override void Append(LoggingEvent loggingEvent)
     {
-        // è®¾ç½®æ ‡å¿—ä½?ï¼Œé˜²æ­¢æ— é™å¾ªçŽ¯
+        // 设置标志位，防止无限循环
         isLoggingFromAppender = true;
 
         try
         {
-            // æ ¼å¼åŒ–æ—¥å¿—æ¶ˆæ?
+            // 格式化日志消息
             string formattedMessage = RenderLoggingEvent(loggingEvent);
 
-            // æ ¹æ®æ—¥å¿—çº§åˆ«é€‰æ‹©åˆé€‚çš„UnityæŽ§åˆ¶å°è¾“å‡ºæ–¹æ³?
+            // 根据日志级别选择合适的 Unity 控制台输出方法
             if (loggingEvent.Level >= Level.Error)
             {
-                Log.Error(formattedMessage);
+                Debug.LogError(formattedMessage);
             }
             else if (loggingEvent.Level >= Level.Warn)
             {
-                Log.Warning(formattedMessage);
+                Debug.LogWarning(formattedMessage);
             }
             else
             {
-                Log.Info(formattedMessage);
+                Debug.Log(formattedMessage);
             }
         }
         finally
         {
-            // æ¸…é™¤æ ‡å¿—ä½?
+            // 清除标志位
             isLoggingFromAppender = false;
         }
     }
