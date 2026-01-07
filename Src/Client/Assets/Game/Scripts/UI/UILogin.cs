@@ -24,18 +24,18 @@ public class UILogin : MonoBehaviour
 
         if (string.IsNullOrWhiteSpace(user))
         {
-            MessageBox.Show("è¯·è¾“å…¥è´¦å?");
+            MessageBox.Show("请输入账号");
             return;
         }
         if (string.IsNullOrWhiteSpace(pass))
         {
-            MessageBox.Show("è¯·è¾“å…¥å¯†ç ?");
+            MessageBox.Show("请输入密码");
             return;
         }
 
-        if (Services.UserService.Instance.IsBusy)  // ç¬?æ­¥ä¼šåŠ å…¥ IsBusy
+        if (Services.UserService.Instance.IsBusy)  // 后续会加入 IsBusy
         {
-            MessageBox.Show("æ­£åœ¨å¤„ç†ä¸Šä¸€æ¬¡è¯·æ±‚ï¼Œè¯·ç¨å€™â€?");
+            MessageBox.Show("正在处理上一次请求，请稍后...");
             return;
         }
 
@@ -45,7 +45,7 @@ public class UILogin : MonoBehaviour
 
     public void OnClickOpenRegister()
     {
-        // æ¸…ç©ºè¾“å…¥æ¡?
+        // 清空输入框
         this.username.text = "";
         this.password.text = "";
     }
@@ -59,11 +59,20 @@ public class UILogin : MonoBehaviour
     private void OnLogin(SkillBridge.Message.Result result, string msg)
     {
         buttonLogin.interactable = true;
-        MessageBox.Show(string.Format("ç™»å½•ç»“æžœï¼š{0} æ¶ˆæ¯:{1}", result, msg));
 
-        if (result == SkillBridge.Message.Result.Success)
+        if (result == SkillBridge.Message.Result.Failed)
         {
-            // ç™»å½•æˆåŠŸåŽçš„æ“ä½œï¼Œè·³è½¬è§’è‰²é€‰æ‹©ç•Œé¢
+            // 登录成功后的操作，跳转角色选择界面
+            var confirm = MessageBox.Show(string.Format("登录结果：{0} 消息:{1} ", result, msg),
+                "登录失败", MessageBoxType.Confirm);
+            confirm.OnYes = () =>
+            {
+                // 清空密码框
+                this.password.text = "";
+            };
+        }
+        else
+        {
             SceneManager.Instance.LoadScene("CharSelect");
         }
     }

@@ -1,4 +1,4 @@
-using Common;
+﻿using Common;
 using SkillBridge.Message;
 using UnityEngine;
 
@@ -75,14 +75,14 @@ namespace Entities
         /// <summary>设置朝向（通常由输入或同步驱动）。</summary>
         public void SetDirection(Vector3Int direction)
         {
-            Log.InfoFormat("SetDirection:{0}", direction);
+            //Log.InfoFormat("SetDirection:{0}", direction);
             this.direction = direction;
         }
 
         /// <summary>设置位置（通常由同步/传送/校正驱动）。</summary>
         public void SetPosition(Vector3Int position)
         {
-            Log.InfoFormat("SetPosition:{0}", position);
+            //Log.InfoFormat("SetPosition:{0}", position);
             this.position = position;
         }
     }
