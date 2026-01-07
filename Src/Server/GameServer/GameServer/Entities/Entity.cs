@@ -6,7 +6,7 @@ namespace GameServer.Entities
     /// <summary>
     /// 实体基类：所有游戏对象的基类，提供位置、方向、速度等基础属性
     /// </summary>
-    class Entity
+    public class Entity
     {
         #region 私有字段
 

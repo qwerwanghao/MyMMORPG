@@ -7,7 +7,7 @@ namespace GameServer.Entities
     /// <summary>
     /// 角色基类：继承自 Entity，为 Character 和 Monster 提供公共属性和方法
     /// </summary>
-    class CharacterBase : Entity
+    public class CharacterBase : Entity
     {
         #region 公共属性
 

@@ -7,11 +7,23 @@ namespace GameServer.Managers
     /// <summary>
     /// MapManager：地图管理器，负责管理所有地图实例
     /// </summary>
-    class MapManager : Singleton<MapManager>
+    public class MapManager : Singleton<MapManager>, IService
     {
         #region 私有字段
 
-        private Dictionary<int, Map> Maps = new Dictionary<int, Map>();
+        private Dictionary<int, Map> Maps;
+
+        #endregion
+
+        #region 构造函数
+
+        /// <summary>
+        /// 构造函数：初始化地图字典
+        /// </summary>
+        public MapManager()
+        {
+            this.Maps = new Dictionary<int, Map>();
+        }
 
         #endregion
 

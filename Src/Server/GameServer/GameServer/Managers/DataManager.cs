@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace GameServer.Managers
     /// <summary>
     /// DataManager：游戏数据管理器，负责从 JSON 文件加载游戏配置数据
     /// </summary>
-    public class DataManager : Singleton<DataManager>
+    public class DataManager : Singleton<DataManager>, IService
     {
         #region 公共字段（数据字典）
 

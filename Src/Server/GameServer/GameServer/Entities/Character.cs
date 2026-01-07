@@ -7,7 +7,7 @@ namespace GameServer.Entities
     /// <summary>
     /// 玩家角色类：继承自 CharacterBase，表示游戏中的玩家角色实例
     /// </summary>
-    class Character : CharacterBase
+    public class Character : CharacterBase
     {
         #region 公共字段
 

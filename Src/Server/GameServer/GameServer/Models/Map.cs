@@ -16,7 +16,7 @@ namespace GameServer.Models
     /// - 负责进入/离开地图时的广播（MapCharacterEnter/Leave）
     /// - 具体刷怪/同步/逻辑 Tick 可放在 Update()
     /// </summary>
-    class Map
+    public class Map
     {
         #region 嵌套类型
 

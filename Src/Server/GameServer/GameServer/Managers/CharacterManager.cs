@@ -10,7 +10,7 @@ namespace GameServer.Managers
     /// CharacterManager 负责管理游戏中的所有角色实例
     /// 主要职责：角色生命周期管理（创建、移除、存储）
     /// </summary>
-    class CharacterManager : Singleton<CharacterManager>
+    public class CharacterManager : Singleton<CharacterManager>, IService
     {
         #region 私有字段
 
@@ -58,6 +58,28 @@ namespace GameServer.Managers
         {
             this.characters.Clear();
             Log.Info("CharacterManager: All characters cleared");
+        }
+
+        
+        /// <summary>
+        /// 启动（IService 接口实现）
+        /// </summary>
+        public void Start()
+        {
+        }
+
+        /// <summary>
+        /// 停止（IService 接口实现）
+        /// </summary>
+        public void Stop()
+        {
+        }
+
+        /// <summary>
+        /// 更新（IService 接口实现）
+        /// </summary>
+        public void Update()
+        {
         }
 
         #endregion

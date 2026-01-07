@@ -27,13 +27,14 @@ namespace GameServer
         /// </summary>
         public bool Init()
         {
-            // 第一阶段：初始化基础数据管理模块 (Managers)
-            // Manager 是被动的数据容器，通常不需要 Update
-            DataManager.Instance.Init();
-            MapManager.Instance.Init();
+            // 所有 Managers 和 Services 统一注册到 services 列表进行管理
+            // Managers：数据管理模块（DataManager, MapManager, CharacterManager）
+            // Services：业务逻辑模块（DBService, UserService, MapService, NetService）
+            services.Add(DataManager.Instance);
+            services.Add(MapManager.Instance);
+            services.Add(CharacterManager.Instance);
 
-            // 第二阶段：初始化业务逻辑服务模块 (Services)
-            // Service 是主动的业务驱动者，注册到 services 列表以便统一调用 Init/Start/Stop/Update
+            // 初始化 Services（业务逻辑模块）
             services.Add(DBService.Instance);
             services.Add(UserService.Instance);
             services.Add(MapService.Instance);
@@ -100,8 +101,6 @@ namespace GameServer
                 {
                     service.Update();
                 }
-
-                MapManager.Instance.Update();
 
                 long end = Time.ticks;
                 int sleepTime = frameTime - (int)((end - start) / 10000);
