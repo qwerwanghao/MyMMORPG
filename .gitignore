@@ -86,3 +86,5 @@ Src/Client/*.csproj.user
 # Optional local tooling artifacts (uncomment if you don't want to version these tools)
 # .claude/
 # .specify/
+/Src/Client/Assets/TextMesh Pro
+

@@ -90,6 +90,8 @@ public class GameObjectManager : MonoBehaviour
                     pc.enabled = false;
                 }
             }
+            
+            UIWorldElementManager.Instance.AddCharacterElement(go.transform, character);
         }
     }
 }

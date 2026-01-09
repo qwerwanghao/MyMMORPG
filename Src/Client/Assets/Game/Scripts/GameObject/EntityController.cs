@@ -59,7 +59,13 @@ public class EntityController : MonoBehaviour
     private void OnDestroy()
     {
         if (entity != null)
+        {
             Log.InfoFormat("{0} OnDestroy :ID:{1} POS:{2} DIR:{3} SPD:{4} ", this.name, entity.entityId, entity.position, entity.direction, entity.speed);
+            if (UIWorldElementManager.Instance != null)
+            {
+                UIWorldElementManager.Instance.RemoveCharacterElement(this.transform);
+            }
+        }
     }
 
     public void OnEntityEvent(EntityEvent entityEvent)
