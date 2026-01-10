@@ -22,13 +22,21 @@ public class UIWorldElementManager : MonoSingleton<UIWorldElementManager>
     
     public void AddCharacterElement(Transform playerTrans, Character character)
     {
-        
+
         if (!worldElementPrefabs.ContainsKey(playerTrans))
-        { 
+        {
             GameObject go = Instantiate(worldElementPrefab, this.transform);
             go.name = playerTrans.name + character.entityId;
             go.GetComponent<UIWorldElement>().player = playerTrans;
             go.GetComponent<UINameBar>().character = character;
+
+            // 本地玩家设置更高的排序层级，确保显示在最上层
+            Canvas canvas = go.GetComponent<Canvas>();
+            if (canvas != null)
+            {
+                canvas.sortingOrder = character.IsPlayer ? 10 : 0;
+            }
+
             go.SetActive(true);
             worldElementPrefabs.Add(playerTrans, go);
         }
