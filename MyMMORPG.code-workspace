@@ -21,8 +21,12 @@
 			"path": "./Tools"
 		},
 		{
-			"name": "AgentRule",
+			"name": "CodexConfig",
 			"path": "./.codex"
+		},
+		{
+			"name": "ClaudeConfig",
+			"path": "./.claude"
 		}
 	],
 	"settings": {

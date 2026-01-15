@@ -9,7 +9,9 @@
       "Bash(python:*)",
       "mcp__UnityMCP__manage_scene",
       "mcp__UnityMCP__manage_gameobject",
-      "mcp__UnityMCP__batch_execute"
+      "mcp__UnityMCP__batch_execute",
+      "Bash(unzip:*)",
+      "Bash(claude:*)"
     ]
   }
 }

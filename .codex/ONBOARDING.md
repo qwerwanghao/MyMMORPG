@@ -1,4 +1,11 @@
-﻿# 新人 Onboarding（MyMMORPG）
+﻿<!--
+This file is generated.
+Source of truth: inputs listed in .codex/tools/manifest.json
+Regenerate: python .codex/tools/build_codex_docs.py
+Output: .codex/ONBOARDING.md
+-->
+
+# 新人 Onboarding（MyMMORPG）
 
 > 目标：让新人能**独立跑通客户端 + 服务器联调**、理解核心系统结构，并掌握日常开发工作流。  
 > 本文偏“从零到可开发”的细节手册；团队规范与更完整背景仍以 `.codex/PROJECT_GUIDELINES.md` 为准。
@@ -164,7 +171,7 @@ GameServer.exe
 3. 检查 `Src/Lib/Protocol/message.cs` 变化。
 4. 双端重新编译并提交 proto + message.cs。
 
-### 5.2 策划数据更新（默认 Python）
+### 5.2 表格数据更新（默认 Python）
 1. 修改 `Src/Data/Tables/*.xlsx`。
 2. 转表并同步：
    ```bash
@@ -353,3 +360,4 @@ Post-build 会复制 DLL/PDB 到 `Src/Client/Assets/ThirdParty/*`。若 Unity �
 - 团队/提交流程/完整排查：`.codex/PROJECT_GUIDELINES.md`
 - Unity MCP 使用与工具：`.codex/PROJECT_GUIDELINES.md` 的 Unity MCP 小节
 - 任何不明确的地方，先问负责人或在群里同步。
+

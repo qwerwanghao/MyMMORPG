@@ -19,24 +19,42 @@
 ## 1) 新会话第一条消息（直接复制粘贴）
 
 ```text
-PLAN: <用 1-3 句话描述你要解决的问题与验收标准>
+PLAN: <用 1-3 句话描述问题 + 验收标准（可验证）>
 
+【硬性流程门禁】
 请严格按 `.codex/AGENTS.md` 的 Plan Mode 执行：
-1) 先给至少 2 套方案（含优缺点/成本/风险/推荐）
-2) 输出待确认 checklist
-3) 我回复 “ACT: 执行方案X” 后你再改代码/跑命令
+- 先 Plan：≥2 套方案 + 待确认 checklist
+- 未收到 `ACT: 执行方案X`：禁止改代码
+- 若发现需要改变行为/接口/序列化/资源绑定：必须停下重新要确认
 
-现状补充：
-- 目标：
-  - 在不引入无关改动的前提下，解决当前描述的问题，使其达到「功能可用 / 流程可走通 / 状态一致」的验收标准
-  - 确保改动结果清晰、可回滚、可审查，不影响现有主流程与稳定性
-- 约束：
-  - 严格遵循 `.codex/AGENTS.md` 定义的 Plan Mode 流程，在收到明确的 `ACT` 指令前不修改代码、不执行命令
-  - 改动范围限定在与当前问题直接相关的最小集合内，避免无关重构或风格性调整
-  - 不引入新的外部依赖或破坏性变更
-- 相关路径：
-- 我已尝试：
+【任务分类（必填）】
+- 类型：<功能/排查/文档/数据/协议/Code Optimization>
+- 是否允许跑命令：<否（默认）/是（ACT 后）>
+- 是否允许改资源：<否（默认）/是（列清单）>
+
+【范围与噪音控制（必填）】
+- 允许修改的目录（最小集合）：
+- 禁止修改的目录：
+- 默认禁止引入 PR 噪音（除非我明确要求）：
+  - Unity 资源/生成物：`**/*.unity`、`**/*.prefab`、`Assets/**/ThirdParty/**/*.dll`、`Src/Client/Library/`、`Src/Client/Temp/`、`Src/Client/Logs/`、`Src/Client/Log/`、`Src/Client/UserSettings/`、`Src/Client/Packages/packages-lock.json`
+  - IDE/工具痕迹：`.idea/`、`.vs/`、`.vscode/`、`.claude/`、`.specify/`
+  - 构建产物：`**/bin/`、`**/obj/`、`**/*.csproj.user`
+
+【Code Optimization 特别约束（仅当类型=Code Optimization）】
+- 仅顺序/分组/排版；不引入/删除逻辑；不改 API 语义
+- 必须最小 diff：不得“删文件再重建”；保留原换行风格与编码
+- 默认不改名；不动 Unity 序列化/绑定字段；不改资源引用
+- Preserve existing behavior and configuration
+- Prefer explicit if/else over nested ternaries
+- Avoid one-liners that reduce readability
+- Keep functions small and focused
+- Do not refactor architecture-level code
+
+【现状补充（按需填写）】
+- 相关路径/入口文件：
+- 我已尝试与结果：
 - 当前报错/日志片段：
+- 期望输出（要改哪些文件/生成哪些产物）：
 ```
 
 ---
@@ -85,6 +103,5 @@ ACT: 执行方案 <A/B/...>
 - `DIFF`：只展示改动点/风险点（不继续扩改）
 - `PLAN:`：只规划不动手
 - `ACT:`：按确认方案动手
-
 
 

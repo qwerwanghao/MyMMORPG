@@ -1,0 +1,40 @@
+{
+  "outputs": [
+    {
+      "path": ".codex/ONBOARDING.md",
+      "sources": [
+        ".codex/docs/onboarding/00_preamble.md",
+        ".codex/docs/onboarding/01_repo-structure.md",
+        ".codex/docs/onboarding/02_env-setup.md",
+        ".codex/docs/onboarding/03_database-setup.md",
+        ".codex/docs/onboarding/04_first-run.md",
+        ".codex/docs/onboarding/05_daily-workflows.md",
+        ".codex/docs/onboarding/06_core-code-tour.md",
+        ".codex/docs/onboarding/07_debugging-and-logs.md",
+        ".codex/docs/onboarding/08_troubleshooting.md",
+        ".codex/docs/onboarding/09_exercises.md",
+        ".codex/docs/onboarding/10_further-reading.md"
+      ],
+      "add_generated_header": true
+    },
+    {
+      "path": ".codex/PROJECT_GUIDELINES.md",
+      "sources": [
+        ".codex/docs/project-guidelines/00_preamble.md",
+        ".codex/docs/project-guidelines/01_overview.md",
+        ".codex/docs/project-guidelines/02_dependencies.md",
+        ".codex/docs/project-guidelines/03_structure.md",
+        ".codex/docs/project-guidelines/04_common-actions.md",
+        ".codex/docs/project-guidelines/05_build-run.md",
+        ".codex/docs/project-guidelines/06_style.md",
+        ".codex/docs/project-guidelines/07_tests.md",
+        ".codex/docs/project-guidelines/08_pr-process.md",
+        ".codex/docs/project-guidelines/09_security-config.md",
+        ".codex/docs/project-guidelines/10_troubleshooting.md",
+        ".codex/docs/project-guidelines/11_quick-reference.md",
+        ".codex/docs/project-guidelines/12_unity-mcp.md"
+      ],
+      "add_generated_header": true
+    }
+  ]
+}

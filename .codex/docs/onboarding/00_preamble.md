@@ -1,0 +1,24 @@
+﻿# 新人 Onboarding（MyMMORPG）
+
+> 目标：让新人能**独立跑通客户端 + 服务器联调**、理解核心系统结构，并掌握日常开发工作流。  
+> 本文偏“从零到可开发”的细节手册；团队规范与更完整背景仍以 `.codex/PROJECT_GUIDELINES.md` 为准。
+
+---
+
+## 目录
+- [01) 仓库结构与关键路径](./01_repo-structure.md)
+- [02) 环境准备（Windows）](./02_env-setup.md)
+- [03) 数据库初始化（首次必做）](./03_database-setup.md)
+- [04) 首次运行（推荐顺序）](./04_first-run.md)
+- [05) 常用开发工作流](./05_daily-workflows.md)
+- [06) 核心系统源码导读](./06_core-code-tour.md)
+- [07) 调试与日志](./07_debugging-and-logs.md)
+- [08) 常见问题与排查清单](./08_troubleshooting.md)
+- [09) 新人练习任务（建议一周内完成）](./09_exercises.md)
+- [10) 进一步阅读](./10_further-reading.md)
+
+---
+
+
+
+

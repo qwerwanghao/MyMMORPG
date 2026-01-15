@@ -1,4 +1,11 @@
-﻿# Repository Guidelines
+﻿<!--
+This file is generated.
+Source of truth: inputs listed in .codex/tools/manifest.json
+Regenerate: python .codex/tools/build_codex_docs.py
+Output: .codex/PROJECT_GUIDELINES.md
+-->
+
+# Repository Guidelines
 
 > **最后更新**: 2025-12-08  
 > **项目版本**: Unity 6000.0.53f1 / .NET Framework 4.6.2
@@ -25,10 +32,9 @@
 ## 使用准则概览
 
 - 回复语言必须使用简体中文。
-- 接到需求后先整理详细的 to-do 列表，发送用户确认；若用户提出修改意见，需重新整理并确认。
-- 执行 to-do 时，每完成一项都要暂停并请用户确认后再继续下一项。
-- 涉及代码或文档改动时，使用 Approve 流程，请用户确认后再提交最终变更。
-- 开发过程中若有任何不确定之处，必须主动向用户提问。
+- 默认遵循 `.codex/AGENTS.md` 的 Plan/Act 协议（先 Plan，待你 `ACT` 后再执行）。
+- 不确定点必须提问；不要猜配置/路径/依赖。
+- 只改与需求直接相关的最小集合，避免无关重构与 PR 噪音。
 
 ## 1) 整体速览
 
@@ -376,3 +382,4 @@ netstat -ano | findstr 8000
   `manage_scene`、`manage_gameobject`、`manage_asset`、`manage_script`/`script_apply_edits`、`read_console`、`editor_state`、`editor_selection`、`unity_instances`、`set_active_instance`。
 - 多实例：先查 `unity_instances`，再用 `set_active_instance(<Name@hash>)` 绑定目标实例。
 - 故障排查：确认 Unity 已打开、HTTP 服务在跑（终端未关闭）、`uv --version` 正常；如连接失败，核对配置里的 URL 与实际端口路径完全一致（含 `/mcp`）。
+
