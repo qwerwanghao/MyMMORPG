@@ -1,4 +1,11 @@
-﻿# Skill: build-run（构建/运行/首次跑通）
+---
+name: build-run
+description: "构建/运行/首次跑通（Windows/.NET/Unity）"
+metadata:
+  short-description: "构建运行与首次跑通"
+---
+
+# Skill: build-run（构建/运行/首次跑通）
 
 ## 前置条件
 - 你在 Windows 上开发

@@ -1,4 +1,11 @@
-﻿# Skill: database-extremeworld（数据库初始化/连接串）
+---
+name: database-extremeworld
+description: "数据库初始化/连接串/常见 SqlException（ExtremeWorld）"
+metadata:
+  short-description: "数据库初始化与连接串"
+---
+
+# Skill: database-extremeworld（数据库初始化/连接串）
 
 ## 前置条件
 - 本机已安装 SQL Server（Express/Developer/LocalDB 任一）

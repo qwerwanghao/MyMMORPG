@@ -1,4 +1,11 @@
-﻿# Skill: quick-reference（常用命令速查）
+---
+name: quick-reference
+description: "常用命令速查（开发/排障/构建）"
+metadata:
+  short-description: "常用命令速查"
+---
+
+# Skill: quick-reference（常用命令速查）
 
 ## 前置条件
 - 你知道自己要操作的类型：协议 / 配表 / 构建 / 端口排查

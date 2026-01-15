@@ -1,4 +1,11 @@
-﻿# Skill: data-pipeline（表格/配表数据链路）
+---
+name: data-pipeline
+description: "表格/配表数据链路：转表、同步与生效排查"
+metadata:
+  short-description: "配表数据链路"
+---
+
+# Skill: data-pipeline（表格/配表数据链路）
 
 ## 前置条件
 - 本地有 Python 3.10+（能运行 `python`）

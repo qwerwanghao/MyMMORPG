@@ -1,4 +1,11 @@
-﻿# Skill: unity-mcp（Unity MCP 使用）
+---
+name: unity-mcp
+description: "Unity MCP 使用：读取场景/层级/Console/Selection，并执行常用编辑器操作"
+metadata:
+  short-description: "Unity MCP 使用"
+---
+
+# Skill: unity-mcp（Unity MCP 使用）
 
 ## 前置条件
 - Unity Editor 已打开项目 `Src/Client`
@@ -33,6 +40,7 @@
 
 ## 常见问题
 - 连不上：确认 Unity MCP 终端没关闭、URL 含 `/mcp`、端口一致
+- Codex 握手失败/406：Unity MCP Server 需要 `Accept: application/json, text/event-stream`；在 `~/.codex/config.toml` 的 `[mcp_servers.unityMCP]` 下加 `http_headers = { Accept = "application/json, text/event-stream" }`
 - 多实例串了：先 `unity_instances` 再 `set_active_instance`
 
 ## 进一步阅读（长文档）

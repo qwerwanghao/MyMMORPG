@@ -1,4 +1,11 @@
-﻿# Skill: pr-process（提交/PR/噪音控制）
+---
+name: pr-process
+description: "提交/PR/噪音控制：最小改动、可审查、可回滚"
+metadata:
+  short-description: "提交与 PR 流程"
+---
+
+# Skill: pr-process（提交/PR/噪音控制）
 
 ## 前置条件
 - 你能提供：本次改动目标、影响范围、手动验证步骤（或可运行的测试命令）

@@ -1,4 +1,11 @@
-﻿# Skill: debugging-logs（调试与日志）
+---
+name: debugging-logs
+description: "调试与日志：日志位置、级别、常用排错路径"
+metadata:
+  short-description: "调试与日志"
+---
+
+# Skill: debugging-logs（调试与日志）
 
 ## 前置条件
 - 你能提供客户端/服务器日志片段（或明确“哪一步触发的”）

@@ -1,4 +1,11 @@
-﻿# Skill: repo-map（仓库结构与关键路径）
+---
+name: repo-map
+description: "仓库结构与关键路径：从需求到入口文件的最短路径"
+metadata:
+  short-description: "仓库结构与关键路径"
+---
+
+# Skill: repo-map（仓库结构与关键路径）
 
 ## 前置条件
 - 无（用于快速定位与入口导航）

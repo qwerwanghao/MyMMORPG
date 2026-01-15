@@ -1,4 +1,11 @@
-﻿# Skill: codex-docs-maintenance（维护/更新 Onboarding & Guidelines）
+---
+name: codex-docs-maintenance
+description: "维护/更新 Codex Onboarding & Project Guidelines（生成与拆分）"
+metadata:
+  short-description: "Codex 文档维护"
+---
+
+# Skill: codex-docs-maintenance（维护/更新 Onboarding & Guidelines）
 
 ## 前置条件
 - 本机可运行 Python（用于生成脚本）

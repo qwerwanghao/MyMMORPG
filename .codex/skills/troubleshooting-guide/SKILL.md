@@ -1,4 +1,11 @@
-﻿# Skill: troubleshooting-guide（常见问题排查）
+---
+name: troubleshooting-guide
+description: "常见问题排查：端口占用、连不上、版本/协议不匹配、数据不同步"
+metadata:
+  short-description: "常见问题排查"
+---
+
+# Skill: troubleshooting-guide（常见问题排查）
 
 ## 前置条件
 - 你能提供：错误日志片段（客户端/服务器）、复现步骤、涉及的模块（Client/Server/Protocol/Data/Unity）

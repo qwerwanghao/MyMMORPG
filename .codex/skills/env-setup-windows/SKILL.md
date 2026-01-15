@@ -1,4 +1,11 @@
-﻿# Skill: env-setup-windows（Windows 环境准备）
+---
+name: env-setup-windows
+description: "Windows 环境准备：依赖安装、SDK/Targeting Pack、常见缺失修复"
+metadata:
+  short-description: "Windows 环境准备"
+---
+
+# Skill: env-setup-windows（Windows 环境准备）
 
 ## 前置条件
 - Windows 开发环境

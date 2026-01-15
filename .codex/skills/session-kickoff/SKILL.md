@@ -1,4 +1,11 @@
-﻿# Skill: session-kickoff（新会话启动 / 按需加载入口）
+---
+name: session-kickoff
+description: "新会话启动模板：快速收敛上下文与任务边界"
+metadata:
+  short-description: "新会话启动模板"
+---
+
+# Skill: session-kickoff（新会话启动 / 按需加载入口）
 
 目标：让你在新会话用**最短输入**把“问题、验收、约束、上下文”讲清楚，并让 AI **先 Plan 后 Act**，同时显式选择要按需加载的 skills，避免跑偏/重复沟通。
 

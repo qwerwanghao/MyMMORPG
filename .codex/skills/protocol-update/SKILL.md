@@ -1,4 +1,11 @@
-﻿# Skill: protocol-update（协议更新/生成）
+---
+name: protocol-update
+description: "协议更新/生成：proto 改动、代码生成与联调排查"
+metadata:
+  short-description: "协议更新与生成"
+---
+
+# Skill: protocol-update（协议更新/生成）
 
 ## 前置条件
 - Windows 环境可运行 `Tools/genproto.cmd`
