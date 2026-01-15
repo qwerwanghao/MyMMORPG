@@ -137,6 +137,9 @@ public class PlayerInputController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (this.character == null)
+            return;
+        
         // 计算当前帧速度（用于同步或动画参数）
         Vector3 offset = this.rb.transform.position - lastPos;
         this.speed = (int)(offset.magnitude * 100f / Time.deltaTime);
