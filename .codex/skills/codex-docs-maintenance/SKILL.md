@@ -1,16 +1,18 @@
 ﻿# Skill: codex-docs-maintenance（维护/更新 Onboarding & Guidelines）
 
+## 前置条件
+- 本机可运行 Python（用于生成脚本）
+- 你接受：`.codex/ONBOARDING.md` / `.codex/PROJECT_GUIDELINES.md` 是生成物，不直接手改
+
 ## 何时使用
 - 需要更新 `.codex/ONBOARDING.md` 或 `.codex/PROJECT_GUIDELINES.md`
 - 需要新增/拆分 `.codex/docs/**` 分片
 - 需要调整 skills 索引或生成规则
 
 ## 原则
-- `.codex/ONBOARDING.md` / `.codex/PROJECT_GUIDELINES.md` 是生成物：不要直接手改（会漂移/丢失）。
-- 只改“真源”：
-  - 长文档分片：`.codex/docs/**`
-  - 生成清单：`.codex/tools/manifest.json`
-  - 生成脚本：`.codex/tools/build_codex_docs.py`
+- `.codex/ONBOARDING.md` / `.codex/PROJECT_GUIDELINES.md`：生成物（入口）
+- `.codex/docs/**`：长文档真源分片（维护点）
+- `.codex/skills/**`：按需加载的执行规则/速查（维护点）
 
 ## 标准流程
 1. 修改 `.codex/docs/onboarding/*.md` 或 `.codex/docs/project-guidelines/*.md`
@@ -24,7 +26,6 @@
 ```bash
 python .codex/tools/split_codex_docs.py
 ```
-
 
 
 

@@ -65,12 +65,12 @@
 | database-extremeworld | ExtremeWorld/连接串/SqlException | `.codex/skills/database-extremeworld/SKILL.md` |
 | build-run | 构建运行/首次跑通/msbuild | `.codex/skills/build-run/SKILL.md` |
 | debugging-logs | 调试/日志位置/log4net | `.codex/skills/debugging-logs/SKILL.md` |
-| troubleshooting | 端口占用/连不上/协议不匹配/数据不同步 | `.codex/skills/troubleshooting/SKILL.md` |
+| troubleshooting-guide | 端口占用/连不上/协议不匹配/数据不同步 | `.codex/skills/troubleshooting-guide/SKILL.md` |
 | unity-mcp | Unity MCP/场景/层级/Console | `.codex/skills/unity-mcp/SKILL.md` |
 | pr-process | 提交/PR/噪音控制/review | `.codex/skills/pr-process/SKILL.md` |
 | quick-reference | 常用命令速查 | `.codex/skills/quick-reference/SKILL.md` |
-| kickoff | 新会话启动模板 | `.codex/skills/kickoff/SKILL.md` |
-| postmortem | 问题沉淀模板 | `.codex/skills/postmortem/SKILL.md` |
+| session-kickoff | 新会话启动模板 | `.codex/skills/session-kickoff/SKILL.md` |
+| issue-postmortem | 问题沉淀模板 | `.codex/skills/issue-postmortem/SKILL.md` |
 | data-pipeline | 转表/配表/同步 Data | `.codex/skills/data-pipeline/SKILL.md` |
 | protocol-update | proto/协议生成 | `.codex/skills/protocol-update/SKILL.md` |
 | codex-docs-maintenance | 更新 Onboarding/Guidelines（生成） | `.codex/skills/codex-docs-maintenance/SKILL.md` |
@@ -82,10 +82,20 @@
 
 ---
 
+## 2.2 复杂场景路径图（怎么组合多个 Skill）
+
+- 新人从零跑通联调：`repo-map` → `env-setup-windows` → `database-extremeworld` → `build-run` → `debugging-logs` / `troubleshooting-guide`
+- 协议改动（proto）：`protocol-update` → `build-run` →（联调失败时）`debugging-logs` / `troubleshooting-guide`
+- 配表改动（Excel 转表）：`data-pipeline` →（数据不生效）`troubleshooting-guide`
+- Unity 内排查（场景/层级/Console）：`unity-mcp` →（仍定位不到）`debugging-logs`
+- 准备 PR：`pr-process` →（需要命令速查）`quick-reference` →（需要补文档）`codex-docs-maintenance`
+
+---
+
 ## 3) 新会话快速上手（2 分钟）
 
 1. `git status --short` 看当前改动与脏文件。
-2. 直接复制模板启动（推荐）：`.codex/skills/kickoff/TEMPLATE.md`。
+2. 直接复制模板启动（推荐）：`.codex/skills/session-kickoff/TEMPLATE.md`。
 3. 按任务只加载一个 skill（例如：协议就只读 `protocol-update`）。
 
 ---
@@ -100,6 +110,8 @@
 说明：
 - `.codex/ONBOARDING.md` 与 `.codex/PROJECT_GUIDELINES.md` 是生成物；请优先改 `.codex/docs/**`。
 - 若 `PROJECT_GUIDELINES.md` 与本文件有冲突，以本文件（根入口）为准。
+
+
 
 
 

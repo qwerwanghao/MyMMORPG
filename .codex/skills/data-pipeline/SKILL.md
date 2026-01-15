@@ -1,5 +1,9 @@
 ﻿# Skill: data-pipeline（表格/配表数据链路）
 
+## 前置条件
+- 本地有 Python 3.10+（能运行 `python`）
+- 需要转表的源表在：`Src/Data/Tables/*.xlsx`
+
 ## 何时使用
 - 用户说“转表 / 配表 / excel2json / Tables / Data/Data / 同步客户端服务器”
 - 新增/修改策划表后需要更新产物与同步目录
@@ -18,12 +22,10 @@ cd Src/Data
 python excel2json.py
 ```
 
-## 产物检查清单
-- `Src/Data/Data` 有更新的 `*.txt`
-- 客户端与服务器同步目录的文件时间一致
-- 客户端/服务器启动后能读到新配置（必要时删除旧缓存或重启）
-
-
+## 常见错误与处理
+- `python` 找不到：安装 Python 并把 `python` 加入 PATH
+- 产物更新但客户端不生效：确认 `Src/Client/Data` 同步目录文件时间已更新；必要时重启 Unity
+- 服务器仍读旧数据：确认 `bin/Debug/Data` 同步目录已更新；必要时重启服务器
 
 
 

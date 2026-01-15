@@ -13,15 +13,16 @@
 - `database-extremeworld`：数据库初始化/连接串（`./database-extremeworld/SKILL.md`）
 - `build-run`：构建/运行/首次跑通（`./build-run/SKILL.md`）
 - `debugging-logs`：调试与日志（`./debugging-logs/SKILL.md`）
-- `troubleshooting`：常见问题排查（`./troubleshooting/SKILL.md`）
+- `troubleshooting-guide`：常见问题排查（`./troubleshooting-guide/SKILL.md`）
 - `unity-mcp`：Unity MCP 使用（`./unity-mcp/SKILL.md`）
 - `pr-process`：提交/PR/噪音控制（`./pr-process/SKILL.md`）
 - `quick-reference`：常用命令速查（`./quick-reference/SKILL.md`）
-- `kickoff`：新会话启动模板（`./kickoff/SKILL.md`）
-- `postmortem`：问题沉淀模板（`./postmortem/SKILL.md`）
+- `session-kickoff`：新会话启动模板（`./session-kickoff/SKILL.md`）
+- `issue-postmortem`：问题沉淀模板（`./issue-postmortem/SKILL.md`）
 - `data-pipeline`：配表转表与同步（`./data-pipeline/SKILL.md`）
 - `protocol-update`：proto 变更与生成（`./protocol-update/SKILL.md`）
 - `codex-docs-maintenance`：维护/更新 Onboarding & Guidelines（`./codex-docs-maintenance/SKILL.md`）
+
 
 
 
