@@ -11,7 +11,13 @@
       "mcp__UnityMCP__manage_gameobject",
       "mcp__UnityMCP__batch_execute",
       "Bash(unzip:*)",
-      "Bash(claude:*)"
+      "Bash(claude:*)",
+      "mcp__UnityMCP__find_gameobjects"
     ]
+  },
+  "mcpServers": {
+    "unityMCP": {
+      "url": "http://localhost:8080/mcp"
+    }
   }
 }

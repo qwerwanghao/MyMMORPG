@@ -88,3 +88,4 @@ Src/Client/*.csproj.user
 # .specify/
 /Src/Client/Assets/TextMesh Pro
 
+/Src/Client/.codex

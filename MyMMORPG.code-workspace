@@ -1,33 +1,37 @@
 {
 	"folders": [
 		{
-			"name": "Client",
-			"path": "./Src/Client"
+			"name": "RepoRoot",
+			"path": "./"
 		},
-		{
-			"name": "Server",
-			"path": "./Src/Server"
-		},
-		{
-			"name": "Lib",
-			"path": "./Src/Lib"
-		},
-		{
-			"name": "Data",
-			"path": "./Src/Data"
-		},
-		{
-			"name": "Tools",
-			"path": "./Tools"
-		},
-		{
-			"name": "CodexConfig",
-			"path": "./.codex"
-		},
-		{
-			"name": "ClaudeConfig",
-			"path": "./.claude"
-		}
+		// {
+		// 	"name": ".codex",
+		// 	"path": "./.codex"
+		// },
+		// {
+		// 	"name": ".claude",
+		// 	"path": "./.claude"
+		// },
+		// {
+		// 	"name": "Client",
+		// 	"path": "./Src/Client"
+		// },
+		// {
+		// 	"name": "Server",
+		// 	"path": "./Src/Server"
+		// },
+		// {
+		// 	"name": "Lib",
+		// 	"path": "./Src/Lib"
+		// },
+		// {
+		// 	"name": "Data",
+		// 	"path": "./Src/Data"
+		// },
+		// {
+		// 	"name": "Tools",
+		// 	"path": "./Tools"
+		// }
 	],
 	"settings": {
 		// 全局文件排除规则
