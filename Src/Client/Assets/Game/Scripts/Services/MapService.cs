@@ -113,6 +113,8 @@ namespace Services
                     var go = new GameObject("SceneManager");
                     go.AddComponent<SceneManager>();
                 }
+                
+                User.Instance.CurrentMapData = map;
                 SceneManager.Instance.LoadScene(map.Resource);
             }
             else

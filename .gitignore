@@ -94,3 +94,4 @@ Src/Client/.codex
 # Problematic or temp files
 nul
 Src/Client/nul
+-wait

@@ -1,8 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Common;
 using Entities;
 using Services;
+using Models;
 using UnityEngine;
 
 /// <summary>
@@ -78,6 +79,7 @@ public class GameObjectManager : MonoBehaviour
             {
                 if (character.Info.Id == Models.User.Instance.CurrentCharacter.Id)
                 {
+                    User.Instance.CurrentCharacterObject = go;
                     // 本地玩家：启用输入，并把相机跟随指向当前角色
                     MainPlayerCamera.Instance.player = go;
                     pc.enabled = true;
@@ -90,7 +92,7 @@ public class GameObjectManager : MonoBehaviour
                     pc.enabled = false;
                 }
             }
-            
+
             UIWorldElementManager.Instance.AddCharacterElement(go.transform, character);
         }
     }
