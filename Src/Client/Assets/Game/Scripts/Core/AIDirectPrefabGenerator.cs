@@ -27,14 +27,33 @@ internal class CustomCertificateHandler : CertificateHandler
 /// </summary>
 public class AIDirectPrefabGenerator : MonoBehaviour
 {
+    #region 序列化字段 - API配置
+
     [Header("=== API配置 ===")]
-    [SerializeField] private string apiKey = "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";
+    [SerializeField] private string apiKey = "";
     [SerializeField] private string apiBase = "https://openrouter.ai/";
     [SerializeField] private string modelName = "google/gemini-2.5-pro";
     [SerializeField] private int maxCompletionTokens = 12000;
+    [SerializeField] private bool ignoreCertificateErrors = false;
+
+    #endregion
+
+    #region 序列化字段 - 输入设置
 
     [Header("=== 输入设置 ===")]
     [SerializeField] private string imagePath;
+
+    #endregion
+
+    #region 序列化字段 - 运行状态
+
+    [Header("=== 运行状态 ===")]
+    [SerializeField] private bool isProcessing = false;
+    [SerializeField] private string lastGeneratedInstructions;
+
+    #endregion
+
+    #region 常量与静态字段
 
     // AI图片分析提示 - 优化版，强调局部坐标
     private const string AI_PROMPT = @"你是Unity UI开发专家。请分析这个游戏界面截图，并根据UI元素的层级关系和相对位置，生成创建指令。
@@ -72,11 +91,26 @@ CANVAS|0,0|1920,1080|UIRoot
 
 请严格按照以上规则，分析截图并输出UI创建指令：";
 
+    private const string PrefabRootFolder = "Assets/Prefabs";
+    private const string PrefabFolder = "Assets/Prefabs/AIPrefabs";
+    private static Font builtinFont;
 
+    #endregion
 
-    [Header("=== 运行状态 ===")]
-    [SerializeField] private bool isProcessing = false;
-    [SerializeField] private string lastGeneratedInstructions;
+    #region 生命周期
+
+    /// <summary>
+    /// Unity Editor脚本启动方法
+    /// </summary>
+    void Start()
+    {
+        // Unity Editor组件初始化
+        Log.InfoFormat("🚀 AI直接Prefab生成器已加载");
+    }
+
+    #endregion
+
+    #region Unity菜单项
 
     /// <summary>
     /// Unity菜单栏入口 - 图片直接生成Prefab
@@ -98,6 +132,12 @@ CANVAS|0,0|1920,1080|UIRoot
     public static void StopAllCoroutine()
     {
         AIDirectPrefabGenerator instance = FindFirstObjectByType<AIDirectPrefabGenerator>();
+        if (instance == null)
+        {
+            EditorUtility.DisplayDialog("错误", "请先在场景中添加AIDirectPrefabGenerator组件", "确定");
+            return;
+        }
+
         instance.StopAllCoroutines();
         instance.isProcessing = false;
     }
@@ -160,6 +200,10 @@ CANVAS|0,0|1920,1080|UIRoot
         }
     }
 
+    #endregion
+
+    #region 公共方法
+
     /// <summary>
     /// 选择图片并开始处理
     /// </summary>
@@ -176,6 +220,10 @@ CANVAS|0,0|1920,1080|UIRoot
             Log.InfoFormat("❌ 用户取消了文件选择");
         }
     }
+
+    #endregion
+
+    #region 私有方法 - 主流程
 
     /// <summary>
     /// 直接图片转Prefab流程 - 完全绕过JSON格式
@@ -225,6 +273,13 @@ CANVAS|0,0|1920,1080|UIRoot
     /// </summary>
     private IEnumerator AnalyzeImageWithAPI()
     {
+        if (string.IsNullOrWhiteSpace(apiKey))
+        {
+            Log.ErrorFormat("API Key为空，请先配置apiKey");
+            EditorUtility.DisplayDialog("错误", "API Key为空，请先在场景对象的AIDirectPrefabGenerator组件中配置 apiKey", "确定");
+            yield break;
+        }
+
         if (!File.Exists(imagePath))
         {
             Log.ErrorFormat("❌ 图片文件不存在: " + imagePath);
@@ -276,8 +331,6 @@ CANVAS|0,0|1920,1080|UIRoot
         }));
     }
 
-
-
     /// <summary>
     /// 统一的API请求方法
     /// </summary>
@@ -286,23 +339,22 @@ CANVAS|0,0|1920,1080|UIRoot
         string requestJson = JsonConvert.SerializeObject(requestData);
         byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(requestJson);
 
-        using (UnityWebRequest request = new UnityWebRequest($"{apiBase}api/v1/chat/completions", "POST"))
+        using (UnityWebRequest request = new UnityWebRequest(GetCompletionsUrl(), "POST"))
         {
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
             request.SetRequestHeader("Authorization", $"Bearer {apiKey}");
 
-            // 添加证书处理器绕过HTTPS验证
-            request.certificateHandler = new CustomCertificateHandler();
+            if (ignoreCertificateErrors)
+                request.certificateHandler = new CustomCertificateHandler();
 
             yield return request.SendWebRequest();
 
-            // 使用最新API检查错误
-            if (request.result is
-                UnityWebRequest.Result.ConnectionError or
-                UnityWebRequest.Result.ProtocolError or
-                UnityWebRequest.Result.DataProcessingError)
+            // 检查错误
+            if (request.result == UnityWebRequest.Result.ConnectionError ||
+                request.result == UnityWebRequest.Result.ProtocolError ||
+                request.result == UnityWebRequest.Result.DataProcessingError)
             {
                 Log.ErrorFormat($"❌ API请求失败: {request.error}");
                 Log.ErrorFormat($"❌ HTTP状态码: {request.responseCode}");
@@ -388,8 +440,6 @@ CANVAS|0,0|1920,1080|UIRoot
         }
     }
 
-
-
     /// <summary>
     /// 从指令创建Prefab
     /// </summary>
@@ -413,13 +463,8 @@ CANVAS|0,0|1920,1080|UIRoot
         string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
         string prefabName = $"AI_Direct_Generated_{timestamp}";
 
-        string prefabDirectory = "Assets/Prefabs/AIPrefabs/";
-        if (!Directory.Exists(prefabDirectory))
-        {
-            Directory.CreateDirectory(prefabDirectory);
-        }
-
-        string prefabPath = Path.Combine(prefabDirectory, prefabName + ".prefab");
+        EnsurePrefabFolders();
+        string prefabPath = $"{PrefabFolder}/{prefabName}.prefab";
 
         // 保存为Prefab
         GameObject prefabAsset = PrefabUtility.SaveAsPrefabAsset(uiRoot, prefabPath);
@@ -592,22 +637,36 @@ CANVAS|0,0|1920,1080|UIRoot
         }
     }
 
+    #endregion
+
+    #region 私有方法 - UI组件创建
+
     /// <summary>
-    /// 计算行的缩进层级
+    /// 创建Canvas组件
     /// </summary>
-    private int GetIndentLevel(string line)
+    private GameObject CreateCanvas(string[] parts)
     {
-        int spaces = 0;
-        for (int i = 0; i < line.Length; i++)
-        {
-            if (line[i] == ' ')
-                spaces++;
-            else if (line[i] == '\t')
-                spaces += 4; // Tab算作4个空格
-            else
-                break;
-        }
-        return spaces / 2; // 每2个空格算一级缩进
+        // 支持新格式：CANVAS|x,y|width,height|根Canvas
+        string name = parts.Length > 3 ? parts[3] : "GeneratedCanvas";
+        GameObject canvas = new GameObject(name);
+
+        // 确保Canvas始终为2D UI模式
+        Canvas canvasComponent = canvas.AddComponent<Canvas>();
+        canvasComponent.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvasComponent.sortingOrder = 0;
+
+        // 配置CanvasScaler，确保UI适配不同分辨率
+        CanvasScaler scaler = canvas.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080);
+        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+        scaler.matchWidthOrHeight = 0.5f; // 平衡宽高适配
+
+        // 添加事件处理
+        canvas.AddComponent<GraphicRaycaster>();
+
+        Log.InfoFormat($"✅ 创建2D UI Canvas: {name}");
+        return canvas;
     }
 
     /// <summary>
@@ -658,31 +717,6 @@ CANVAS|0,0|1920,1080|UIRoot
         }
     }
 
-    private GameObject CreateCanvas(string[] parts)
-    {
-        // 支持新格式：CANVAS|x,y|width,height|根Canvas
-        string name = parts.Length > 3 ? parts[3] : "GeneratedCanvas";
-        GameObject canvas = new GameObject(name);
-
-        // 确保Canvas始终为2D UI模式
-        Canvas canvasComponent = canvas.AddComponent<Canvas>();
-        canvasComponent.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvasComponent.sortingOrder = 0;
-
-        // 配置CanvasScaler，确保UI适配不同分辨率
-        CanvasScaler scaler = canvas.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080);
-        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-        scaler.matchWidthOrHeight = 0.5f; // 平衡宽高适配
-
-        // 添加事件处理
-        canvas.AddComponent<GraphicRaycaster>();
-
-        Log.InfoFormat($"✅ 创建2D UI Canvas: {name}");
-        return canvas;
-    }
-
     /// <summary>
     /// 创建Text组件
     /// </summary>
@@ -724,7 +758,7 @@ CANVAS|0,0|1920,1080|UIRoot
 
             Text textComponent = textObj.AddComponent<Text>();
             textComponent.text = textContent;
-            textComponent.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            textComponent.font = GetBuiltinFont();
             textComponent.fontSize = fontSize;
             textComponent.color = textColor;
             textComponent.alignment = TextAnchor.MiddleCenter;
@@ -795,7 +829,7 @@ CANVAS|0,0|1920,1080|UIRoot
 
             Text text = textObj.AddComponent<Text>();
             text.text = buttonText;
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            text.font = GetBuiltinFont();
             text.fontSize = fontSize;
             text.color = Color.black;
             text.alignment = TextAnchor.MiddleCenter;
@@ -846,148 +880,6 @@ CANVAS|0,0|1920,1080|UIRoot
         {
             Log.ErrorFormat($"❌ 创建Image失败: {e.Message}，指令: {string.Join("|", parts)}");
         }
-    }
-
-    /// <summary>
-    /// 创建Panel组件
-    /// </summary>
-    private void CreateContainer(GameObject parent, string[] parts)
-    {
-        try
-        {
-            // PANEL|x,y|width,height|面板名称|颜色(可选)
-            if (parts.Length < 3)
-            {
-                Log.WarningFormat($"⚠️ Panel指令参数不足: {string.Join("|", parts)}，跳过创建");
-                return;
-            }
-
-            Vector2 position = ParsePosition(parts[1]);
-            Vector2 size = ParseSize(parts[2]);
-            string panelName = parts.Length > 3 ? parts[3] : "Panel";
-            Color backgroundColor = parts.Length > 4 ? ParseColor(parts[4]) : new Color(0.8f, 0.8f, 0.8f, 0.8f);
-
-            GameObject panelObj = new GameObject(panelName);
-            panelObj.transform.SetParent(parent.transform, false);
-
-            RectTransform rectTransform = panelObj.AddComponent<RectTransform>();
-            // 设置锚点为中心，使用中心坐标系
-            rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-            rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-            rectTransform.anchoredPosition = position;
-            rectTransform.sizeDelta = size;
-
-            // 添加Image组件作为背景
-            Image image = panelObj.AddComponent<Image>();
-            image.color = backgroundColor;
-
-            Log.InfoFormat($"✅ 创建Panel: {panelName} at {position} size {size} color {backgroundColor}");
-        }
-        catch (System.Exception ex)
-        {
-            Log.ErrorFormat($"❌ Panel创建失败: {ex.Message}，指令: {string.Join("|", parts)}");
-        }
-    }
-
-    private Vector2 ParsePosition(string posStr)
-    {
-        try
-        {
-            if (string.IsNullOrEmpty(posStr))
-            {
-                Log.WarningFormat("⚠️ 位置字符串为空，使用默认位置(0,0)");
-                return Vector2.zero;
-            }
-
-            string[] coords = posStr.Split(',');
-            if (coords.Length < 2)
-            {
-                Log.WarningFormat($"⚠️ 位置格式错误: '{posStr}'，应为'x,y'格式，使用默认位置(0,0)");
-                return Vector2.zero;
-            }
-
-            // 清理空格和其他字符
-            string xStr = coords[0].Trim();
-            string yStr = coords[1].Trim();
-
-            if (!float.TryParse(xStr, out float x))
-            {
-                Log.WarningFormat($"⚠️ X坐标解析失败: '{xStr}'，使用0");
-                x = 0f;
-            }
-
-            if (!float.TryParse(yStr, out float y))
-            {
-                Log.WarningFormat($"⚠️ Y坐标解析失败: '{yStr}'，使用0");
-                y = 0f;
-            }
-
-            return new Vector2(x, y);
-        }
-        catch (System.Exception e)
-        {
-            Log.ErrorFormat($"❌ 位置解析异常: '{posStr}' - {e.Message}，使用默认位置(0,0)");
-            return Vector2.zero;
-        }
-    }
-
-    private Vector2 ParseSize(string sizeStr)
-    {
-        try
-        {
-            if (string.IsNullOrEmpty(sizeStr))
-            {
-                Log.WarningFormat("⚠️ 尺寸字符串为空，使用默认尺寸(100,50)");
-                return new Vector2(100, 50);
-            }
-
-            string[] dims = sizeStr.Split(',');
-            if (dims.Length < 2)
-            {
-                Log.WarningFormat($"⚠️ 尺寸格式错误: '{sizeStr}'，应为'width,height'格式，使用默认尺寸(100,50)");
-                return new Vector2(100, 50);
-            }
-
-            // 清理空格和其他字符
-            string widthStr = dims[0].Trim();
-            string heightStr = dims[1].Trim();
-
-            if (!float.TryParse(widthStr, out float width))
-            {
-                Log.WarningFormat($"⚠️ 宽度解析失败: '{widthStr}'，使用100");
-                width = 100f;
-            }
-
-            if (!float.TryParse(heightStr, out float height))
-            {
-                Log.WarningFormat($"⚠️ 高度解析失败: '{heightStr}'，使用50");
-                height = 50f;
-            }
-
-            // 确保尺寸为正数
-            width = Mathf.Max(1f, width);
-            height = Mathf.Max(1f, height);
-
-            return new Vector2(width, height);
-        }
-        catch (System.Exception e)
-        {
-            Log.ErrorFormat($"❌ 尺寸解析异常: '{sizeStr}' - {e.Message}，使用默认尺寸(100,50)");
-            return new Vector2(100, 50);
-        }
-    }
-
-    private Color ParseColor(string colorStr)
-    {
-        if (string.IsNullOrEmpty(colorStr)) return Color.white;
-
-        if (colorStr.StartsWith("#"))
-        {
-            ColorUtility.TryParseHtmlString(colorStr, out Color color);
-            return color;
-        }
-
-        return Color.white;
     }
 
     /// <summary>
@@ -1045,7 +937,7 @@ CANVAS|0,0|1920,1080|UIRoot
             labelRect.sizeDelta = new Vector2(size.x - 30, size.y);
             Text labelTextComp = labelObj.AddComponent<Text>();
             labelTextComp.text = labelText;
-            labelTextComp.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            labelTextComp.font = GetBuiltinFont();
             labelTextComp.fontSize = 14;
             labelTextComp.color = Color.black;
 
@@ -1214,6 +1106,171 @@ CANVAS|0,0|1920,1080|UIRoot
         }
     }
 
+    #endregion
+
+    #region 私有方法 - 辅助解析
+
+    /// <summary>
+    /// 计算行的缩进层级
+    /// </summary>
+    private int GetIndentLevel(string line)
+    {
+        int spaces = 0;
+        for (int i = 0; i < line.Length; i++)
+        {
+            if (line[i] == ' ')
+                spaces++;
+            else if (line[i] == '\t')
+                spaces += 4; // Tab算作4个空格
+            else
+                break;
+        }
+        return spaces / 2; // 每2个空格算一级缩进
+    }
+
+    /// <summary>
+    /// 解析位置字符串
+    /// </summary>
+    private Vector2 ParsePosition(string posStr)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(posStr))
+            {
+                Log.WarningFormat("⚠️ 位置字符串为空，使用默认位置(0,0)");
+                return Vector2.zero;
+            }
+
+            string[] coords = posStr.Split(',');
+            if (coords.Length < 2)
+            {
+                Log.WarningFormat($"⚠️ 位置格式错误: '{posStr}'，应为'x,y'格式，使用默认位置(0,0)");
+                return Vector2.zero;
+            }
+
+            // 清理空格和其他字符
+            string xStr = coords[0].Trim();
+            string yStr = coords[1].Trim();
+
+            if (!float.TryParse(xStr, out float x))
+            {
+                Log.WarningFormat($"⚠️ X坐标解析失败: '{xStr}'，使用0");
+                x = 0f;
+            }
+
+            if (!float.TryParse(yStr, out float y))
+            {
+                Log.WarningFormat($"⚠️ Y坐标解析失败: '{yStr}'，使用0");
+                y = 0f;
+            }
+
+            return new Vector2(x, y);
+        }
+        catch (System.Exception e)
+        {
+            Log.ErrorFormat($"❌ 位置解析异常: '{posStr}' - {e.Message}，使用默认位置(0,0)");
+            return Vector2.zero;
+        }
+    }
+
+    /// <summary>
+    /// 解析尺寸字符串
+    /// </summary>
+    private Vector2 ParseSize(string sizeStr)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(sizeStr))
+            {
+                Log.WarningFormat("⚠️ 尺寸字符串为空，使用默认尺寸(100,50)");
+                return new Vector2(100, 50);
+            }
+
+            string[] dims = sizeStr.Split(',');
+            if (dims.Length < 2)
+            {
+                Log.WarningFormat($"⚠️ 尺寸格式错误: '{sizeStr}'，应为'width,height'格式，使用默认尺寸(100,50)");
+                return new Vector2(100, 50);
+            }
+
+            // 清理空格和其他字符
+            string widthStr = dims[0].Trim();
+            string heightStr = dims[1].Trim();
+
+            if (!float.TryParse(widthStr, out float width))
+            {
+                Log.WarningFormat($"⚠️ 宽度解析失败: '{widthStr}'，使用100");
+                width = 100f;
+            }
+
+            if (!float.TryParse(heightStr, out float height))
+            {
+                Log.WarningFormat($"⚠️ 高度解析失败: '{heightStr}'，使用50");
+                height = 50f;
+            }
+
+            // 确保尺寸为正数
+            width = Mathf.Max(1f, width);
+            height = Mathf.Max(1f, height);
+
+            return new Vector2(width, height);
+        }
+        catch (System.Exception e)
+        {
+            Log.ErrorFormat($"❌ 尺寸解析异常: '{sizeStr}' - {e.Message}，使用默认尺寸(100,50)");
+            return new Vector2(100, 50);
+        }
+    }
+
+    /// <summary>
+    /// 解析颜色字符串
+    /// </summary>
+    private Color ParseColor(string colorStr)
+    {
+        if (string.IsNullOrEmpty(colorStr)) return Color.white;
+
+        if (colorStr.StartsWith("#"))
+        {
+            ColorUtility.TryParseHtmlString(colorStr, out Color color);
+            return color;
+        }
+
+        return Color.white;
+    }
+
+    /// <summary>
+    /// 获取内置字体
+    /// </summary>
+    private static Font GetBuiltinFont()
+    {
+        if (builtinFont == null)
+            builtinFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+
+        return builtinFont;
+    }
+
+    /// <summary>
+    /// 获取API完成URL
+    /// </summary>
+    private string GetCompletionsUrl()
+    {
+        string baseUrl = string.IsNullOrWhiteSpace(apiBase) ? "https://openrouter.ai/" : apiBase;
+        baseUrl = baseUrl.TrimEnd('/') + "/";
+        return $"{baseUrl}api/v1/chat/completions";
+    }
+
+    /// <summary>
+    /// 确保Prefab文件夹存在
+    /// </summary>
+    private static void EnsurePrefabFolders()
+    {
+        if (!AssetDatabase.IsValidFolder(PrefabRootFolder))
+            AssetDatabase.CreateFolder("Assets", "Prefabs");
+
+        if (!AssetDatabase.IsValidFolder(PrefabFolder))
+            AssetDatabase.CreateFolder(PrefabRootFolder, "AIPrefabs");
+    }
+
     /// <summary>
     /// 设置Scene视图为2D模式，确保UI正确显示
     /// </summary>
@@ -1245,15 +1302,6 @@ CANVAS|0,0|1920,1080|UIRoot
         }
     }
 
-
-
-    /// <summary>
-    /// Unity Editor脚本启动方法
-    /// </summary>
-    void Start()
-    {
-        // Unity Editor组件初始化
-        Log.InfoFormat("🚀 AI直接Prefab生成器已加载");
-    }
+    #endregion
 }
 #endif
