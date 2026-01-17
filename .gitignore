@@ -61,11 +61,11 @@ Src/Client/Log/*.log
 # Server local logs
 Src/Server/GameServer/GameServer/Log/*.log
 Src/Client/nul
-
+nul
 Src/Client/.idea/
 Src/Client/.claude/
-Src/Client/.kilocode
-Src/Client/.vscode
+Src/Client/.codex
+
 Src/Server/GameServer/.idea/.idea.GameServer/.idea
 
 # --- MyMMORPG repo suggestions ---
@@ -88,4 +88,3 @@ Src/Client/*.csproj.user
 # .specify/
 /Src/Client/Assets/TextMesh Pro
 
-/Src/Client/.codex

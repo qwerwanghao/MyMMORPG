@@ -6,18 +6,8 @@
 ```text
 PLAN: <用 1-3 句话描述：你要解决什么问题 + 验收标准（可验证）>
 
-【本次要按需加载的 skills（必填，勾选即可）】
-- [ ] repo-map（入口/路径）
-- [ ] build-run（构建运行）
-- [ ] database-extremeworld（数据库）
-- [ ] protocol-update（协议）
-- [ ] data-pipeline（转表）
-- [ ] unity-mcp（Unity MCP）
-- [ ] debugging-logs（日志/断点）
-- [ ] troubleshooting-guide（排查）
-- [ ] pr-process（PR/噪音控制）
-- [ ] quick-reference（命令速查）
-- [ ] codex-docs-maintenance（维护 .codex 文档）
+【skills】
+- 按需加载
 
 【范围（必填，最少写 1 行）】
 - 允许修改：<目录/文件列表，越小越好>
