@@ -79,11 +79,16 @@ def main():
     if not args.skip_copy:
         client_data_dir = (repo_root / "Src" / "Client" / "Data").resolve()
         client_data_dir.mkdir(parents=True, exist_ok=True)
-        for name in ("CharacterDefine.txt", "MapDefine.txt", "LevelUpDefine.txt", "SpawnRuleDefine.txt"):
-            src = output_dir / name
-            if src.exists():
-                shutil.copy2(src, client_data_dir / name)
-                print(f"Copied {src} -> {client_data_dir / name}")
+        copied = 0
+        for src in sorted(output_dir.glob("*.txt")):
+            # Skip Excel lock/temp artifacts (e.g. "~$MapDefine.xlsx" -> "~$MapDefine.txt")
+            if src.name.startswith("~$"):
+                continue
+            dst = client_data_dir / src.name
+            shutil.copy2(src, dst)
+            copied += 1
+            print(f"Copied {src} -> {dst}")
+        print(f"Copied {copied} file(s) -> {client_data_dir}")
 
     if not args.skip_server_sync:
         server_data_dir = (
